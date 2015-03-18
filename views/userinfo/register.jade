@@ -1,0 +1,61 @@
+//
+   Created by liuhanxu on 14-12-8.
+#main
+   .container
+      section#register
+         .hgroup
+            h1 Register or Sign in
+            ul.breadcrumb.pull-right
+               li
+                  a(href='/index') Home
+                  span.divider /
+               li.active Register of Sign in
+         .row
+            .signin.span6
+               .social_sign
+                  h3 Sign in with your social account
+                  a.fb(href='#facebook')
+                     span.glyphicon.glyphicon-leaf
+                  a.tw(href='#twitter')
+                     span.glyphicon.glyphicon-tint
+                  a.gp(href='#googleplus')
+                     span.glyphicon.glyphicon-fire
+
+               .or
+                  .or_l
+                  span or
+                  .or_r
+               p.sign_title Log in with your site account
+               .form
+                  form(ng-submit='login()')
+                     input.input-xlarge(type='text',ng-model='user.name',placeholder='Username',id='username',required)
+                     input.input-xlarge(type='password', placeholder='Password',id='password')
+                     .forgot
+                        label.checkbox
+                           input(type='checkbox')
+                           |Remember me
+                        a(href='#') Forgot password?
+                     button.btn.btn-primary.btn-large
+                        span.glyphicon.glyphicon-ok &nbsp;Sign In
+            .signup.span6
+              form(ng-submit='register()')
+                  fieldset
+                     .social_sign
+                        h3 Don&apos;t have a site account yet?
+                         
+                        a
+                           span.glyphicon.glyphicon-user
+                           //i.icon.icon-user
+                     p.sign_title Create one now, it&apos;s fast &amp; free!
+                      
+                     input.input-xlarge(name='Username', placeholder='Username', required='', type='text',id='username2')
+                      
+                     input.input-xlarge(name='Email', placeholder='Email address',ng-model='user.email', required='', type='email',id='email2')
+                      
+                     input.input-xlarge(name='Password', placeholder='Password', required='', type='password',id='password2')
+                      
+                     label.checkbox
+                        input(name='checkboxes', value='Option one', type='checkbox')
+                        |I agree to the
+                        a(href='#') &nbsp;terms and conditions
+                     button.btn.btn-success.btn-large Create your account

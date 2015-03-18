@@ -1,0 +1,62 @@
+#main
+	.container
+		section#getseason
+			.hgroup
+				h1 Search season food here !
+				h2 Fill in the normal information of user.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/adminIndex') Home
+						span.divider /
+					li.active Search season
+		.row
+			#leftcol.span12
+				.new_user
+					form
+						.row
+							.span4
+							.span4
+								//h4 Publish a new user
+								.input-group
+									span.input-group-addon &nbsp&nbsp&nbsp&nbsp&nbspName
+									input.form-control(type='text' ng-model='season.name' id = "txt_name" placeholder="Name")
+							.span4
+						br
+						.row
+							.span5
+							.span3
+								button.btn.btn-primary.btn-large.pull-left(id = "btn_submit" ng-click='submit()')
+									span.glyphicon.glyphicon-ok &nbsp;Submit
+							.span4
+						br
+		.row
+			.span4
+			.span4
+				article.post(ng-repeat="season in seasons")
+					.post_header
+						h3.post_title
+							//a(ng-click='aaa(recipe)') {{recipe.recipeName}}
+							p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align:left;') {{season.name}}
+							//a(href='/recipe/single/{{recipe._id}}') {{user.name}}
+						.post_sub
+							span.glyphicon.glyphicon-user
+							| &nbsp;Month:&nbsp;&nbsp;{{season.month}} &nbsp;&nbsp;
+							//a(href='/recipe/single#post_comments')
+							br
+							span.glyphicon.glyphicon-comment
+							| &nbsp;Describe:&nbsp;&nbsp;{{season.describe}} &nbsp;&nbsp;
+							br
+							span.glyphicon.glyphicon-star
+							| &nbsp;Type:&nbsp;&nbsp;{{season.type}} &nbsp;&nbsp;
+							aside.widget.ads.clearfix(ng-if='true')
+								a(href='')
+									img(src='{{season.picture}}')
+					.post_content
+						a.btn.btn-primary(href='' ng-click = 'delete()') Delete
+						| &nbsp;&nbsp;
+						//a.btn.btn-primary(ng-click = 'update_({user:user})') Update
+				//|{{users}}
+				.pagination.pagination-centered(user-page page-object="pageing" click-function="list" ng-if = 'is_visible')
+			.span4
+
+

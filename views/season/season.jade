@@ -1,0 +1,18 @@
+//Created by hh on 14-12-10.
+#main
+	.container
+		section#adduser
+			.hgroup
+				h1 View season food here !
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active View season
+		div(ng-controller="Season")
+			button.btn-default(ng-click = "isCollapsed = !isCollapsed") touch here
+			hr
+			div(collapse="isCollapsed")
+				//i(ng-class="{'icon-resize-small': isCollapsed, 'icon-fullscreen': !isCollapsed}") Detail
+				div(ng-class = "{'well-lg' : isCollapsed}") Some content
+

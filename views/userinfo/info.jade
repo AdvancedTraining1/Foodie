@@ -1,0 +1,44 @@
+//
+   Created by liuhanxu on 14-12-9.
+#main
+   .container
+      section#user
+         .hgroup
+            h1 User Information
+            //button.btn.btn-success.btn-large(ng-click='test123()') test
+            h2 This is a user info page.
+            ul.breadcrumb.pull-right
+               li
+                  a(href='/index') Home
+                  span.divider /
+               li.active Contact
+         .row
+            .span4.office_address
+               address
+                  strong  Hello,Welcom {{userinfo.account}}
+                  article.post_content
+                     figure
+                        img(alt='0' src='{{userinfo.head}}')
+               address
+                  strong Email Address
+                  br
+                  a(href='mailto:#') {{userinfo.email}}
+
+            .span8.contact_form
+               form
+                  .row
+                     .span4
+                        label Name
+                        input.span4(type='text',ng-model='user.name',value='{{userinfo.username}}',id='username',required)
+                     .span4
+                        label E-mail
+                        input.span4(name='Email', value='{{userinfo.email}}',ng-model='user.email', required, type='email',id='email')
+                     .span8
+                        label Message
+                        textarea.span8(rows='8', value='I was a little boy...')
+                     .span8
+                        a.btn.btn-large.btn-success(ng-click='modifyInfo()')
+                           span Submit Modify Info
+                        |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        button.btn.btn-primary.btn-large(ng-click='gotoModifyPass()')
+                           span.glyphicon.glyphicon-ok Goto Modify Password

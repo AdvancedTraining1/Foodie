@@ -1,0 +1,146 @@
+
+[0m[0m
+[0m  Admin API[0m
+[0m    /admin/getAllUsers[0m
+    [31m  1) should return html content, status should be 200[0m
+connect!!!
+
+[0m  Attention API[0m
+[0m    /attentions/getAllAttentions/:queryStr[0m
+    [31m  2) should return html content[0m
+[0m    /attentions/addAttentions[0m
+    [31m  3) should return html content[0m
+[0m    /attentions/deleteAttentions[0m
+    [31m  4) should return html content[0m
+[0m    /attentions/lookFriendStatus[0m
+    [31m  5) should return html content[0m
+[0m    /attentions/commentStatus[0m
+    [31m  6) should return html content[0m
+[0m    /attentions/likeStatus[0m
+    [31m  7) should return html content[0m
+[0m    /attentions/cancelLike[0m
+    [31m  8) should return html content[0m
+
+[0m  Blog API[0m
+[0m    /blog[0m
+Express server listening on port 3000
+    [32m  ✓[0m[90m Get /blog should return 200 [0m[33m(40ms)[0m
+[0m    /createBlog[0m
+    [32m  ✓[0m[90m Get /createBlog should return 200 [0m
+[0m    /showBlogDetail[0m
+    [32m  ✓[0m[90m Get /showBlogDetail/:blog_id should return 200 [0m[33m(39ms)[0m
+[0m    /showBlogList[0m
+    [32m  ✓[0m[90m Get /showBlogList should return 200 [0m
+[0m    /publishBlog[0m
+    [32m  ✓[0m[90m Post /publishBlog should return 200 [0m
+[0m    /saveBlog[0m
+    [32m  ✓[0m[90m Post /saveBlog should return 200 [0m
+[0m    /modifyBlog[0m
+    [32m  ✓[0m[90m Get /modifyBlog/:blog_id should return 200 [0m[33m(40ms)[0m
+[0m    /saveModifyBlog[0m
+    [32m  ✓[0m[90m Post /saveModifyBlog should return 200 [0m
+[0m    /deleteBlog[0m
+    [32m  ✓[0m[90m Get /deleteBlog/:blog_id should return 200 [0m
+[0m    /collectionBlog[0m
+    [32m  ✓[0m[90m Get /collectionBlog/:blog_id should return 200 [0m
+[0m    /cancellationBlog[0m
+    [32m  ✓[0m[90m Get /cancellationBlog/:blog_id should return 200 [0m[33m(48ms)[0m
+[0m    /likeBlog[0m
+    [32m  ✓[0m[90m Get /likeBlog/:blog_id should return 200 [0m
+[0m    /cancelLikeBlog[0m
+    [32m  ✓[0m[90m Get /cancelLikeBlog/:blog_id should return 200 [0m
+[0m    /addCommentToBlog[0m
+    [32m  ✓[0m[90m Post /addCommentToBlog should return 200 [0m
+[0m    /showCommentListToBlog[0m
+    [32m  ✓[0m[90m Get /showCommentListToBlog/:blog_id should return 200 [0m
+[0m    /deleteCommentToBlog[0m
+    [32m  ✓[0m[90m Get /deleteCommentToBlog/:blog_id should return 200 [0m
+
+[0m  Recipe API[0m
+[0m    /recipe/listAll[0m
+[0mGET /recipe/listAll [32m200 [0m29.539 ms - 6621[0m
+    [32m  ✓[0m[90m should return html content, status should be 200 [0m[33m(39ms)[0m
+[0m    /recipe/listOwn[0m
+[0mGET /recipe/listOwn/01 [32m200 [0m4.507 ms - 2[0m
+    [32m  ✓[0m[90m should return html content, status should be 200 [0m
+[0m    /recipe/search[0m
+[0mGET /recipe/search/r [32m200 [0m14.332 ms - 6621[0m
+    [32m  ✓[0m[90m should return html content, status should be 200 [0m
+[0m    /recipe/listComment[0m
+[0mGET /recipe/listComment/01 [32m200 [0m13.822 ms - 1931[0m
+    [32m  ✓[0m[90m should return html content, status should be 200 [0m
+[0m    /recipe/listProduct[0m
+[0mGET /recipe/listProduct/11 [32m200 [0m11.274 ms - 2231[0m
+    [32m  ✓[0m[90m should return html content, status should be 200 [0m
+[0m    /recipe/create[0m
+recipe数据接收完毕
+[0mPOST /recipe/create [32m200 [0m17.764 ms - -[0m
+    [32m  ✓[0m[90m should return 发布菜谱成功 as a html body [0m
+[0m    /recipe/comment[0m
+recipe数据接收完毕
+[0mPOST /recipe/comment [32m200 [0m3.654 ms - -[0m
+    [32m  ✓[0m[90m should return 评论成功！ as a html body [0m
+[0m    /recipe/collect[0m
+recipe数据接收完毕
+[0mPOST /recipe/collect [32m200 [0m2.829 ms - -[0m
+    [32m  ✓[0m[90m should return collect成功！ as a html body [0m
+[0m    /recipe/createProduct[0m
+recipe数据接收完毕
+[0mPOST /recipe/createProduct [32m200 [0m4.611 ms - -[0m
+    [32m  ✓[0m[90m should return product成功！ as a html body [0m
+
+[0m  Sale API[0m
+[0m    /sale[0m
+[0mGET /sale/ [32m200 [0m338.845 ms - 715[0m
+    [32m  ✓[0m[90m should return html content [0m[31m(341ms)[0m
+[0m    /sale/getAll[0m
+[0mGET /sale/getAll [32m200 [0m5.452 ms - 1591[0m
+    [32m  ✓[0m[90m should return html content [0m
+[0m    /sale/getOne[0m
+[0mGET /sale/getOne [32m200 [0m2.856 ms - 2[0m
+    [32m  ✓[0m[90m should return html content [0m
+[0m    /sale/getOwn[0m
+[0mGET /sale/getOwn [32m200 [0m2.223 ms - 2[0m
+    [32m  ✓[0m[90m should return html content [0m
+[0m    /sale/create[0m
+数据接收完毕
+[0mGET /sale/create [32m200 [0m4.099 ms - -[0m
+    [32m  ✓[0m[90m should return html content [0m
+[0m    /sale/delete[0m
+[0mGET /sale/delete [32m200 [0m3.324 ms - -[0m
+    [32m  ✓[0m[90m should return html content [0m
+[0m    /sale/edit[0m
+数据接收完毕
+{ title: 'A little change on SellingThings',
+  author: { _id: '03', head: 'headPath', account: 'noob' },
+  content: 'There`s no content' }
+[0mGET /sale/edit [32m200 [0m7.713 ms - -[0m
+    [32m  ✓[0m[90m should return html content [0m
+[0m    /sale/search[0m
+[0mGET /sale/search [32m200 [0m3.583 ms - 2[0m
+    [32m  ✓[0m[90m should return html content [0m
+
+[0m  Topic API[0m
+[0m    /topic[0m
+    [32m  ✓[0m[90m Get /topic should return 200 [0m
+[0m    /createTopic[0m
+    [32m  ✓[0m[90m Get /createTopic should return 200 [0m
+[0m    /showTopicDetail[0m
+    [32m  ✓[0m[90m Get /showTopicDetail/:topic_id should return 200 [0m
+[0m    /showTopicList[0m
+    [32m  ✓[0m[90m Get /showTopicList should return 200 [0m
+[0m    /likeTopicUpload[0m
+    [32m  ✓[0m[90m Get /likeTopicUpload/:Upload_id should return 200 [0m
+[0m    /cancelLikeTopicUpload[0m
+    [32m  ✓[0m[90m Get /cancelLikeTopicUpload/:Upload_id should return 200 [0m
+[0m    /getAllCommentToTopicUpload[0m
+    [32m  ✓[0m[90m Get /getAllCommentToTopicUpload/:Upload_id should return 200 [0m
+
+[0m  测试Userinfo[0m
+[0m    测试testuserinfo.jade[0m
+[0mGET /userinfo/testinterface [32m200 [0m70.830 ms - 1886[0m
+    [32m  ✓[0m[90m should return html content [0m[31m(87ms)[0m
+
+
+[92m [0m[32m 41 passing[0m[90m (1s)[0m
+

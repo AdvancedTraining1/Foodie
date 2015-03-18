@@ -1,0 +1,101 @@
+//Created by hh on 11/28/14
+doctype
+html(ng-app="administrator")
+	head
+		meta(charset='utf8')
+		meta(name="author" content="ATT16")
+		meta(name="keywords" content="Advanced Training One Nourriture")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0")
+		meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+		base(href='/')
+		title 管理员系统
+
+		link(rel='stylesheet', href='css/bootstrap_chenmm1.css')
+		link(rel='stylesheet', href='css/animate.css')
+		link(rel='stylesheet', href='css/style.css')
+		link(rel='stylesheet', href='css/font-awesome/font-awesome.min.css' media="screen")
+		link(href="img/favicon.png" rel="icon" type="image/png")
+	body
+		header
+			.container
+				.navbar
+					.navbar-inner
+						a.brand()
+							img(src="img/restart_logo.png" width="90" height="90" alt="Logo")
+							span.logo_title
+								strong Nourriture
+							span.logo_subtitle Advanced Training Team 16
+						a.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
+							span.nb_left.pull-left
+								span.icon-bar
+								span.icon-bar
+								span.icon-bar
+							span.nb_right.pull-right menu
+						.nav-collapse.collapse
+							ul#menuTab.nav.pull-left
+								li(id = 'add-user').active
+									a(href="/admin/addUser_an") Add User
+								li(id = 'search-user')
+									a(href="/admin/getUser_an") Search User
+								li(id = 'add-season')
+									a(href="/admin/addSeason_an") Add Season
+								li(id = 'search-season')
+									a(href="/admin/getSeason_an") Search Season
+	//h1= '管理员系统'
+	//p Welcome to operate
+	//form(id = "choose_form")
+	//请选择你需要的操作
+	//br
+	//a(href='/admin/addUser_an') 添加用户
+	//&nbsp
+	//a(href='/admin/getUser_an') 查找用户
+	//&nbsp
+	//a(href='/admin/addUser') 添加用户
+	//&nbsp
+	//a(href='/admin/addUser') 添加用户
+	//input(type = "button" id = "add_user" value = "添加用户" onclick = "location.href = '/admin/addUser';")
+	//&nbsp
+	//input(type = "button" id = "remove_user" value = "删除用户" onclick = "location.href = '/admin/addUser';")
+	//&nbsp
+	//input(type = "button" id = "modify_user" value = "修改用户" onclick = "location.href = '/admin/addUser';")
+	//output(id="result")
+block admin
+#main
+	footer
+		section#footer_teasers_wrapper(style='padding:20px 0px')
+			.container
+				.row
+					.span4.footer_teaser
+						h3 About us
+						p We are Advanced Training Team 16 including 6 people.
+						p
+							span.glyphicon.glyphicon-map-marker 3 ShangYuan Cun - Beijing Jiaotong University
+						p
+							span.glyphicon.glyphicon-envelope hello@AdvancedTraining1.com
+					.span4.footer_teaser
+						h3 Latest News
+						ul.media-list
+							li.media
+								a.media-photo(href='' style="background-image:url(images/portfolio/t5.jpg)")
+								a.media-date(href='') 04
+									span Jan
+								h5.media-heading
+									a(href='') Android Application...
+								p The android platform application is released, go download
+					.span4.footer_teaser#latest-flickr-images
+						h3 FlickrFeed
+						p All photos &copy; by
+							a(href="http://www.bjtu.edu.cn/" target="_blank")  BJTU
+		section#copyright
+			.container
+				.row
+					.span6 Copyright &copy; 2014.Company name All rights reserved. Advanced Training1 Team 16
+					.span6.text-right
+						a(href='') Nourriture
+script.
+	$(function(){
+		$("#menuTab > li").click(tab);
+		function tab() {
+			$(this).addClass("active").siblings().removeClass("active");
+		};
+	});

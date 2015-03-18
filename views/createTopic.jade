@@ -1,0 +1,17 @@
+//
+   Created by mengchi on 14-11-13.
+
+extends layout
+block content
+    h1 Create A new blog
+    form(method = "post", action="/topic/publishTopic")
+        p
+            label topicName
+            <br/>
+            input(name="topicName")
+        p
+            labe Content
+            </br/>
+            textarea(name="content")
+        p
+            input(type="submit" value ="submit")

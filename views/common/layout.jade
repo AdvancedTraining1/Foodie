@@ -1,0 +1,148 @@
+//Created by cmm on 11/26/14.
+
+doctype
+html(ng-app="nourriture")
+	head
+		meta(charset='utf8')
+		//Advanced Training Team 16
+		meta(name="author" content="ATT16")
+		meta(name="keywords" content="Advanced Training One Nourriture")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0")
+		meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+
+		base(href='/index')
+		title Nourtiture
+		//link(rel='stylesheet', href='css/bootstrap.css')
+		//link(rel='stylesheet', href='css/bootstrap-responsive.css')
+		link(rel='stylesheet', href='css/bootstrap_chenmm1.css')
+		link(rel='stylesheet', href='css/animate.css')
+		link(rel='stylesheet', href='css/style.css')
+		link(rel='stylesheet', href='css/font-awesome/font-awesome.min.css' media="screen")
+		link(href="img/favicon.png" rel="icon" type="image/png")
+
+	body
+		//# id; . class
+		header
+			.container
+				.navbar
+					.navbar-inner
+						a.brand(href='/index')
+							img(src="img/restart_logo.png" width="90" height="90" alt="Logo")
+							span.logo_title
+								strong Nourriture
+							span.logo_subtitle Advanced Training Team 16
+						a.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
+							span.nb_left.pull-left
+								span.icon-bar
+								span.icon-bar
+								span.icon-bar
+							span.nb_right.pull-right menu
+						.nav-collapse.collapse
+							ul#menuTab.nav.pull-right
+								li.active
+									a(href="/index") Home
+								li
+									a(href='/recipe/list_an') Recipe
+								li
+									a(href='/blog/blogList_angular') Blog
+								li
+									a(href='/topic/topicList_angular') Topic
+								li
+									a(href='/userinfo/centerBlogs') Personal Center
+								li
+									a(href='/attention/friendStatusListRecipe') Friend Status
+								li
+									a(href='/sale/listTradePost_angular') Trade
+								li.dropdown
+									a.dropdown-toggle(data-toggle="dropdown" href="") Publish
+										span.caret
+									ul#subMenu.dropdown-menu
+										li
+											a(href='/recipe/create_an') Publish Recipe
+										li
+											a(href='/blog/createBlog_angular') Publish Blog
+										li
+											a(href='/topic/createTopic_angular') Publish Topic
+										li
+											a(href='/sale/createTradePost') Publish Trade Post
+										li
+											a(href='/season/season_an') Season Food
+										li
+											a(href='/sale/createTradePost_angular') Publish Trade Post
+
+
+				#sign
+					a(href='/userinfo/register',id='loginAddress')
+						span.glyphicon.glyphicon-user(id='loginName') Register / Sign In
+					a(href='/userinfo/logout',id='loginAddress2')
+						span  &nbsp;&nbsp;&nbsp;&nbsp;,Logout
+
+		block team
+
+		#main
+			footer
+				section#footer_teasers_wrapper(style='padding:20px 0px')
+					.container
+						.row
+							.span4.footer_teaser
+								h3 About us
+								p We are Advanced Training Team 16 including 6 people.
+								p
+									span.glyphicon.glyphicon-map-marker 3 ShangYuan Cun - Beijing Jiaotong University
+								p
+									span.glyphicon.glyphicon-envelope hello@AdvancedTraining1.com
+							.span4.footer_teaser
+								h3 Latest News
+								ul.media-list
+									li.media
+										a.media-photo(href='' style="background-image:url(images/portfolio/t5.jpg)")
+										a.media-date(href='') 04
+											span Jan
+										h5.media-heading
+											a(href='') Android Application...
+										p The android platform application is released, go download
+							.span4.footer_teaser#latest-flickr-images
+								h3 FlickrFeed
+								p All photos &copy; by
+									a(href="http://www.cssmoban.com/" target="_blank")  Dimitra Giannouka
+				section#copyright
+					.container
+						.row
+							.span6 Copyright &copy; 2014.Company name All rights reserved. Advanced Training1 Team 16
+							.span6.text-right
+								a(href='') Nourriture
+
+script.
+	$(function(){
+		$("#menuTab > li").click(tab);
+		function tab() {
+			$(this).addClass("active").siblings().removeClass("active");
+		};
+
+		$.ajax({
+			async : false,
+			cache : false,      type: 'POST',
+			dataType : "json",
+			url: "/service/userinfo/isLogin",//请求的action路径
+			error: function () {//请求失败处理函数
+				//alert('请求失败');
+				document.getElementById("loginAddress2").style.visibility = "hidden";//隐藏
+			},
+			success:function(data){ //请求成功后处理函数。
+				if(data.message=="1"){
+					//alert("data.username--"+data.username);
+					document.getElementById('loginAddress').href="/userinfo/info";
+					document.getElementById('loginName').innerHTML=data.username;
+
+					document.getElementById("loginAddress2").style.visibility = "visible";//显示
+				}else{
+					document.getElementById("loginAddress2").style.visibility = "hidden";//隐藏
+				}
+
+
+			}
+		});
+
+	});
+
+

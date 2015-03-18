@@ -1,0 +1,19 @@
+//Created by cmm on 11/26/14.
+
+#main(style='min-height:500px')
+	.container
+		section#recipe
+			.hgroup
+				h2 Newest recipes
+				ul.breadcrumb.pull-right
+					li
+						a(href='/recipe/list_an') More
+		#protfolio_container.portfolio_strict.row
+			.portfolio_item.cat_travel.span4(ng-repeat="recipe in recipes")
+				.portfolio_photo(style="background-image:url({{recipe.photo}})")
+					a(href='/recipe/single_an/{{recipe._id}}')
+						span.glyphicon.glyphicon-share
+						p {{recipe.description}}
+				.portfolio_description
+					h3
+						a(href='/recipe/single_an/{{recipe._id}}') {{recipe.recipeName}}

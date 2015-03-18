@@ -1,0 +1,30 @@
+<div id="main"><div class="container"><section id="getuser"><div class="hgroup"><h1>Search user here !</h1><h2>Fill in the normal information of user.</h2><ul class="breadcrumb pull-right"><li><a href="/adminIndex">Home</a><span class="divider">/</span></li><li class="active">Search user</li></ul></div></section><div class="row"><div id="leftcol" class="span12"><div class="new_user"><form><div class="row"><div class="span4"></div><div class="span4"><!--h4 Publish a new user--><div class="input-group"><span class="input-group-addon">&nbsp&nbsp&nbsp&nbsp&nbspName</span><input type="text" ng-model="user.name" id="txt_name" placeholder="Name" class="form-control"/></div><br/><div class="input-group"><span class="input-group-addon">&nbsp&nbspAccount</span><input type="text" ng-model="user.account" id="txt_account" placeholder="Account" class="form-control"/></div><br/><div class="input-group"><span class="input-group-addon">&nbsp&nbsp&nbsp&nbsp&nbspPhone</span><input type="text" ng-model="user.phone" id="txt_cellphone" placeholder="Phone" onkeypress="IsNum(event);" class="form-control"/></div></div><div class="span4"></div></div><br/><div class="row"><div class="span5"></div><div class="span3"><button id="btn_submit" ng-click="submit()" class="btn btn-primary btn-large pull-left"><span class="glyphicon glyphicon-ok">&nbsp;Submit</span></button></div><div class="span4"></div></div><br/></form></div></div></div><div class="row"><div class="span4"></div><div class="span4"><article ng-repeat="user in users" class="post"><div class="post_header"><h3 class="post_title"><!--a(ng-click='aaa(recipe)') {{recipe.recipeName}}--><p style="padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align:left;background-color: #eee;">{{user.username}}</p><!--a(href='/recipe/single/{{recipe._id}}') {{user.name}}--></h3><div class="post_sub"><span class="glyphicon glyphicon-user"></span>&nbsp;Account:&nbsp;&nbsp;{{user.account}} &nbsp;&nbsp;<!--a(href='/recipe/single#post_comments')--><br/><span class="glyphicon glyphicon-comment"></span>&nbsp;Phone:&nbsp;&nbsp;{{user.phone}} &nbsp;&nbsp;<br/><span class="glyphicon glyphicon-star"></span>&nbsp;Type:&nbsp;&nbsp;{{user.type}} &nbsp;&nbsp;</div></div><div class="post_content"><a href="" ng-click="delete(user.account)" class="btn btn-primary">Delete</a>&nbsp;&nbsp;<a ng-click="update_({user:user})" class="btn btn-primary">Update</a></div></article><!--|{{users}}--><div user-page="user-page" page-object="pageing" click-function="list" ng-if="is_visible" class="pagination pagination-centered"></div></div><div class="span4"></div></div></div></div><!--block content--><!--	p 欢迎来到查询用户系统--><!--	form(id = "formtest")--><!--	| 输入查询的用户信息--><!--	br--><!--	input(type = "text" id = "txt_name" name = "name" value = "姓名"--><!--	onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")--><!--	br--><!--	input(type = "text" id = "txt_account" name = "account" value = "用户账户"--><!--	onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")--><!--	br--><!--	input(type = "text" id = "txt_cellphone" name = "cellphone" value = "电话" onkeypress = "IsNum(event);"--><!--	onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")--><!--	br--><!--	//input(type = "button" value = "提交" ng-click='submit()')--><!--	//br--><!--	button(ng-click='submit()') 提交--><!--	output(id="result")////这个方法是用来判定输入的是否为数字
+////我在想要是邮箱的话 正则表达式谁来写--><script>function IsNum(e)
+{
+	var k=window.event? e.keyCode : e.whitch;
+	if((k>=48) && (k<=57) || k==8 || k==0)
+	{
+	}else
+	{
+		if(window.event)
+		{
+			window.event.returnValue = false;
+		}else
+			e.preventDefault();//为了火狐浏览器而设置
+	}
+}
+//	function submitData()
+//	{
+//		var obj = {
+//		name:document.getElementById("txt_name").value,
+//		tel:document.getElementById("txt_cellphone").value,
+//		account:document.getElementById("txt_account").value,
+//		};
+//		var xhr = new XMLHttpRequest();
+//		xhr.open('post','/admin/getUserByAccount',true);
+//		xhr.onload = function(e)
+//		{
+//			document.getElementById("result").innerHTML = this.response;
+//		}
+//		xhr.send(JSON.stringify(obj));
+//	};</script>

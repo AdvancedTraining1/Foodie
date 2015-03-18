@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 O(∩_∩)O~
+  p This is my page about #{pageTitle}
+  script.
+    function submitData()
+    {
+      var obj = {
+        search:document.getElementById("username").value
+      };
+      var xhr = new XMLHttpRequest();
+      xhr.open('post','/sale',true);
+      xhr.onload = function(e)
+      {
+
+          document.getElementById("result").innerHTML = this.response;
+
+      };
+      xhr.send(JSON.stringify(obj));
+    }
+  body
+    form(id = "form1")
+        输个名字试试？
+        input(type = "text" id = "username" name = "uname" value = "姓名")
+        br
+        input(type = "button" value = "提交" onclick = "submitData();")
+    output(id="result")

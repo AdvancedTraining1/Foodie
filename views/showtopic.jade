@@ -1,0 +1,17 @@
+//
+   Created by mengchi on 14-11-13.
+
+extends layout
+block content
+    p= message
+    p
+        h=topicName
+    p=content
+    form(method = "post", action="/topic/joinTopic")
+        p
+            labe upload
+            </br/>
+            input(name="title")
+            textarea(name="picture")
+            input(type="hidden" value="#{topic_id}",name="topic_id")
+            input(type="submit" value ="submit")

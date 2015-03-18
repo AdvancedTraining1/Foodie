@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  script.
+    function submitData()
+    {
+      var obj = {
+        search:document.getElementById("txt_search").value
+      };
+      var xhr = new XMLHttpRequest();
+      xhr.open('post','/season',true);
+      xhr.onload = function(e)
+      {
+
+          document.getElementById("result").innerHTML = this.response;
+
+      };
+      xhr.send(JSON.stringify(obj));
+    }
+  body
+    form(id = "formtest")
+        输入查询信息:
+        input(type = "text" id = "txt_search" name = "search" value = "时另")
+        br
+        input(type = "button" value = "提交" onclick = "submitData();")
+    output(id="result")

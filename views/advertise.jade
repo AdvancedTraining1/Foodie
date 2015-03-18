@@ -1,0 +1,60 @@
+extends layout
+block content
+    h1= title
+    p 欢迎来到更改广告
+    script.
+        //这个方法是用来判定输入的是否为数字
+        //我在想要是邮箱的话 正则表达式谁来写
+        function IsNum(e)
+        {
+            var k = window.event? e.keyCode : e.whitch;
+            if((k>=48) && (k<=57) || k==8 || k==0)
+            {
+            }else
+            {
+                if(window.event)
+                {
+                    window.event.returnValue = false;
+                }else
+                    e.preventDefault();//为了火狐浏览器而设置
+            }
+        }
+        function submitData()
+        {
+          ListBox = document.getElementById("sel_type");
+          var index = ListBox.selectedIndex;
+          var obj = {
+            name:document.getElementById("txt_name").value,
+            tel:document.getElementById("txt_cellphone").value,
+            account:document.getElementById("txt_account").value,
+            type:ListBox.options[index].getAttribute("value"),
+            userid:ListBox.options[index].getAttribute("value")
+          };
+          var xhr = new XMLHttpRequest();
+          xhr.open('post','/advertise/addAd',true);
+          xhr.onload = function(e)
+          {
+              document.getElementById("result").innerHTML = this.response;
+          };
+          xhr.send(JSON.stringify(obj));
+        }
+    body
+        form(id = "formtest")
+            输入添加的用户信息
+            br
+            input(type = "text" id = "txt_name" name = "name" value = "广告名"
+            onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+            br
+            input(type = "text" id = "txt_cellphone" name = "cellphone" value = "广告电话" onkeypress = "IsNum(event);"
+            onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+            br
+            input(type = "text" id = "txt_account" name = "account" value = "广告账户"
+            onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+            br
+            select(id = "sel_type" name = "usertype" )
+                option(value = 1)普通广告
+                option(value = 2)营养广告
+                option(value = 3)管理广告
+            br
+            input(type = "button" value = "提交" onclick = "submitData();")
+        output(id="result")

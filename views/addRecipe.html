@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <form id = "form1" method="post" action="http://localhost:3000/recipe/create">
+        菜谱名：<input type="text" name="recipeName"><br/>
+        说明：<input type="text" name="description"><br/>
+        用料：<input type="text" name="material1"><input type="text" name="amount1"><br/>
+             <input type="text" name="material2"><input type="text" name="amount2"><br/>
+        难度：<input type="text" name="difficult"><br/>
+        时间：<input type="text" name="cookTime"><br/>
+        步骤：<input type="text" name="step1"><input type="text" name="photo1" value="photo1"><br/>
+             <input type="text" name="step2"><input type="text" name="photo1" value="photo1"><br/>
+        <input type="submit">
+    </form>
+    <hr>
+    <form id = "form2" method="post" action="http://localhost:3000/recipe/modify">
+        修改信息
+        <input type="text" name="id">
+        <input type="submit">
+    </form>
+    <hr>
+    <form id = "form3" method="post" action="http://localhost:3000/recipe/comment">
+        评论菜谱
+        <input type="submit">
+    </form>
+    <hr>
+    <form id = "form4" method="post" action="http://localhost:3000/recipe/collect">
+        收藏菜谱
+        <input type="submit">
+    </form>
+    <hr>
+    <form id = "form5" method="post" action="http://localhost:3000/recipe/createProduct">
+        上传作品
+        <input type="submit">
+    </form>
+    <hr>
+    <form id = "form6" method="post" action="http://localhost:3000/recipe/likeProduct">
+        作品点赞
+        <input type="text" name="id" value="">
+        <input type="submit">
+    </form>
+    <hr>
+    <form id = "form7" method="post" ENCTYPE="multipart/form-data" action="http://localhost:3000/recipe/upload">
+        上传图片
+        <input type="file" name="image">
+        <input type="submit">
+    </form>
+</body>
+</html>

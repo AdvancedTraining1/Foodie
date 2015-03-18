@@ -1,0 +1,123 @@
+//
+   Created by liuhanxu on 14-12-12.
+#main(style='min-height:500px')
+   .container
+      section#blog
+         .hgroup
+            h1 Personal Center------Blogs
+            h2
+               | Your Own Blog
+            ul.breadcrumb.pull-right
+               li
+                  a(href='/index') Home
+                  span.divider /
+               li.active Blog
+         .row
+            #leftcol.span8
+               article.post(ng-repeat="blog in blogs")
+                  .post_header
+                     h3.post_title
+                        a(href='/blog/blogDetail_angular/{{blog._id}}')
+                           | {{blog.title}}
+                     .post_sub
+                        span.glyphicon.glyphicon-time
+                        | {{blog.create_at}}&nbsp;&nbsp;
+                        a(href='')
+                           span.glyphicon.glyphicon-comment
+                           | {{blog.comment_count}} comments
+                  .post_content
+                     h5 key word: {{blog.tag}}
+                  a.btn.btn-primary(href='/blog/blogDetail_angular/{{blog._id}}') Read More
+               .pagination.pagination-centered(blog-page page-object="pageing" click-function="list")
+            #sidebar.span4
+               aside.widget
+                  h4 Categories
+                  ul.nav.nav-tabs.nav-stacked
+                     li.active
+                        a(href='/userinfo/centerBlogs') My Blogs
+                     li
+                        a(href='/userinfo/centerRecipes') My Recipes
+                     li
+                        a(href='#') My Trades
+                     li
+                        a(href='#') My Topics
+                     li
+                        a(href='#') My Uploads
+
+               aside.widget.ads.clearfix
+                  h4 Friends
+                  a(href='#')
+                     img.friend(src='/head/defaulthead.jpeg', alt='')
+                  a(href='#')
+                     img.friend(src='/head/defaulthead.jpeg', alt='')
+                  a(href='#')
+                     img.friend(src='/head/defaulthead.jpeg', alt='')
+                  a(href='#')
+                     img.friend(src='/head/defaulthead.jpeg', alt='')
+               aside.widget.ads.clearfix
+                  h5
+                     a(href='#') More Friends--->
+               aside.widget
+                  h4 Tabs
+                  ul#myTab.nav.nav-tabs
+                     li.active
+                        a(data-toggle='tab', href='#recent') Recent
+                     li
+                        a(data-toggle='tab', href='#tags') Tags
+                  #myTabContent.tab-content
+                     #recent.tab-pane.fade.active.in
+                        ul.media-list
+                           li.media
+                              a.media-photo(href='#', style='background-image:url(images/portfolio/t5.jpg)')
+                              a.media-date(href='#')
+                                 | 19
+                                 span FEB
+                              h5.media-heading
+                                 a(href='#') Media heading, this is a title of a news...
+                              p Fugiat dapibus, tellus ac cursus commodo, ut fermentum...
+                           li.media
+                              a.media-photo(href='#', style='background-image:url(images/portfolio/t4.jpg)')
+                              a.media-date(href='#')
+                                 | 18
+                                 span FEB
+                              h5.media-heading
+                                 a(href='#') Media heading, of a news item.
+                              p Fugiat dapibus, tellus ac cursus commodo, condime ntum nibh, ut fermentum...
+                           li.media
+                              a.media-photo(href='#', style='background-image:url(images/portfolio/t5.jpg)')
+                              a.media-date(href='#')
+                                 | 17
+                                 span FEB
+                              h5.media-heading
+                                 a(href='#') Media heading, this is a title of a news...
+                              p Fugiat dapibus, tellus ac cursus commodo, ut fermentum...
+                           li.media
+                              a.media-photo(href='#', style='background-image:url(images/portfolio/t4.jpg)')
+                              a.media-date(href='#')
+                                 | 16
+                                 span FEB
+                              h5.media-heading
+                                 a(href='#') Media heading, of a news item.
+                              p Fugiat dapibus, tellus ac cursus commodo, condime ntum nibh, ut fermentum...
+                     #tags.tab-pane.fade
+                        a.label Default
+                        a.label.label-success Success
+                        a.label.label-warning Warning
+                        a.label.label-important Important
+                        a.label.label-info Info
+                        a.label.label-inverse Inverse
+                        a.label Default
+                        a.label.label-success Success
+                        a.label.label-important Important
+                        a.label.label-info Info
+                        a.label.label-inverse Inverse
+                        a.label Default
+                        a.label.label-success Success
+                        a.label.label-success Success
+                        a.label.label-warning Warning
+                        a.label.label-important Important
+                        a.label.label-warning Warning
+                        a.label.label-warning Warning
+                        a.label.label-important Important
+                        a.label.label-info Info
+                        a.label.label-inverse Inverse

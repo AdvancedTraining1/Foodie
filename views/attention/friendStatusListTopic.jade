@@ -1,0 +1,51 @@
+
+//Created by zhaiyuan on 12/9/14.
+#main(style='min-height:500px')
+	.container
+		section#listFriendStatus
+			.hgroup
+				h1 All Friend Status Topics Here!
+				h2 Enjoy the friend status topics.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active Friend Status
+		.row
+			#leftcol.span8
+				article.post(ng-repeat="topic in topics")
+					.post_header
+						h3.post_title
+							a(href='/attention/oneTopic/{{topic._id}}' id="{{$index}}") # {{topic.topicName}} #
+						.post_sub
+							span.glyphicon.glyphicon-time {{topic.time}} &nbsp;&nbsp;
+								//a(href='/topic/single#post_comments')
+									span.glyphicon.glyphicon-comment {{topic.commentNum}} comments
+					.post_content
+						figure
+							//a(href='/recipe/single')
+								img(alt='0' src='{{recipe.photo}}')
+						p {{topic.content}}
+						a.btn.btn-primary(href='/attention/oneTopic/{{topic._id}}') Read More
+				.pagination.pagination-centered(attention-page page-object="pageing" click-function="list")
+			#sidebar.span4
+				//input(ng-model='ccc')
+				//|{{ccc}}
+				aside.widget
+					h4 Search
+				aside.widget
+					.search-box
+						a.search-icon(href='/attention/getAllAttention/{{search}}')
+							span.glyphicon.glyphicon-search(style='top:4px')
+						input#search.search(ng-model='search' placeholder='search')
+				aside.widget
+					h4 Categories
+						//ul.nav.nav-tabs.nav-stacked(id='myTab')
+							li.active
+								a(data-toggle="tab" href='#Recipe') Recipe
+					li
+						button.btn.btn-info(ng-click='toRecipe()') Recipe
+					li
+						button.btn.btn-info(ng-click='toBlog()') Blog
+					li
+						button.btn.btn-info(ng-click='toTopic()') Topic

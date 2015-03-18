@@ -1,0 +1,51 @@
+//Created by cmm on 12/8/14.
+#main(style='min-height:500px')
+	.container
+		section#listRecipe
+			.hgroup
+				h1 All his/her recipes
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active
+						a(href='') PersonCenter
+		.row
+			#leftcol.span8
+				#protfolio_container.portfolio_strict.row
+					.portfolio_item.cat_travel.span4(ng-repeat="recipe in recipes")
+						.portfolio_photo(style="background-image:url({{recipe.photo}})")
+							a(href='/recipe/single_an/{{recipe._id}}')
+								span.glyphicon.glyphicon-share
+								p {{recipe.description}}
+						.portfolio_description
+							h3
+								a(href='/recipe/single_an/{{recipe._id}}') {{recipe.recipeName}}
+
+				//article.post(ng-repeat="recipe in recipes")
+				//	.post_header
+				//		h3.post_title
+				//			a(href='/recipe/single_an/{{recipe._id}}') {{recipe.recipeName}}
+				//		.post_sub
+				//			span.glyphicon.glyphicon-time
+				//			| {{recipe.logTime}} &nbsp;&nbsp;
+				//			span.glyphicon.glyphicon-comment
+				//				| {{recipe.commentNum}} comments &nbsp;
+				//			span.glyphicon.glyphicon-star
+				//				| {{recipe.collectNum}} collects &nbsp;
+				//			span.glyphicon.glyphicon-hand-up
+				//			| {{recipe.productNum}} products &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				//			a.pull-right(href='' ng-click="addCollect(recipe._id)")
+				//				span.glyphicon.glyphicon-star-empty
+				//				|Collect it
+				//	.post_content
+				//		figure
+				//			a(href='/recipe/single_an/{{recipe._id}}')
+				//				img(alt='0' src='{{recipe.photo}}')
+				//		p {{recipe.description}}
+				//		a.btn.btn-primary(href='/recipe/single_an/{{recipe._id}}') Read More
+				.pagination.pagination-centered(otherrecipe-page page-object="pageing" click-function="list")
+			#sidebar.span4
+				aside.widget
+
+

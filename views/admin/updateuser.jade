@@ -1,0 +1,111 @@
+#main
+	.container
+		section#adduser
+			.hgroup
+				h1 Update a user here !
+				h2 Fill in the normal information of user.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/adminIndex') Home
+						span.divider /
+					li.active Update user
+		.row
+			#leftcol.span12
+				.new_user
+					form
+						.row
+							.span4
+							.span4
+								//h4 Publish a new user
+								.input-group
+									span.input-group-addon &nbsp&nbsp&nbsp&nbsp&nbspName
+									input.form-control(type='text' ng-model='user.name' id = "txt_name" placeholder="Name")
+								br
+								.input-group
+									span.input-group-addon &nbsp&nbspAccount
+									input.form-control(type='text' ng-model='user.account' id = "txt_account" placeholder="Account" disabled)
+								br
+								.input-group
+									span.input-group-addon &nbsp&nbsp&nbsp&nbsp&nbspPhone
+									input.form-control(type='text' ng-model='user.phone' id = "txt_cellphone" placeholder="Phone" onkeypress = "IsNum(event);")
+								br
+								.input-group
+									span.input-group-addon Password
+									input.form-control(type='text' ng-model='user.password' id = "txt_password" placeholder="Password")
+							.span4
+						br
+						.row
+							.span4
+							.span1
+								p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Type
+							.span2
+								select(id = "sel_type" name = "usertype" ng-model='user.type' style='width:100%;')
+									option(value = 1) Ordinary users
+									option(value = 2) Dietitian
+									option(value = 3) Administrator
+							.span4
+						.row
+							.span4
+							.span1
+								p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Sex
+							.span2
+								select(id = "sel_sex" name = "usersex" ng-model='user.sex' style='width:100%;')
+									option(value = 0) Male
+									option(value = 1) Female
+							.span4
+						.row
+							.span5
+							.span3
+								button.btn.btn-primary.btn-large.pull-left(ng-click='submit()')
+									span.glyphicon.glyphicon-ok &nbsp;Submit
+							.span4
+						br
+						.row
+							.span4
+							.span4
+								output(id="result")
+							.span4
+	//p 欢迎来到添加用户系统
+	//form(id = "formtest")
+	//| 输入添加的用户信息
+	//br
+	//input(type = "text" id = "txt_name" name = "name" value = "姓名"
+	//onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+	//br
+	//input(type = "text" id = "txt_account" name = "account" value = "用户账户"
+	//onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+	//br
+	//input(type = "text" id = "txt_cellphone" name = "cellphone" value = "电话" onkeypress = "IsNum(event);"
+	//onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+	//br
+	//input(type = "text" id = "txt_password" name = "password" value = "密码"
+	//onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+	//br
+	//select(id = "sel_type" name = "usertype")
+	//	option(value = 1)| 普通用户
+	//	option(value = 2)| 营养师
+	//	option(value = 3)| 管理员
+	//select(id = "sel_sex" name = "usersex")
+	//	option(value = 0)| 男
+	//	option(value = 1)| 女
+	//br
+	//input(type = "button" value = "提交" onclick = "submitData();")
+	//br
+	//output(id="result")
+	//这个方法是用来判定输入的是否为数字
+	//我在想要是邮箱的话 正则表达式谁来写
+	script.
+		function IsNum(e)
+		{
+			var k=window.event? e.keyCode : e.whitch;
+			if((k>=48) && (k<=57) || k==8 || k==0)
+			{
+			}else
+			{
+				if(window.event)
+				{
+					window.event.returnValue = false;
+				}else
+					e.preventDefault();//为了火狐浏览器而设置
+			}
+		}

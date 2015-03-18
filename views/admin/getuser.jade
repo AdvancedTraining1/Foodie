@@ -1,0 +1,116 @@
+
+#main
+	.container
+		section#getuser
+			.hgroup
+				h1 Search user here !
+				h2 Fill in the normal information of user.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/adminIndex') Home
+						span.divider /
+					li.active Search user
+		.row
+			#leftcol.span12
+				.new_user
+					form
+						.row
+							.span4
+							.span4
+								//h4 Publish a new user
+								.input-group
+									span.input-group-addon &nbsp&nbsp&nbsp&nbsp&nbspName
+									input.form-control(type='text' ng-model='user.name' id = "txt_name" placeholder="Name")
+								br
+								.input-group
+									span.input-group-addon &nbsp&nbspAccount
+									input.form-control(type='text' ng-model='user.account' id = "txt_account" placeholder="Account")
+								br
+								.input-group
+									span.input-group-addon &nbsp&nbsp&nbsp&nbsp&nbspPhone
+									input.form-control(type='text' ng-model='user.phone' id = "txt_cellphone" placeholder="Phone" onkeypress = "IsNum(event);")
+							.span4
+						br
+						.row
+							.span5
+							.span3
+								button.btn.btn-primary.btn-large.pull-left(id='btn_submit' ng-click='submit()')
+									span.glyphicon.glyphicon-ok &nbsp;Submit
+							.span4
+						br
+		.row
+			.span4
+			.span4
+				article.post(ng-repeat="user in users")
+					.post_header
+						h3.post_title
+							//a(ng-click='aaa(recipe)') {{recipe.recipeName}}
+							p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align:left;background-color: #eee;') {{user.username}}
+							//a(href='/recipe/single/{{recipe._id}}') {{user.name}}
+						.post_sub
+							span.glyphicon.glyphicon-user
+							|&nbsp;Account:&nbsp;&nbsp;{{user.account}} &nbsp;&nbsp;
+							//a(href='/recipe/single#post_comments')
+							br
+							span.glyphicon.glyphicon-comment
+							|&nbsp;Phone:&nbsp;&nbsp;{{user.phone}} &nbsp;&nbsp;
+							br
+							span.glyphicon.glyphicon-star
+							|&nbsp;Type:&nbsp;&nbsp;{{user.type}} &nbsp;&nbsp;
+					.post_content
+						a.btn.btn-primary(href='' ng-click = 'delete(user.account)') Delete
+						|&nbsp;&nbsp;
+						a.btn.btn-primary(ng-click = 'update_({user:user})') Update
+				//|{{users}}
+				.pagination.pagination-centered(user-page page-object="pageing" click-function="list" ng-if = 'is_visible')
+			.span4
+//block content
+//	p 欢迎来到查询用户系统
+//	form(id = "formtest")
+//	| 输入查询的用户信息
+//	br
+//	input(type = "text" id = "txt_name" name = "name" value = "姓名"
+//	onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+//	br
+//	input(type = "text" id = "txt_account" name = "account" value = "用户账户"
+//	onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+//	br
+//	input(type = "text" id = "txt_cellphone" name = "cellphone" value = "电话" onkeypress = "IsNum(event);"
+//	onfocus = "if(value == defaultValue) value = ''" onblur = "if(!value) value = defaultValue")
+//	br
+//	//input(type = "button" value = "提交" ng-click='submit()')
+//	//br
+//	button(ng-click='submit()') 提交
+//	output(id="result")
+	////这个方法是用来判定输入的是否为数字
+	////我在想要是邮箱的话 正则表达式谁来写
+script.
+	function IsNum(e)
+	{
+		var k=window.event? e.keyCode : e.whitch;
+		if((k>=48) && (k<=57) || k==8 || k==0)
+		{
+		}else
+		{
+			if(window.event)
+			{
+				window.event.returnValue = false;
+			}else
+				e.preventDefault();//为了火狐浏览器而设置
+		}
+	}
+	//	function submitData()
+	//	{
+	//		var obj = {
+	//		name:document.getElementById("txt_name").value,
+	//		tel:document.getElementById("txt_cellphone").value,
+	//		account:document.getElementById("txt_account").value,
+	//		};
+	//		var xhr = new XMLHttpRequest();
+	//		xhr.open('post','/admin/getUserByAccount',true);
+	//		xhr.onload = function(e)
+	//		{
+	//			document.getElementById("result").innerHTML = this.response;
+	//		}
+	//		xhr.send(JSON.stringify(obj));
+	//	};

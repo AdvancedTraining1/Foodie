@@ -1,0 +1,41 @@
+//
+   Created by liuhanxu on 14-12-8.
+#main
+   .container
+      section#user
+         .hgroup
+            h1 User Information
+            //button.btn.btn-success.btn-large(ng-click='test123()') test
+            h2 This is a user info page.
+            ul.breadcrumb.pull-right
+               li
+                  a(href='/index') Home
+                  span.divider /
+               li.active Contact
+         .row
+            .span4.office_address
+               address
+                  strong  Hello,Welcom {{userinfo.account}}
+                  article.post_content
+                     figure
+                        img(alt='0' src='{{userinfo.head}}')
+               address
+                  strong Email Address
+                  br
+                  a(href='mailto:#') {{userinfo.email}}
+            .span8.contact_form
+               .form
+                  form(ng-submit="modifyPass()")
+                     .row
+                        .span8
+                           label Old Password
+                           input.span4(name='Password1', placeholder='Old Password', required, type='password',id='passwordold')
+                        .span8
+                           label New Password
+                           input.span4(name='Password2', placeholder='New Password', required, type='password',id='password1')
+                        .span8
+                           label New Password Again
+                           input.span4(name='Password3', placeholder='New Password', required, type='password',id='password2')
+                        .span8
+                           button.btn.btn-large.btn-success(type="submit")
+                              span Submit Modify Password

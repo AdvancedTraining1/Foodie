@@ -1,0 +1,103 @@
+//Created by cmm on 11/26/14.
+#main
+	.container
+		section#createRecipe
+			.hgroup
+				h1 Create your own recipe here !
+				h2 Fill in the normal information of this food, upload several pictures to explain how to cook it. Do a good job, people will follow your steps.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active Create Recipe
+		.row
+			#leftcol.span8
+				.new_recipe
+					h4 Publish a new recipe
+						br
+						br
+						form
+							.row
+								.span3
+									p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Difficultity
+								.span5
+									select#difficult(ng-model='recipe.difficult' style='width:100%')
+										option Junior Level
+										option Middle Level
+										option Senior Level
+							.row
+								.span3
+									p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Cook Time
+								.span5
+									select#cookTime(ng-model='recipe.cookTime' style='width:100%')
+										option About 10 minutes
+										option 10 - 30 minutes
+										option 30 - 60 minutes
+										option More than 60 minutes
+							.row
+								.span3
+									p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Recipe Photo
+								.span5
+									input#photo.form-control(type='file' name='files' ng-file-select="onFileSelect1($files)" multiple accept="image/*" style='background-color: #fff;border: 1px solid #ccc;border-radius: 4px;')
+							.row
+								.span8
+									.input-group
+										span.input-group-addon RecipeName
+										input#recipeName.form-control(type='text' ng-model='recipe.recipeName' placeholder="RecipeName")
+							br
+							.row
+								.span8
+									.input-group
+										span.input-group-addon Your story with it
+										input#description.form-control(type='text' ng-model='recipe.description' placeholder="Your story with it")
+							br
+							.row
+								.span3
+									p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Material
+								.span4
+									button#moreM.btn.btn-link.pull-left(ng-click='moreMaterial()')
+										span.glyphicon.glyphicon-plus Add one
+									button#lessM.btn.btn-link.pull-right(ng-click='lessMaterial()')
+										span.glyphicon.glyphicon-minus Delete one
+							.row(ng-repeat="m in moreMaterials")
+								.span4
+									.input-group
+										span.input-group-addon Material Name
+										input#materialName.form-control(type='text' name='materialName' placeholder="Material Name")
+								.span4
+									.input-group
+										span.input-group-addon Material Amount
+										input#amount.form-control(type='text' name='amount' placeholder="Material Amount")
+							br
+							.row
+								.span3
+									p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Step
+								.span4
+									button#moreS.btn.btn-link.pull-left(ng-click='moreStep()')
+										span.glyphicon.glyphicon-plus Add one
+									button#lessS.btn.btn-link.pull-right(ng-click='lessStep()')
+										span.glyphicon.glyphicon-minus Delete one
+							.row(ng-repeat="s in moreSteps")
+								.span8
+									.input-group
+										span.input-group-addon Step Description
+										input#stepExplain.form-control(type='text' name='stepExplain' placeholder="Step Description")
+								.span3
+									p(style='padding: 6px 12px;font-size: 14px;font-weight: normal;line-height: 1;color: #555;text-align: center;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;') Upload Photo
+								.span5
+									input#stepPhoto.form-control(type='file' name='files' ng-file-select="onFileSelect($files)" multiple accept="image/*" style='background-color: #fff;border: 1px solid #ccc;border-radius: 4px;')
+							.row.space50
+							.row
+								.span8
+									button.btn.btn-primary.btn-large.pull-right(ng-click='createRecipePage()')
+										span.glyphicon.glyphicon-ok &nbsp;Create your recipe
+			#sidebar.span4
+				aside.widget.ads.clearfix(ng-if='photoSee')
+					h4 Recipe photo
+					a(href='')
+						img(src='{{recipe.photo}}')
+				aside.widget.ads.clearfix(ng-if='stepSee')
+					h4 Step photo
+					a(href='' ng-repeat='photo in step')
+						img(src='{{photo}}')
+

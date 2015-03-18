@@ -1,0 +1,43 @@
+//Created by cmm on 11/28/14.
+#main(style='min-height:500px')
+	.container
+		section#listRecipe
+			.hgroup
+				h1 All the recipes here !
+				h2 You can get all the recipes you want from this page, or search the ones you want from the right bar.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active Recipes
+		.row
+			#leftcol.span8
+				#protfolio_container.portfolio_strict.row
+					.portfolio_item.cat_travel.span4(ng-repeat="recipe in recipes")
+						.portfolio_photo(style="background-image:url({{recipe.photo}})")
+							a(href='/recipe/single_an/{{recipe._id}}')
+								span.glyphicon.glyphicon-share
+								p {{recipe.description}}
+						.portfolio_description
+							h3
+								a(href='/recipe/single_an/{{recipe._id}}') {{recipe.recipeName}}
+				.pagination.pagination-centered(recipe-page page-object="pageing" click-function="list")
+			#sidebar.span4
+				aside.widget
+					h4 Search
+				aside.widget
+					.search-box
+						a.search-icon(ng-click='searchRecipe()')
+							span.glyphicon.glyphicon-search(style='top:4px')
+						input.search(ng-model='search' placeholder='search')
+				aside.widget
+					h4 Recipes Sort by
+					ul.nav.nav-tabs.nav-stacked(id='myTab')
+						li.active
+							a(data-toggle="tab" href="#all" ng-click='') Time
+						li
+							a(data-toggle="tab" href="#comment") Comment
+						li
+							a(data-toggle="tab" href="#product") Product
+						li
+							a(data-toggle="tab" href="#collects") Collect

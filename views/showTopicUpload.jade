@@ -1,0 +1,16 @@
+//
+   Created by mengchi on 14-11-14.
+
+extends layout
+block content
+    p= message
+    p
+        h1=title
+    p=picture
+    form(method = "post", action="/topic/addCommentToTopicUpload")
+        p
+            labe comment
+            </br/>
+            textarea(name="comment")
+            input(type="hidden" value="5464ee4caae0ec19272d59e9",name="_id")
+            input(type="submit" value ="submit")

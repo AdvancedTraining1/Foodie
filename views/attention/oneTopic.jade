@@ -1,0 +1,88 @@
+
+//Created by zhaiyuan on 12/10/14.
+
+#main
+	.container
+		section#Topic
+			.hgroup
+				h1
+					| # {{topic.topicName}} #
+				h2
+					| {{topic.content}}
+					h2
+						span.glyphicon.glyphicon-time
+							| {{topic.time}}&nbsp;&nbsp;
+						a(href='')
+							span.glyphicon.glyphicon-camera
+							| &nbsp;&nbsp;{{topic.upload_count}} product
+						a(href='#' data-toggle='modal', data-target='#myModal'  style="margin-left:50px")
+							span.glyphicon.glyphicon-plus
+							| upload one
+
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active Friend Status
+			.row
+				#leftcol.span8
+					#protfolio_container.portfolio_strict.row
+						.portfolio_item.cat_travel.span4(ng-repeat="upload in uploads")
+							.portfolio_photo(style="background-image:url({{upload.picture}})")
+							a(href='')
+								span.glyphicon.glyphicon-share
+								p {{upload.title}}
+							.portfolio_description
+								h3
+									a(href='') {{upload.title}}
+					.pagination.pagination-centered(attention-page page-object="uploadPaging" click-function="list")
+				#sidebar.span4
+					aside.widget.ads.clearfix
+						h4 Author
+						.team_member(style='background:none')
+							figure(style="background-image: url({{topic.author.head}})")
+								img(alt='0' src='{{topic.author.head}}')
+							h5(style='color:#555') {{topic.author.account}}
+						a(href='')
+							img(alt='0' src='{{topic.author.head}}')
+						.row
+							| {{topic.author.account}}
+					aside.widget
+						h4 Categories
+						li
+							button.btn.btn-info(ng-click='toRecipe()') Recipe
+						li
+							button.btn.btn-info(ng-click='toBlog()') Blog
+						li
+							button.btn.btn-info(ng-click='toTopic()') Topic
+				#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true', style='display:none')
+					.modal-dialog
+						.modal-content
+							.modal-header
+								button.close(type='button', data-dismiss='modal', aria-hidden='true')
+									| ×
+								h4#myModalLabel.modal-title
+									| Upload you product
+							.modal-body
+								.row
+									.span4
+										.input-group
+											span.input-group-addon Product Name
+											input.form-control(type='text' name='title' ng-model='topicUpload.title' placeholder="Product Name")
+								.row
+									.span4(style="margin-top:5px")
+										.input-group
+											span.input-group-addon Product&nbsp; story&nbsp;
+											textarea.form-control(type='text' name='content' ng-model='topicUpload.story' rows="3" placeholder="Product Story")
+								.row
+									.span4(style="margin-top:5px")
+										.input-group
+											div(onclick="file.click()")
+												span.glyphicon.glyphicon-plus
+													| &nbsp;&nbsp;Choose a picture
+												input(type='file' id='file' name='files' ng-file-select="onFileSelect($files)"  accept="image/*" style="display:none")
+							.modal-footer
+								button.btn.btn-default(type='button', data-dismiss='modal' id="close")
+									| close
+								button.btn.btn-primary(type='button' ng-click="uploadProduct()")
+									| upload

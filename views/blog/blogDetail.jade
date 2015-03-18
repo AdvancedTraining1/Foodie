@@ -1,0 +1,155 @@
+//
+   Created by mengchi on 12/8/14.
+#main(style='min-height:500px')
+    .container
+        section#blog
+            .hgroup
+                h1
+                    | {{ blog.title }}
+                h2
+                    span.glyphicon.glyphicon-time
+                        | {{blog.create_at}}&nbsp;&nbsp;
+                        a(href='single_post.html#post_comments')
+                    span.glyphicon.glyphicon-comment
+                        |  {{blog.comment_count}} comments&nbsp;&nbsp;
+                    span.glyphicon.glyphicon-star
+                        |   {{blog.collect_count}} collects &nbsp;&nbsp;&nbsp;&nbsp;
+                    a#collect(href='' ng-click="addCollect()" ng-if='seeCollect')
+                        span.glyphicon.glyphicon-star-empty
+                        |Collect
+                    a#ccollect(ng-if='!seeCollect' ng-click="deleteCollect()")
+                        span.glyphicon.glyphicon-star
+                        |cancel Collected
+                ul.breadcrumb.pull-right
+                    li
+                        a(href='/index') Home
+                        span.divider /
+                    li
+                        a.active Blog
+            .row
+                #leftcol.span8
+                    article.post(style="margin-bottom: 20px;")
+                        .post_content
+                            #post_content
+                    .keyword_content
+                        h5 Key Word: {{blog.tag}}
+                        //| !{blog.content}
+                        //div.post_content!= {{blog.content}}
+                    .like_content(style="text-align:right;margin-right:10px")
+                        a(href="" ng-click="addLike()").glyphicon.glyphicon-thumbs-up {{blog.like_count}}
+                    .post_comments
+                        h4 Comments
+                        h5(ng-if='noComment') No comments right now
+                        .comment
+                            .bs-docs-example
+                                #accordion3.accordion
+                                    .accordion-group
+                                        .accordion-heading
+                                            a.accordion-toggle#showcomment(href='#comment' data-parent="#accordion3" data-toggle="collapse") comment
+                                        div#comment.accordion-body.collapse
+                                            .accordion-inner
+                                                .row(ng-repeat='comment in comments')
+                                                    figure.span1
+                                                        p author
+                                                        img(alt='0' src='{{comment.author.head}}')
+                                                    .span6
+                                                        .comment_name user: {{comment.author.account}}
+                                                            //a.reply(ng-click='addComment(comment.author._id)') Reply
+                                                        .comment_date
+                                                            span.glyphicon.glyphicon-time
+                                                            | {{comment.time}}
+                                                        .the_comment
+                                                            br
+                                                            p {{comment.content}}
+                                                .pagination.pagination-centered(comment-page page-object="commentPaging" click-function="list")
+
+                    .new_comment
+                        h4 Add Comment
+                        form
+                            .row
+                                .span8
+                                    textarea.span8#commentcontent(rows="4" placeholder="Comments" ng-model='comment.content')
+                            .row
+                                .span8
+                                    a.btn.send#pushcomment(ng-click='addComment()') Add comment
+                #sidebar.span4
+                    aside.widget.ads.clearfix
+                        h4 Author
+                        .team_member(style='background:none')
+                            figure(style="background-image: url('/head/defaulthead.jpeg')")
+                                img(alt='{{blog.author.account}}' src='/head/defaulthead.jpeg')
+                            h5(style='color:#555') {{blog.author.account}}
+                    aside.widget.ads.clearfix
+                        h4 Ads
+                        a(href='#')
+                            img(src='http://placehold.it/110', alt='')
+                        a(href='#')
+                            img(src='http://placehold.it/110', alt='')
+                        a(href='#')
+                            img(src='http://placehold.it/110', alt='')
+                        a(href='#')
+                            img(src='http://placehold.it/110', alt='')
+                    aside.widget
+                        h4 Tabs
+                        ul#myTab.nav.nav-tabs
+                            li.active
+                                a(data-toggle='tab', href='#recent') Recent
+                            li
+                                a(data-toggle='tab', href='#tags') Tags
+                        #myTabContent.tab-content
+                            #recent.tab-pane.fade.active.in
+                                ul.media-list
+                                    li.media
+                                        a.media-photo(href='#', style='background-image:url(images/portfolio/t5.jpg)')
+                                        a.media-date(href='#')
+                                            | 19
+                                            span FEB
+                                        h5.media-heading
+                                            a(href='#') Media heading, this is a title of a news...
+                                        p Fugiat dapibus, tellus ac cursus commodo, ut fermentum...
+                                    li.media
+                                        a.media-photo(href='#', style='background-image:url(images/portfolio/t4.jpg)')
+                                        a.media-date(href='#')
+                                            | 18
+                                            span FEB
+                                        h5.media-heading
+                                            a(href='#') Media heading, of a news item.
+                                        p Fugiat dapibus, tellus ac cursus commodo, condime ntum nibh, ut fermentum...
+                                    li.media
+                                        a.media-photo(href='#', style='background-image:url(images/portfolio/t5.jpg)')
+                                        a.media-date(href='#')
+                                            | 17
+                                            span FEB
+                                        h5.media-heading
+                                            a(href='#') Media heading, this is a title of a news...
+                                        p Fugiat dapibus, tellus ac cursus commodo, ut fermentum...
+                                    li.media
+                                        a.media-photo(href='#', style='background-image:url(images/portfolio/t4.jpg)')
+                                        a.media-date(href='#')
+                                            | 16
+                                            span FEB
+                                        h5.media-heading
+                                            a(href='#') Media heading, of a news item.
+                                        p Fugiat dapibus, tellus ac cursus commodo, condime ntum nibh, ut fermentum...
+                            #tags.tab-pane.fade
+                                a.label Default
+                                a.label.label-success Success
+                                a.label.label-warning Warning
+                                a.label.label-important Important
+                                a.label.label-info Info
+                                a.label.label-inverse Inverse
+                                a.label Default
+                                a.label.label-success Success
+                                a.label.label-important Important
+                                a.label.label-info Info
+                                a.label.label-inverse Inverse
+                                a.label Default
+                                a.label.label-success Success
+                                a.label.label-success Success
+                                a.label.label-warning Warning
+                                a.label.label-important Important
+                                a.label.label-warning Warning
+                                a.label.label-warning Warning
+                                a.label.label-important Important
+                                a.label.label-info Info
+                                a.label.label-inverse Inverse

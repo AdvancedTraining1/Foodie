@@ -1,0 +1,17 @@
+//
+   Created by zhaiyuan on 14-11-4.
+
+extends layout
+block content
+    h1 register
+    form(method = "post", action="/attentions/addUser")
+        p
+            label Username
+            <br/>
+            input(name="username")
+        p
+            label Password
+            </br/>
+            input(name="password")
+        p
+            input(type="submit" value ="submit")

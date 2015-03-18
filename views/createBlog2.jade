@@ -1,0 +1,27 @@
+//
+   Created by mengchi on 14-11-3.
+extends layout
+
+block content
+    script.
+        function submitData(){
+            var obj = {
+                title:document.getElementById("title").value,
+                content:document.getElementById("title").value
+            };
+            var xhr = new XMLHttpRequest();
+            xhr.open('post','/blog/publishBlog',true);
+            xhr.send(JSON.stringify(obj));
+        }
+    h1 Create A new blog
+    form(id = "blogForm")
+        p
+            label Title
+            <br/>
+            input(id="title")
+        p
+            labe Content
+            </br/>
+            textarea(id="content")
+        p
+            input(type="submit",value="submit" onclick = "submitData();")

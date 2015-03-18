@@ -1,0 +1,28 @@
+//Created by zhaiyuan on 12/7/14.
+#main(style='min-height:500px')
+	.container
+		section#listUser
+			.hgroup
+				h1 All Users Here!
+				h2 Enjoy here and find your friend.
+				ul.breadcrumb.pull-right
+					li
+						a(href='/index') Home
+						span.divider /
+					li.active Friend Status
+
+			#protfolio_container.portfolio_strict.row
+				.portfolio_item.cat_travel.span4(ng-repeat="user in users")
+					.portfolio_photo(style="background-image:url({{user.head}})")
+
+					.portfolio_description
+						h3
+							a(href='#') {{user.username}}
+						//a(id='at{{user._id}}').btn.btn-primary(href='' ng-click="addAttention(user._id,user.account,user.head)" ng-if="seeAttention")
+						a.btn.btn-primary(href='' ng-click="addAttention(user._id,user.account,user.head)" ng-if='seeAttention')
+							span.glyphicon.glyphicon-star-empty
+							| attention
+						//a.btn.btn-primary(ng-click="deleteAttention(user._id,user.account,user.head)" ng-if='!seeAttention')
+							span.glyphicon.glyphicon-star
+							| cancel attention
+			.pagination.pagination-centered(attention-page page-object="pageing" click-function="list")
