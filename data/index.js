@@ -14,7 +14,7 @@ db.on('error', function(err){
     process.exit(1);
 });
 db.once('open', function () {
-    console.log("connect!!!");
+    console.log("connect to DB!");
 });
 //替换名字来完成转换model
 var models_path = __dirname + '/../data/DataSchemas'
