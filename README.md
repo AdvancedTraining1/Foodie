@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 NorritureTeam16
 Formal starting from 2014/10/27
 ==============================
@@ -93,3 +94,7 @@ Delete comment to a blog
 Show comment list to a blog
 Like a blog
 Cancel like a blog
+=======
+# Foodie
+Foodie is Our Team's project led by Mr.Xing
+>>>>>>> 9556103413d96b235a908d8aec33640369ed195b
