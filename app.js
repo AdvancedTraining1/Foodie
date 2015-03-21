@@ -17,6 +17,7 @@ var sale = require('./routes/sale');
 var userinfo = require('./routes/userinfo');
 var common = require('./routes/common');
 var seasonpage = require('./routes/season');
+var dishRoute = require('./routes/dishRoute');
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use('/sale',sale);
 userinfo(app);
 recipe(app);
 common(app);
+dishRoute(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
