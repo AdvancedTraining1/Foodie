@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var blog = require('./routes/blog');
 var topic = require('./routes/topic');
 var attention = require('./routes/attention');
@@ -35,7 +34,6 @@ app.use(session({secret: 'keyboard cat'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/blog', blog);
 app.use('/topic', topic);
 //app.use('/attention',attention);

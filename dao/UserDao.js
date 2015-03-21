@@ -1,7 +1,5 @@
 /**
- * this is edited by huhao
- * 2014.11.06
- * chenmm push me to do this i don't understand until now
+ * Created by liuhanxu on 14-10-20.
  */
 
 var DaoBase = require('./DaoBase');

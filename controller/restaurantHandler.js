@@ -1,13 +1,18 @@
 /**
- * Created by LiuHanxu on 14-11-12.
+ * Created by liuhanxu on 15-3-20.
  */
 var db = require('../util/database')
 
-var RestaurantModel = require('../data').Restaurant;
-var UserModel = require('../data').user;
-
+var BlogModel = require('../data').Blog;
+var BlogDao = require('../dao/BlogDao');
+var CollectBlogDao = require('../dao/CollectBlogDao');
+var CollectBlogModel = require('./../data').CollectBlog;
+var CommentToBlogDao = require('../dao/CommentToBlogDao');
+var CommentToBlogModel = require('./../data').CommentToBlog;
+var BlogLikeModel = require('./../data').BlogLike;
+var BlogLikeDao = require('../dao/BlogLikeDao');
 var UserDao = require("../dao/UserDao");
-
+var UserModel = require('../data').user;
 var querystring = require("querystring"),
     formidable = require('formidable'),
     RecipeDao = require("../dao/RecipeDao"),
