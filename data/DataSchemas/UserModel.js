@@ -1,5 +1,5 @@
 /**
- * Created by liuhanxu on 15-3-19.
+ * Created by zhaiyuan on 3/29/15.
  */
 
 var mongoose = require('mongoose');
@@ -25,7 +25,8 @@ var schema = new mongoose.Schema({
     }],
 
     friends_count: { type: Number, default: 0 },
-    fans_count: { type: Number, default: 0 }
+    fans_count: { type: Number, default: 0 },
+    //date_count: { type: Number, default: 0 }
 
 });
 

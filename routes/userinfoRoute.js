@@ -1,5 +1,5 @@
 /**
- * Created by liuhanxu on 2014-11-12.
+ * Created by zhaiyuan on 3/29/15.
  */
 
 var UserinfoHandler = require('../controller/userinfoHandler');
