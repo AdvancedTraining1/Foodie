@@ -13,11 +13,10 @@ var adminpage = require('./routes/admin');
 var advertisepage = require('./routes/advertise');
 var recipe = require('./routes/recipe');
 var sale = require('./routes/sale');
-var userinfo = require('./routes/userinfoRoute');
+var userinfoRoute = require('./routes/userinfoRoute');
 var common = require('./routes/common');
 var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
-var userinfoRoute = require('./routes/userinfoRoute');
 
 var app = express();
 
