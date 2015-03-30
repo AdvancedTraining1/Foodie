@@ -9,7 +9,6 @@ var session = require('express-session');
 var routes = require('./routes/index');
 var blog = require('./routes/blog');
 var topic = require('./routes/topic');
-var attention = require('./routes/attention');
 var adminpage = require('./routes/admin');
 var advertisepage = require('./routes/advertise');
 var recipe = require('./routes/recipe');
@@ -18,6 +17,7 @@ var userinfo = require('./routes/userinfoRoute');
 var common = require('./routes/common');
 var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
+var userinfoRoute = require('./routes/userinfoRoute');
 
 var app = express();
 
@@ -37,8 +37,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/blog', blog);
 app.use('/topic', topic);
-//app.use('/attention',attention);
-attention(app);
 app.use('/admin',adminpage);
 app.use('/season',seasonpage);
 app.use('/advertise',advertisepage);
