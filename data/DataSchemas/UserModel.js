@@ -18,14 +18,9 @@ var schema = new mongoose.Schema({
         account : String,
         head: String
     }],
-    fans:[{
-        _id: ObjectId,
-        account : String,
-        head: String
-    }],
 
-    friends_count: { type: Number, default: 0 },
-    fans_count: { type: Number, default: 0 },
+
+    friends_count: { type: Number, default: 0 }
     //date_count: { type: Number, default: 0 }
 
 });
