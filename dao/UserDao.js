@@ -3,7 +3,7 @@
  */
 
 var DaoBase = require('./DaoBase');
-var UsersModel = require('../data').user;
+var UsersModel = require('../data').User;
 
 var UserDao = new DaoBase(UsersModel);
 
