@@ -35,7 +35,7 @@ MomentDao.getByUserId = function (pageNo,pageSize,authorId,callback) {
 };
 
 MomentDao.getNumByUserId = function (authorId,callback) {
-    Moment.find({"author.id":authorId,flag:true}).exec(function(error,num){
+    Moment.count({"author.id":authorId,flag:true}).exec(function(error,num){
         if(error)
             return callback(error,null);
         return callback(null, num);

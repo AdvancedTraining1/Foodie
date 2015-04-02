@@ -6,10 +6,10 @@ var moment = require('./../controller/momentHandler');
 module.exports = function (app) {
 
     app.get('/service/moment/listAll', moment.listAll);//
-    app.get('/service/recipe/listOwn', moment.listByUser);//
-    app.get('/service/recipe/getCommentById', moment.getCommentById);//
-    app.get('/service/recipe/delete', moment.deleteMoment);//
-    app.post('/service/recipe/add', moment.addMoment);//
-    app.post('/service/recipe/addComment', moment.commentMoment);//
-    app.post('/service/recipe/upload', moment.upload);
+    app.get('/service/moment/listOwn', moment.listByUser);//
+    app.get('/service/moment/getCommentById', moment.getCommentById);//
+    app.get('/service/moment/delete', moment.deleteMoment);//
+    app.post('/service/moment/add', moment.addMoment);//
+    app.post('/service/moment/addComment', moment.commentMoment);//
+    app.post('/service/moment/upload', moment.upload);
 };
