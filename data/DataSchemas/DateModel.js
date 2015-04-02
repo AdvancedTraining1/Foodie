@@ -13,7 +13,7 @@ var schema = new mongoose.Schema({
     dateTime: { type: Date },   //date time of the date
     logTime: { type: Date },  //publish time of the date
     dateUsers: [{
-        _id: ObjectId,
+        _id: String,
         account : String,
         head: String
     }],
