@@ -16,7 +16,7 @@
 
 
 var MomentDao = require("../dao/MomentDao"),
-    MomentCommentDao = require("../dao/MomentCommentDao"),
+    //MomentCommentDao = require("../dao/MomentCommentDao"),
     UserDao = require("../dao/UserDao"),
     MomentModel = require("./../data").Moment,
     MomentCommentModel = require("./../data").MomentComment,

@@ -4,8 +4,13 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
-var MomentComment = require("./../data").MomentCommnet;
-var MomentLike = require("./../data").MomentLike;
+var MomentComment = require("./../../data").MomentComment;
+var MomentLike = require("./../../data").MomentLike;
+
+/*var ItemsSchema = new mongoose.Schema({
+    name: String
+    ,men: [MenSchema]
+});*/
 
 var schema = new Schema({
     author: {
