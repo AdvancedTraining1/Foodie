@@ -13,11 +13,13 @@ var schema = new mongoose.Schema({
     phone: { type: String},
     sex: { type: Number },
     head:{ type: String , default:'/head/defaulthead.jpeg' },
+    tag:{ type: String},
     friends: [{
         _id: ObjectId,
         account : String,
         head: String
     }],
+    flag:{ type: Boolean , default:false },
 
 
     friends_count: { type: Number, default: 0 }

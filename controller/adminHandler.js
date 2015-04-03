@@ -4,7 +4,6 @@
 var mongoose = require('mongoose');
 var userModel = require('../data').user;
 var UserDao = require("../dao/UserDao");
-var TopicDao = require('../dao/TopicDao');
 var UsersModel = require('../data').user;
 var querystring = require('querystring');
 //var formidable = require('formidable');

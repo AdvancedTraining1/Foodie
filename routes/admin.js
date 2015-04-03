@@ -6,7 +6,6 @@
 var express = require('express');
 var router = express.Router();
 var adminHandler = require('../controller/adminHandler');
-var topicHandler = require('../controller/topicHandler');
 var commentHandler = require('../controller/commentHandler');
 var seasonHandler = require('../controller/seasonHandler');
 
@@ -75,8 +74,7 @@ router.post('/comment/delete',commentHandler.delete);
 对topic的操作
 * */
 //router.post('/addTopic',topicHandler.add);
-router.post('/getAllTopic',topicHandler.getAll);
-router.post('/searchTopic',topicHandler.searchTopic);
+
 
 /*
 对时另食物的操作

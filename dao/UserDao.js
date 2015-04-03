@@ -3,7 +3,7 @@
  */
 
 var DaoBase = require('./DaoBase');
-var UsersModel = require('../data').user;
+var UsersModel = require('./../data').User;
 
 var UserDao = new DaoBase(UsersModel);
 
@@ -59,6 +59,17 @@ UserDao.update = function (conditions,update,options,callback) {
 
 UserDao.getUserByAccount = function (account,callback) {
     UsersModel.find({account:account}).exec(function(err,user){
+        if (err){
+            console.log("err"+err);
+            callback(err,null);
+        }
+        else{
+            callback(null,user);
+        }
+    });
+}
+UserDao.getUserById = function (id,callback) {
+    UsersModel.find({_id:id}).exec(function(err,user){
         if (err){
             console.log("err"+err);
             callback(err,null);

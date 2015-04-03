@@ -7,10 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var routes = require('./routes/index');
-var blog = require('./routes/blog');
-var topic = require('./routes/topic');
 var adminpage = require('./routes/admin');
-var advertisepage = require('./routes/advertise');
 var recipe = require('./routes/recipe');
 var sale = require('./routes/sale');
 var userinfoRoute = require('./routes/userinfoRoute');
@@ -18,6 +15,7 @@ var common = require('./routes/common');
 var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
 var moment = require('./routes/moment');
+var friends = require('./routes/friends');
 
 var app = express();
 
@@ -35,17 +33,15 @@ app.use(session({secret: 'keyboard cat'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/blog', blog);
-app.use('/topic', topic);
 app.use('/admin',adminpage);
 app.use('/season',seasonpage);
-app.use('/advertise',advertisepage);
 app.use('/sale',sale);
 userinfoRoute(app);
 recipe(app);
 common(app);
 dishRoute(app);
 moment(app);
+friends(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
