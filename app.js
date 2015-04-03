@@ -16,6 +16,7 @@ var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
 var moment = require('./routes/moment');
 var friends = require('./routes/friends');
+var dateRoute =  require('./routes/dateRoute');
 
 var app = express();
 
@@ -42,6 +43,8 @@ common(app);
 dishRoute(app);
 moment(app);
 friends(app);
+dateRoute(app);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

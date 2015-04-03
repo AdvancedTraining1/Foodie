@@ -4,7 +4,7 @@
 var db = require('../util/database')
 
 var RestaurantModel = require('../data').Restaurant;
-var UserModel = require('../data').user;
+var UserModel = require('../data').User;
 
 var UserDao = require("../dao/UserDao");
 
@@ -142,6 +142,43 @@ UserinfoHandler.isLogin = function(req,res){
     }
 };
 
+//**********************************zhaiyuan start********************************
+
+UserinfoHandler.addUser=function(req,res){
+
+    var user = new UserModel({
+        username: "zy",
+        account: "zy",
+        password: "zy",
+        type: 0,
+        phone: "15201345555",
+        sex: 0,
+        head:"2.img"/*,
+        friends: [{
+            _id: "54578976af75277b630cc379",
+            account : "zhaiyuan",
+            head: "1.img"
+        },
+            {
+                _id: "5457aa1f0233539703192dc9",
+                account : "mengchi",
+                head: "2.img"
+            }],
+
+        friends_count: 2*/
+    });
+
+    UserDao.save(user,function(err, newuser) {
+        if (err) {
+            res.json(500, {message: err.toString()});
+            return;
+        }
+        console.log(newuser)
+        res.json(201, newuser);
+        //res.render('index');
+    });
+};
+
 UserinfoHandler.modifyinfo=function(req,res){
     req.setEncoding('utf-8');
     var postData = "";
@@ -152,24 +189,27 @@ UserinfoHandler.modifyinfo=function(req,res){
 
     var params = querystring.parse(postData);
     console.log("UserHandler---更改个人信息");
-    var username = params['username'];
-    var email = params['email'];
+    //var username = params['username'];
+    //var email = params['email'];
+    var username = "zhai"
     console.log("修改个人信息handler");
 
-    var conditions = {_id:req.session.user_id};
-    var update={username:username,email:email};
+    //var conditions = {_id:req.session.user_id};
+    //var update={username:username,email:email};
+    var conditions = {_id:"551d6239753c1a9c3d9e6e75"};
+    var update={username:username};
 
     var user =UserDao.update(conditions,update,null,function (err, user)
     {
         if(err)
         {
             console.log(err);
-            res.json({message:"Modify userinfo successful！"});
+            res.json({message:"Modify userinfo failed！"});
 
         }else
         {
 
-            res.json({message:"Modify userinfo failed！"});
+            res.json({message:"Modify userinfo successful！"});
 
         }
     });
@@ -178,26 +218,33 @@ UserinfoHandler.modifyinfo=function(req,res){
 
 UserinfoHandler.viewUserinfo=function(req,res){
 
-    var user_account =req.session.account;
+    //var user_account =req.session.account;
+    var user_account ="zy";
     console.log("UserHandler---查看个人信息---user_account："+user_account);
 
-    var user = UserDao.getUserByAccount(user_account,function (err, user)
-    {
+    UserDao.getUserByAccount(user_account,function (err, user){
         if(err)
         {
             console.log(err);
-            res.json({message:"Get userinfo successful!",user:null});
+            res.json({message:"Get userinfo failed!",user:null});
 
         }else
         {
 
-            res.json({message:"Get userinfo failed！",user:user});
+            res.json({message:"Get userinfo successful！",user:user});
 
         }
     });
 
 };
 
+
+
+//**********************************zhaiyuan  end********************************
+
+
+
+/*
 UserinfoHandler.getUserBlogs=function(req,res){
 
     var pageNo = req.param('pageNo');
@@ -240,6 +287,7 @@ UserinfoHandler.getUserRecipes=function(req,res){
     });
 
 };
+*/
 
 
 UserinfoHandler.logout=function(req,res){

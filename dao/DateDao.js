@@ -11,14 +11,12 @@ DateDao.getAll = function (callback)
 {
     DateModel.find({},function(err,date) {
         if (err) {
-            callback(err,null);
-            return;
+            return callback(err,null);
+
+        }else {
+            return callback(null,date);
+
         }
-        if (!date) {
-            callback(null,"DateDao.getAll no date");
-            return;
-        }
-        callback(null,date);
     });
 };
 
@@ -54,6 +52,15 @@ DateDao.save = function (obj,callback)
 
 DateDao.update = function (conditions,update,options,callback) {
     DateModel.update(conditions,update,options).exec(function(error,date){
+        if(error) return callback(error,null);
+        return callback(null, date);
+    });
+}
+
+
+DateDao.updateById = function (id,dateUsers,callback) {
+
+    DateModel.findByIdAndUpdate(id,{$push: {dateUsers:dateUsers},$inc:{dateUsers_count:1}},function(error,date){
         if(error) return callback(error,null);
         return callback(null, date);
     });
