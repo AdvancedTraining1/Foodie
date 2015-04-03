@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head prefix="Group7">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+
+    <title>Moment_Test</title>
+</head>
+<body>
+    <h2>Moment_Test</h2>
+</body>
+</html>
+make[1]: Entering directory `/home/administrator/WebstormProjects/Foodie/test/moment'
+make test-node
+make[2]: Entering directory `/home/administrator/WebstormProjects/Foodie/test/moment'
+[33m
+##############################################################
+#
+#   !!! MONGOOSE WARNING !!!
+#
+#   This is an UNSTABLE release of Mongoose.
+#   Unstable releases are available for preview/testing only.
+#   DO NOT run this in production.
+#
+##############################################################
+[0m
+    <section class="suite">
+      <h1>Moment connecting to the database</h1>
+      <dl>
+connect to DB!
+        <dt>it should connect properly and get the moment</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/listAll')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 1);
+        done();
+    });</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Test the get functions</h1>
+      <dl>
+        <dt>it should get all the moments</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/listAll')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 1);
+        done();
+    });</code></pre></dd>
+        <dt>it should get the moment by 110011</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/listOwn?authorId=110011')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 1);
+        done();
+    });</code></pre></dd>
+      </dl>
+    </section>
+make[2]: Leaving directory `/home/administrator/WebstormProjects/Foodie/test/moment'
+make[1]: Leaving directory `/home/administrator/WebstormProjects/Foodie/test/moment'
+<h2>end of the moment test</h2>
