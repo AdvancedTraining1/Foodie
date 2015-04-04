@@ -1,23 +1,8 @@
 /**
  * Created by cmm on 4/2/15.
  */
-
-//listAll
-//listByUser
-//getById
-//deleteMoment
-//addMoment
-//commentMoment
-//deleteComment
-//likeMoment
-//deleteLike
-
-
-
-
 var MomentDao = require("../dao/MomentDao"),
     MomentCommentDao = require("../dao/MomentCommentDao"),
-    //MomentLikeDao = require("../dao/MomentLikeDao"),
     UserDao = require("../dao/UserDao"),
     MomentModel = require("./../data").Moment,
     MomentCommentModel = require("./../data").MomentComment,
@@ -76,74 +61,47 @@ exports.getCommentById = function(req,res){
 
 //暂时有点问题
 exports.addMoment = function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
+    var user = {
+        _id: "111",
+        head: "3.jpg",
+        account: "cmm1"
+    };
+    var moment = new MomentModel({
+        _id:"551ff89554177cfd188158e9",
+        author: {
+            _id: user._id,
+            head: user.head,
+            account: user.account },
+        pictures:req.body.pictures,
+        content:req.body.content,
+        date: logTime(),
+        likeNum: 0,
+        showComment:[],
+        likeList:[],
+        commentList:[],
+        commentNum: 0,
+        flag: true
     });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
-        console.log('recipe数据接收完毕');
-        var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
-        console.log(params);
-        var moment = new MomentModel();
-        moment = params;
 
-        //特殊参数，数组形式，特殊处理，步骤和食材
-        /*var mNum = params['mNum'];
-        var sNum = params['sNum'];
-        var material0 = [];
-        var step0 = [];
-        for (var i = 0; i < mNum; i++) {
-            var mName = "material[" + i + "][materialName]";
-            var mAmount = "material[" + i + "][amount]";
-            material0[i] = {materialName: params[mName], amount: params[mAmount]};
+    MomentDao.create(moment,function (err, moments){
+        if(err){
+            res.writeHead(500, {
+                "Content-Type": "text/plain;charset=utf-8"
+            });
+            res.end("发布moment出现内部错误！");
+        }else {
+            res.writeHead(200, {
+                "Content-Type": "text/plain;charset=utf-8"
+            });
+            res.end("create moment success！");
         }
-        for (var i = 0; i < sNum; i++) {
-            var sPhote = "step[" + i + "][stepPhoto]";
-            var sExplain = "step[" + i + "][stepExplain]";
-            step0[i] = {stepNum: i + 1, stepExplain: params[sExplain], stepPhoto: params[sPhote]};
-        }
-        recipe.material = material0;
-        recipe.step = step0;*/
-
-        //几个默认值设置
-        recipe.logTime = logTime();
-        recipe.collectNum = 0;
-        recipe.likeNum = 0;
-        recipe.flag = true;
-
-        //设置用户信息
-        console.log("-------"+req.session);
-        console.log("-------"+JSON.stringify(req.session));
-
-        recipe.author = {
-            _id : req.session.user_id,
-            account : req.session.account,
-            head : req.session.head
-        };
-
-        RecipeDao.create(recipe,function (err, recipes) {
-            if(err){
-                res.writeHead(500, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("发布菜谱出现内部错误！");
-            }else {
-                res.writeHead(200, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("create recipe success！");
-            }
-        });
     });
 };
 
 exports.deleteMoment = function(req,res){
-    //var idStr = req.params.ids.split(",");
-    var idStr = req.param('id');
+    var id = req.param('id');
 
-    MomentDao.delete(idStr,function (err, recipe) {
+    MomentDao.delete(id,function (err, moment) {
         res.writeHead(200, {
             "Content-Type": "text/plain;charset=utf-8"
         });

@@ -194,4 +194,44 @@ describe('Test the get functions', function () {
                 done();
             });
     });
+
+    it('it should create a new moment', function (done){
+        var moment = new Moment({
+            pictures: ["11.jpg","12.jpg"],
+            content: "I have a good diner !!!",
+            date: "2015-04-03 20:00:00",
+            likeNum: 0,
+            likeList: [],
+            showComment:[],
+            commentNum:0,
+            commentList: []
+        });
+
+        request(url)
+            .post('/service/moment/addMoment')
+            .type('json')
+            .expect(200)
+            .send(JSON.stringify(moment))
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.text.should.eql("create moment success！");
+                done();
+            });
+    });
+
+    it('it should delete an existing moment', function (done) {
+        request(url)
+            .get('/service/moment/deleteMoment?id=551f4d3a582104f00ef48953')
+            .type('json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.text.should.eql("delete moment success！");
+                done();
+            });
+    });
 });
