@@ -135,6 +135,7 @@ describe('Test the get functions', function () {
 
     it('it should create a comment', function (done) {
         var comment = MomentComment({
+            //_id:"551feb07c0d9b51a11266c31",
             author: {
                 _id: "110011",
                 head: "1.jpg",
@@ -155,7 +156,6 @@ describe('Test the get functions', function () {
             .end(function (err, res) {
                 if (err) {
                     throw err;
-                    done();
                 }
                 res.text.should.eql("comment success！");
                 done();
@@ -164,7 +164,7 @@ describe('Test the get functions', function () {
 
     it('it should delete the comment', function (done) {
         request(url)
-            .get('/service/moment/deleteComment?commentId=551feb07c0d9b51a11266c31&momendId=551f4d3a582104f00ef48953')
+            .get('/service/moment/deleteComment?commentId=551feb07c0d9b51a11266c31&momentId=551f4d3a582104f00ef48953')
             .type('json')
             .expect(200)
             .end(function (err, res) {
@@ -172,7 +172,25 @@ describe('Test the get functions', function () {
                     throw err;
                 }
                 res.text.should.eql("delete comment success！");
-                //res.body.should.have.property("total", 2);
+                done();
+            });
+    });
+
+    it('it should like a moment', function (done) {
+        var like = MomentComment({
+            momentId:"551f4d3a582104f00ef48953"
+        });
+
+        request(url)
+            .post('/service/moment/addLike')
+            .type('json')
+            .expect(200)
+            .send(JSON.stringify(like))
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.text.should.eql("like moment success！");
                 done();
             });
     });

@@ -194,14 +194,34 @@ exports.commentMoment = function(req,res){
 exports.deleteComment = function (req,res) {
     var commentId = req.param('commentId');
     var momentId = req.param('momentId');
-    console.log("---0-");
     MomentDao.deleteComment(commentId,momentId,function(err,moment){
-        console.log(11);
-        if(!err1){
+        if(!err){
             res.writeHead(200, {
                 "Content-Type": "text/plain;charset=utf-8"
             });
             res.end("delete comment success！");
+        }
+    });
+};
+
+exports.likeMoment = function (req,res) {
+    var momentId = req.body.momentId;
+    var user = {
+        _id: "111",
+        head: "3.jpg",
+        account: "cmm1"
+    };
+    var like = {
+        _id: user._id,
+        head: user.head,
+        account: user.account
+    };
+    MomentDao.likeMoment(momentId,like,function(err,moment){
+        if(!err){
+            res.writeHead(200, {
+                "Content-Type": "text/plain;charset=utf-8"
+            });
+            res.end("like moment success！");
         }
     });
 };

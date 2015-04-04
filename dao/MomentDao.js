@@ -85,25 +85,30 @@ MomentDao.addComment = function(id,comment,callback){
                 return callback(null, moment);
             });
         }
-        //return callback(null, comment1);
     });
 };
 
 MomentDao.deleteComment = function(commentId,momentId,callback){
     MomentComment.findByIdAndUpdate(commentId,{"flag":false}).exec(function(error1,comment){
-        console.log("===1");
         if(error1)
             return callback(error1,null);
         else{
-            console.log("===2");
-            Moment.findByIdAndUpdate(momentId,{$inc:{commentNum:-1,'$pull':{commentList:commentId}}},function(error2,moment){
-                console.log("===3");
-                if(error2)
+            Moment.findByIdAndUpdate(momentId,{'$inc':{commentNum:-1},'$pull':{commentList:commentId}},function(error2,moment){
+                if(error2){
                     return callback(error2,null);
+                }
                 return callback(null, moment);
             });
         }
     });
 };
 
-//关于like的方法等comment方法验证之后再写
+MomentDao.likeMoment = function(momentId,like,callback){
+    MomentComment.findByIdAndUpdate(momentId,{'$inc':{likeNum:-1},'$push':{likeList:like}}).exec(function(error1,moment){
+        if(error1)
+            return callback(error1,null);
+        else{
+            return callback(null, moment);
+        }
+    });
+};
