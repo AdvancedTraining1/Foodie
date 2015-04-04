@@ -58,20 +58,20 @@ MomentDao.updateLikeNum = function (id,callback) {
     });
 };
 
-MomentDao.updateCommentNum = function (id,flag,callback) {
-    if(flag == true){
-        Moment.findByIdAndUpdate(id,{$inc:{commentNum:1}},function(error,moment){
+MomentDao.updateComment = function (replyId,commentId,callback) {
+    //if(flag == true){
+    Moment.findByIdAndUpdate(replyId,{'$inc':{commentNum:1},'push':{commentList:commentId}},function(error,moment){
+        if(error)
+            return callback(error,null);
+        return callback(null, moment);
+    });
+    //}/*else {
+        /*Moment.findByIdAndUpdate(replyId,{$inc:{commentNum:-1},'$pull':{commentList:commentId}},function(error,moment){
             if(error)
                 return callback(error,null);
             return callback(null, moment);
-        });
-    }else {
-        Moment.findByIdAndUpdate(id,{$inc:{commentNum:-1}},function(error,moment){
-            if(error)
-                return callback(error,null);
-            return callback(null, moment);
-        });
-    }
+        });*/
+    //}
 };
 
 MomentDao.addComment = function(id,comment,callback){
@@ -90,18 +90,19 @@ MomentDao.addComment = function(id,comment,callback){
 };
 
 MomentDao.deleteComment = function(commentId,momentId,callback){
-    MomentComment.findOne({"id":commentId}).exec(function(error,comment){
-        if(error)
-            return callback(error,null);
+    MomentComment.findByIdAndUpdate(commentId,{"flag":false}).exec(function(error1,comment){
+        console.log("===1");
+        if(error1)
+            return callback(error1,null);
         else{
-            MomentComment.pop(comment);
-            Moment.findByIdAndUpdate(momentId,{$inc:{commentNum:-1}},function(error,moment){
-                if(error)
-                    return callback(error,null);
+            console.log("===2");
+            Moment.findByIdAndUpdate(momentId,{$inc:{commentNum:-1,'$pull':{commentList:commentId}}},function(error2,moment){
+                console.log("===3");
+                if(error2)
+                    return callback(error2,null);
                 return callback(null, moment);
             });
         }
-        //return callback(null, num);
     });
 };
 

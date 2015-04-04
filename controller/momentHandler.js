@@ -16,7 +16,8 @@
 
 
 var MomentDao = require("../dao/MomentDao"),
-    //MomentCommentDao = require("../dao/MomentCommentDao"),
+    MomentCommentDao = require("../dao/MomentCommentDao"),
+    //MomentLikeDao = require("../dao/MomentLikeDao"),
     UserDao = require("../dao/UserDao"),
     MomentModel = require("./../data").Moment,
     MomentCommentModel = require("./../data").MomentComment,
@@ -28,10 +29,19 @@ exports.listAll = function(req,res){
     var pageSize = req.param('pageSize');
 
     MomentDao.getAll(pageNo,pageSize,function (err1, moment) {
-        MomentDao.getAllNum(function(err2,num){
-            if(!(err1 || err2)){
-                res.json({root:moment,total:num});
-            }
+        moment.forEach(function(file) {
+            file.commentNum = 3;
+            var commentList = file.commentList;
+            MomentCommentDao.getByIdList(commentList,function(err2,comment){
+                if(!err2){
+                    file.showComment.push(comment);
+                }
+                MomentDao.getAllNum(function(err2,num){
+                    if(!(err1 || err2)){
+                        res.json({root:moment,total:num});
+                    }
+                });
+            });
         });
     });
 };
@@ -50,11 +60,17 @@ exports.listByUser = function(req,res){
     });
 };
 
-
 exports.getCommentById = function(req,res){
     var id = req.param('id');
     MomentDao.getById(id,function (err1, moment) {
-        res.json({root:moment.commentList});
+        var commentList = moment.commentList;
+        if(!err1){
+            MomentCommentDao.getByIdList(commentList,function(err2,comment){
+                if(!err2){
+                    res.json({root:comment,total:commentList.length});
+                }
+            });
+        }
     });
 };
 
@@ -136,58 +152,56 @@ exports.deleteMoment = function(req,res){
 };
 
 exports.commentMoment = function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
-
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
+    var user = {
+        _id: "111",
+        head: "3.jpg",
+        account: "cmm1"
+    };
+    var comment = new MomentCommentModel({
+        _id:"551feb07c0d9b51a11266c31",
+        author: {
+            _id: user._id,
+            head: user.head,
+            account: user.account },
+        content:req.body.content,
+        date: logTime(),
+        momentId:req.body.momentId,
+        reply: {
+            _id:req.body.reply.id,
+            account:req.body.reply.account},
+        flag: true
     });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
-        console.log('recipe数据接收完毕');
-        var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
-        var comment = new MomentCommentModel();
-        comment = params;
-        comment.date = logTime();
-        //设置用户信息
-        comment.author = {
-            _id : req.session.user_id,
-            account : req.session.account,
-            head : req.session.head
-        };
-
-        console.log(comment);
-
-        MomentCommentDao.create(comment,function (err, recipes) {
-            if(err){
-                res.writeHead(500, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("评论菜谱出现内部错误！");
-            }else {
-                MomentDao.updateCommentNum(comment.replyId,function(err1,recNew){
-                    if(!err1){
-                        res.writeHead(200, {
-                            "Content-Type": "text/plain;charset=utf-8"
-                        });
-                        res.end("comment success！");
-                    }
-                });
-            }
-        });
+    MomentCommentDao.create(comment,function (err, momentComment) {
+        console.log(comment._id);
+        if(err){
+            res.writeHead(500, {
+                "Content-Type": "text/plain;charset=utf-8"
+            });
+            res.end("评论菜谱出现内部错误！");
+        }else {
+            MomentDao.updateComment(comment.momentId,momentComment._id,function(err1,moment){
+                if(!err1){
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("comment success！");
+                }
+            });
+        }
     });
 };
 
 exports.deleteComment = function (req,res) {
     var commentId = req.param('commentId');
     var momentId = req.param('momentId');
-
+    console.log("---0-");
     MomentDao.deleteComment(commentId,momentId,function(err,moment){
+        console.log(11);
         if(!err1){
             res.writeHead(200, {
                 "Content-Type": "text/plain;charset=utf-8"
             });
-            res.end("delete success！");
+            res.end("delete comment success！");
         }
     });
 };

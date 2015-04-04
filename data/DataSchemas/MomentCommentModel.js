@@ -12,6 +12,7 @@ var schema = new Schema({
         account: String },
     content:String,
     date: String,
+    momentId:String,
     reply: {
         _id:String,
         account:String},
