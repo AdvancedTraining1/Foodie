@@ -67,7 +67,7 @@ describe('Test the functions', function () {
 
     it('it should modify the users password', function(done){
         var newbeeuser = User({
-            _id:"551f50c59561511112bde212",
+            _id:"551f50c59561511112bde456",
             password:"bigyellow"
         });
         request(url)
@@ -79,7 +79,7 @@ describe('Test the functions', function () {
                 if (err) {
                     throw err;
                 }
-                res.text.should.eql("Modify userinfo successful！");
+                res.text.should.eql("Modify password successful!");
                 done();
             });
     });
