@@ -151,7 +151,7 @@ UserinfoHandler.addUser=function(req,res){
         account: "zyy",
         password: "zyy",
         type: 0,
-        phone: "15201345555",
+        phone: "15201341111",
         sex: 0,
         head:"2.img"/*,
         friends: [{
@@ -173,9 +173,8 @@ UserinfoHandler.addUser=function(req,res){
             res.json(500, {message: err.toString()});
             return;
         }
-        console.log(newuser)
         res.json(200, newuser);
-        //res.render('index');
+
     });
 };
 
