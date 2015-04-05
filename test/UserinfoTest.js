@@ -5,20 +5,19 @@
 var app = require('../app')
 var assert = require("assert")
 // , www = require('../bin/www')
-    , http = require('http')
+//    , http = require('http')
 var request = require('request')
-    ,webServer="http://localhost:3000"
-    ,host='localhost'
+    ,webServer="http://localhost:3000";
 
 describe('User API',function(){
 
-    before(function(){
+    /*before(function(){
         app.set('port', process.env.PORT || 3000);
 
         var server = app.listen(app.get('port'), function() {
             console.log('Express server listening on port ' + server.address().port);
         });
-    });
+    });*/
 
     describe('/service/userinfo/addUser', function () {
         it('Get /service/userinfo/addUser should return 200', function (done) {
