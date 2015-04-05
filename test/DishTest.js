@@ -41,7 +41,7 @@ describe('Test the create functions', function () {
     });
 
     it('it should create a dish', function (done) {
-        //console.log("DishDao Add 成功！");
+        //console.log("DishDao Add 成功!!！");
         var m_dish = dish({
             dishName: "huhao",
             description: "huhao is a fish"
