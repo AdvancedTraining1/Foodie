@@ -147,9 +147,9 @@ UserinfoHandler.isLogin = function(req,res){
 UserinfoHandler.addUser=function(req,res){
 
     var user = new UserModel({
-        username: "zy",
-        account: "zy",
-        password: "zy",
+        username: "zyy",
+        account: "zyy",
+        password: "zyy",
         type: 0,
         phone: "15201345555",
         sex: 0,
@@ -174,7 +174,7 @@ UserinfoHandler.addUser=function(req,res){
             return;
         }
         console.log(newuser)
-        res.json(201, newuser);
+        res.json(200, newuser);
         //res.render('index');
     });
 };

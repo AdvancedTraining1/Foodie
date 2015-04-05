@@ -56,8 +56,8 @@ DateHandler.lookDate=function(req,res){
 DateHandler.createDate=function(req,res){
 
     console.log("create one date");
-    var userId = 123;
-    var restaurantId = 321;
+    var userId = 1234;
+    var restaurantId = 4321;
     var logTime =Date.parse(new Date());
 
     /*var dateTitle = req.param('dateTitle');
