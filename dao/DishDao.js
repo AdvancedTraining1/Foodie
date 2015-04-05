@@ -1,5 +1,6 @@
 /**
  * Created by liuhanxu on 15-3-20.
+ * Edit by huhao on 15-4-4.
  */
 
 var DaoBase = require('./DaoBase');
@@ -23,23 +24,44 @@ DishDao.save = function (obj,callback)
 
 };
 
-DishDao.getAllDish = function (callback)
+DishDao.getAllDish = function (pageNo,pageSize,callback)
 {
-    DishModel.find({},function(err,queues) {
+    DishModel.find({}).skip((pageNo-1)*pageSize).limit(pageSize).sort({'dishName':-1}).exec(function(err,data){
         if (err) {
+            console.log("fuck");
             callback(err,null);
             return;
         }
-        if (!queues) {
-            callback(null,"DishDao.getAllDish no dishes");
-            return;
-        }
-        callback(null,queues);
+        return callback(null,data);
     });
 };
 
-DishDao.delete = function (list,callback) {
-    DishModel.remove({_id:{$in:list}}).exec(function(error,dish){
+DishDao.getAllNum = function (callback) {
+    DishModel.count({}).exec(function(error,num){
+        if(error)
+            return callback(error,null);
+        return callback(null, num);
+    });
+};
+
+DishDao.getByRestaurantId = function (pageNo,pageSize,restaurantId,callback) {
+    DishModel.find({"restaurantId":restaurantId}).skip((pageNo-1)*pageSize).limit(pageSize).sort({'dishName':-1}).exec(function(error,data){
+        if(error)
+            return callback(error,null);
+        return callback(null, data);
+    });
+};
+
+DishDao.getRestaurantDishesNum = function (restaurantId,callback) {
+    DishModel.count({"restaurantId":restaurantId}).exec(function(error,num){
+        if(error)
+            return callback(error,null);
+        return callback(null, num);
+    });
+};
+
+DishDao.delete = function (conditions,callback) {
+    DishModel.remove(conditions).exec(function(error,dish){
         if(error) return callback(error,null);
         return callback(null, dish);
     });
@@ -51,6 +73,30 @@ DishDao.update = function (conditions,update,options,callback) {
         return callback(null, dish);
     });
 }
+
+DishDao.updatePraiseNum = function (id,callback) {
+    DishModel.findByIdAndUpdate(id,{$inc:{praiseNum:1}},function(error,data){
+        if(error)
+            return callback(error,null);
+        return callback(null, data);
+    });
+};
+
+DishDao.updateLoverNum = function (id,callback) {
+    DishModel.findByIdAndUpdate(id,{$inc:{loverNum:1}},function(error,data){
+        if(error)
+            return callback(error,null);
+        return callback(null, data);
+    });
+};
+
+DishDao.updateTotalStarsNum = function (id,num,callback) {
+    DishModel.findByIdAndUpdate(id,{$inc:{loverNum:num}},function(error,data){
+        if(error)
+            return callback(error,null);
+        return callback(null, data);
+    });
+};
 
 DishDao.getQueueByRestaurantId = function (restId,callback) {
     DishModel.find({restaurantId:restId}).exec(function(err,dishes){
