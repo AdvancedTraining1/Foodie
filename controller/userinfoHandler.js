@@ -23,36 +23,20 @@ function UserinfoHandler(){
 }
 UserinfoHandler.register=function(req,res){
 
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
+    var user = new UserModel({
+        username: req.body.username,
+        account: req.body.account,
+        password: req.body.password,
+        email: req.body.email
     });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
-        var params = querystring.parse(postData);
-        console.log(params);//{ username: 'aaa', password: 'aaa', email: '1412@sfd.com' }
 
-        var username = params.username;
-        var password = params.password;
-        var email = params.email;
-        console.log("注册---username:" + username + "-----密码:" + password);
+    UserDao.save(user, function (err, data) {
+        if(err&& err.length>0){
+            res.json({message:"Register Failed！"});
+        }else {
+            res.end("Register Successful！");
+        }
 
-        var user = new UserModel({
-            username: username,
-            account: username,
-            password: password,
-            email: email
-        });
-
-        UserDao.save(user, function (err, data) {
-            if(err&& err.length>0){
-                res.json({message:"Register Failed！"});
-            }else {
-                res.json({message:"Register Successful！"});
-            }
-
-        });
     });
 };
 
@@ -98,16 +82,9 @@ UserinfoHandler.login=function(req,res){
 };
 
 UserinfoHandler.modifypass=function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-    });
-
     console.log("修改密码handler");
-    var params = querystring.parse(postData);
-    var oldpass = params.passwordold;
-    var newpass = params.passwordnew1;
+    var oldpass = req.body.passwordold;
+    var newpass = req.body.password;
 
     var oldpassOfUser=req.session.password;
     if(oldpass!=oldpassOfUser){
@@ -127,7 +104,7 @@ UserinfoHandler.modifypass=function(req,res){
         }else
         {
             req.session.password =newpass ;  //修改session中的值
-            res.json({message:"Modify password successful!"});
+            res.end("Modify password successful!");
 
         }
     });
@@ -151,7 +128,7 @@ UserinfoHandler.addUser=function(req,res){
         account: "zyy",
         password: "zyy",
         type: 0,
-        phone: "15201341111",
+        phone: "15201345555",
         sex: 0,
         head:"2.img"/*,
         friends: [{
@@ -173,8 +150,9 @@ UserinfoHandler.addUser=function(req,res){
             res.json(500, {message: err.toString()});
             return;
         }
+        console.log(newuser)
         res.json(200, newuser);
-
+        //res.render('index');
     });
 };
 
