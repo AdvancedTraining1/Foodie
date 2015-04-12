@@ -9,10 +9,7 @@ var UserModel = require('../data').User;
 var UserDao = require("../dao/UserDao");
 
 var querystring = require("querystring"),
-    formidable = require('formidable'),
-    //RecipeDao = require("../dao/RecipeDao"),
     UserDao = require("../dao/UserDao"),
-    RecipeModel = require("./../data").Recipe,
     fs = require('fs'),
     url = require('url'),
     config=require("../util/config");
