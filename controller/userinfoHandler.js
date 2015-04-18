@@ -32,7 +32,6 @@ UserinfoHandler.register=function(req,res){
         }else {
             res.end("Register Successful！");
         }
-
     });
 };
 
@@ -48,10 +47,6 @@ UserinfoHandler.login=function(req,res){
         if(err&& err.length>0)
         {
             res.json({message:"Login Failed！",user:null});
-            //res.writeHead(500, {
-            //    "Content-Type": "text/plain;charset=utf-8"
-            //});
-            //res.end("登录失败！");
         }
         else if(user==null)
         {
@@ -59,21 +54,18 @@ UserinfoHandler.login=function(req,res){
         }
         else
         {
-            console.log("hehe");
-
-//            AccessToken.userActionWithToken(req.params.token, res, function(){
-//
-//            }, req.params.id);
-            AccessToken.createAccessToken(user.__id, function(err, token){
+            AccessToken.createAccessToken(user._id, function(err, token){
                 if (err)
                 {
                     console.log("Error : " + err);
                     return res.status(500).end("Internal error");
                 }
+                console.log("hehe");
                 var data = {
                     "token" : token._id
                 }
                 res.status(200).json(data);
+                console.log(token._id);
             });
         }
     });
@@ -82,41 +74,74 @@ UserinfoHandler.login=function(req,res){
 
 UserinfoHandler.modifypass=function(req,res){
     console.log("修改密码handler");
-    var oldpass = req.body.passwordold;
-    var newpass = req.body.password;
 
-    var oldpassOfUser=req.session.password;
-    if(oldpass!=oldpassOfUser){
-        res.json({message:"Old Password Error!"});
-        return 0;
-    }
-    var conditions = {_id:req.session.user_id};
-    var update={"password":newpass};
+    var oldpass = req.param('oldpass');
+    var newpass = req.param('newpass');
+    var token = req.param('token');
+    console.log(token);
 
-    var user =UserDao.update(conditions,update,null,function (err, user)
-    {
-        if(err)
-        {
-            console.log(err);
-            res.json({message:"Modify password failed！"});
+    AccessToken.userActionWithToken(token, res, function(user){
+        var oldpassOfUser = user.password;
+        var conditions = {_id: user._id};
+        var update={"password": newpass};
 
-        }else
-        {
-            req.session.password =newpass ;  //修改session中的值
-            res.end("Modify password successful!");
-
+        if(oldpass != oldpassOfUser) {
+            res.json({message: "Old Password Error!"});
+            return 0;
         }
-    });
+
+        UserDao.update(conditions,update,null,function (err, user)
+        {
+            if(err)
+            {
+                console.log(err);
+                res.json({message:"Modify password failed！"});
+
+            }else
+            {
+                user.password = newpass ;
+                res.end("Modify password successful!");
+            }
+        });
+
+    }, req.params.id);
 
 };
+
 UserinfoHandler.isLogin = function(req,res){
-    var user_id = req.session.user_id;
-    if(user_id.length>0){
-        res.json({message:"1",username:req.session.user_name});
-    }else{
-        res.json({message:"2"});
-    }
+    var token = req.param('token');
+    AccessToken.userActionWithToken(token, res, function(user){
+        if(user._id != null)
+        {
+            res.json({message:"1",username:user.username});
+        }
+        else
+        {
+            res.json({message:"2"});
+        }
+
+    }, req.params.id);
 };
+
+UserinfoHandler.logout=function(req,res){
+    console.log("UserHandler---logout");
+    var token = req.param('token');
+
+    console.log(token);
+    if (!token)
+        return res.status(400).end("Not connected")
+    AccessToken.removeAccessToken(token, function (err, token) {
+        if (err) {
+            console.log("Error token : " + err);
+            return res.status(500).end("Internal error");
+        }
+        if (!token)
+            return res.status(400).end("Bad token");
+        res.status(204).end();
+    })
+
+    res.json({message:"Logout successful!"});
+}
 
 //**********************************zhaiyuan start********************************
 
@@ -265,22 +290,5 @@ UserinfoHandler.getUserRecipes=function(req,res){
 };
 */
 
-UserinfoHandler.logout=function(req,res){
-
-    console.log("UserHandler---logout");
-    if (!req.body.token)
-        return res.status(400).end("Not connected")
-    AccessToken.removeAccessToken(req.body.token, function (err, token) {
-        if (err) {
-            console.log("Error token : " + err);
-            return res.status(500).end("Internal error");
-        }
-        if (!token)
-            return res.status(400).end("Bad token");
-        res.status(204).end();
-    })
-
-    res.json({message:"Logout successful!"});
-}
 
 module.exports = UserinfoHandler;
