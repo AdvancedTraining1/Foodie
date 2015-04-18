@@ -1,74 +1,181 @@
 /**
- * Created by mengchi on 4/3/15.
+ * Created by mengchi on 15-4-1.
  */
-var app = require('../app')
-var assert = require("assert")
-// , www = require('../bin/www')
-    , http = require('http')
-var request = require('request')
-    ,webServer="http://localhost:3000"
-    ,host='localhost'
+var should = require('should');
+var assert = require('assert');
+var request = require('supertest');
+var mongoose = require('mongoose');
+var User = require("./../data").User;
 
-describe('Blog API',function(){
+describe('Test the functions', function () {
+    var url = 'http://localhost:3000';
+    before(function (done) {
+        mongoose.connect('mongodb://localhost/test', function () {
+            mongoose.connection.db.dropCollection("users");
 
-    before(function(){
-        app.set('port', process.env.PORT || 3000);
+            var user1 = User({
+                _id:"551f50c59561511112bde212",
+                username: "aaa",
+                account: "aaa",
+                email:"aaa@a.b",
+                password: "fake",
+                type: 0,
+                phone: "15201344444",
+                sex: 0,
+                head:"/head/defaulthead.jpeg"
+            });
 
-        var server = app.listen(app.get('port'), function() {
-            console.log('Express server listening on port ' + server.address().port);
-        });
-    });
+            user1.save(function (err) {
+                if (err) throw err;
+            });
 
-    describe('/service/friend/adduser', function () {
-        it('Get /service/friend/adduser should return 200', function (done) {
-            request(webServer+"/service/friend/adduser", function (error, response,body) {
-                if (error) throw error;
+            var user2 = User({
+                _id:"551f50c59561511112bde213",
+                username: "bbb",
+                account: "bbb",
+                email:"bbb@a.b",
+                password: "fake",
+                type: 0,
+                phone: "15201344445",
+                sex: 0,
+                head:"/head/defaulthead.jpeg"
+            });
 
-                var status = response.statusCode;
-                assert.equal(200, status);
+            user2.save(function (err) {
+                if (err) throw err;
+            });
+
+
+            var user3 = User({
+                _id:"551f50c59561511112bde214",
+                username: "ccc",
+                account: "ccc",
+                email:"ccc@a.b",
+                password: "fake",
+                type: 0,
+                phone: "15201344446",
+                sex: 0,
+                head:"/head/defaulthead.jpeg"
+            });
+
+            user3.save(function (err) {
+                if (err) throw err;
+            });
+
+
+            var user4 = User({
+                _id:"551f50c59561511112bde215",
+                username: "ddd",
+                account: "ddd",
+                email:"ddd@a.b",
+                password: "fake",
+                type: 0,
+                phone: "15201344447",
+                sex: 0,
+                head:"/head/defaulthead.jpeg"
+            });
+
+            user4.save(function (err) {
+                if (err) throw err;
                 done();
             });
         });
     });
 
-
-
-   /* describe('/service/friend/add', function () {
-        it('Post /service/friend/add should return 200', function (done) {
-            var options = {
-                host: host,
-                port: 3000,
-                path: '/service/friend/add',
-                method: 'POST'
-            };
-            var data=require("querystring").stringify({friendId:"551d70c8bd26a9e018081ebe",friendAccount:"bbb",friendHead:"/head/defaulthead.jpeg"})
-            var req=http.request(options, function(res) {
-                assert.equal(200, res.statusCode);
-            });
-            req.write(data);
-            req.end();
-            done();
+    after(function (done) {
+        mongoose.connect('mongodb://localhost/test', function () {
+            mongoose.connection.db.dropCollection("users");
         });
+        mongoose.connection.close(done)
     });
 
-    describe('/service/friend/add', function () {
-        it('Post /service/friend/add should return 200', function (done) {
-            var options = {
-                host: host,
-                port: 3000,
-                path: '/service/friend/add',
-                method: 'POST'
-            };
-            var data=require("querystring").stringify({friendId:"551d70dafdbaa2f11862ba7f",friendAccount:"ccc",friendHead:"/head/defaulthead.jpeg"})
-            var req=http.request(options, function(res) {
-                assert.equal(200, res.statusCode);
+    it('it should add a friend', function(done){
+
+
+        var frienduser = {friendId : "551f50c59561511112bde213", friendAccount : "bbb", friendHead:"/head/defaulthead.jpeg"};
+
+
+        request(url)
+            .post('/service/friend/add')
+            .type('json')
+            .expect(200)
+            .send(JSON.stringify(frienduser))
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.body.should.have.property("message", "add friends success");
+                done();
             });
-            req.write(data);
-            req.end();
-            done();
-        });
     });
-*/
+
+    it('it should add another friend', function(done){
+
+        var frienduser = {friendId : "551f50c59561511112bde214", friendAccount : "ccc", friendHead:"/head/defaulthead.jpeg"};
+
+
+        request(url)
+            .post('/service/friend/add')
+            .type('json')
+            .expect(200)
+            .send(JSON.stringify(frienduser))
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.body.should.have.property("message", "add friends success");
+                done();
+            });
+    });
+
+    it('it should get the friendList', function (done) {
+        request(url)
+            .get('/service/friend/listFriend?userId=551f50c59561511112bde212')
+            .type('json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.body.should.have.property("friendList");
+                res.body.should.have.property("num", 2);
+                done();
+            });
+    });
+
+    it('it should delete a friend', function(done){
+
+        var frienduser = {friendId : "551f50c59561511112bde214", friendAccount : "ccc", friendHead:"/head/defaulthead.jpeg"};
+
+
+        request(url)
+            .post('/service/friend/delete')
+            .type('json')
+            .expect(200)
+            .send(JSON.stringify(frienduser))
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.body.should.have.property("message", "delete friends success");
+                done();
+            });
+    });
+
+
+    it('it should search a user', function (done) {
+        request(url)
+            .get('/service/friend/searchFriend?queryStr=a&pageNo=1&pageSize=5')
+            .type('json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                res.body.should.have.property("friendList");
+                done();
+            });
+    });
 
 
 });

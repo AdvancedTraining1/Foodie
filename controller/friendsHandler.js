@@ -16,6 +16,7 @@ FriendsHandler.showAllFriends=function(req,res){
     console.log("show all friend of user");
 
     var userId = req.param('userId');
+    console.log(userId);
 
     UserDao.getUserById(userId,function(err,user){
         if(err){
@@ -27,6 +28,7 @@ FriendsHandler.showAllFriends=function(req,res){
             return;
 
         }
+
         res.json(200,{friendList:user.friends,num: user.friends_count});
 
     })
@@ -37,6 +39,7 @@ FriendsHandler.addFriend=function(req,res){
     console.log("add a friend");
 
     var friendId = req.param('friendId');//"551d7bbe1fb802ae1c438f15"//
+    console.log(friendId)
     var friendAccount =req.param('friendAccount');//"bbb" //
     var friendHead =req.param('friendHead');//"/head/defaulthead.jpeg" //
 
@@ -45,9 +48,14 @@ FriendsHandler.addFriend=function(req,res){
     friends.account = friendAccount;
     friends.head = friendHead;
 
-    var userId = req.session.user_id;//"551d7bb281e3449e1c1c6600"; //
-    var userAccount = req.session.account;//"aaa"; //
-    var userHead = req.session.head;//"/head/defaulthead.jpeg"; //
+
+    var userId = "551f50c59561511112bde212"; //req.session.user_id;
+    var userAccount = "aaa"; //req.session.account;
+    var userHead = "/head/defaulthead.jpeg"; //req.session.head;
+
+    //var userId = req.session.user_id;//"551d7bb281e3449e1c1c6600"; //
+    //var userAccount = req.session.account;//"aaa"; //
+    //var userHead = req.session.head;//"/head/defaulthead.jpeg"; //
 
     var me = {};
     me._id =userId;
@@ -57,6 +65,7 @@ FriendsHandler.addFriend=function(req,res){
 
 
     FriendDao.addFriend(friendId,me,function(err,user){
+        console.log(user);
         if (err) {
             res.json(500, {message: err.toString()});
             return;
@@ -95,13 +104,13 @@ FriendsHandler.deleteFriend = function(req,res){
     friends.account = friendAccount;
     friends.head = friendHead;
 
-    //var userId = "551d7bb281e3449e1c1c6600"; //req.session.user_id;
-    //var userAccount = "aaa"; //req.session.account;
-    //var userHead = "/head/defaulthead.jpeg"; //req.session.head;
-
-    var userId = req.session.user_id;
-    var userAccount = req.session.account;
-    var userHead = req.session.head;
+    var userId = "551f50c59561511112bde212"; //req.session.user_id;
+    var userAccount = "aaa"; //req.session.account;
+    var userHead = "/head/defaulthead.jpeg"; //req.session.head;
+    //
+    //var userId = req.session.user_id;
+    //var userAccount = req.session.account;
+    //var userHead = req.session.head;
     var me = {}
     me._id =userId;
     me.account = userAccount;
@@ -151,7 +160,7 @@ FriendsHandler.searchFriends=function(req,res){
             return;
         }
 
-        res.json(200,{users:users});
+        res.json(200,{friendList:users});
 
     });
 

@@ -1,4 +1,4 @@
-/**
+/*
  * Created by liuhanxu on 15-3-19.
  */
 var mongoose = require('mongoose');

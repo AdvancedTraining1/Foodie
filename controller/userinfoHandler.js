@@ -6,13 +6,9 @@ var db = require('../util/database')
 var RestaurantModel = require('../data').Restaurant;
 var UserModel = require('../data').User;
 
-var UserDao = require("../dao/UserDao");
-
 var querystring = require("querystring"),
-    formidable = require('formidable'),
-    RecipeDao = require("../dao/RecipeDao"),
     UserDao = require("../dao/UserDao"),
-    RecipeModel = require("./../data").Recipe,
+    AccessToken = require("../auth/ControllerAccessToken.js");
     fs = require('fs'),
     url = require('url'),
     config=require("../util/config");
@@ -25,7 +21,7 @@ UserinfoHandler.register=function(req,res){
 
     var user = new UserModel({
         username: req.body.username,
-        account: req.body.account,
+        account: req.body.username,
         password: req.body.password,
         email: req.body.email
     });
@@ -41,42 +37,45 @@ UserinfoHandler.register=function(req,res){
 };
 
 UserinfoHandler.login=function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-    });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
-        var params = querystring.parse(postData);
-        console.log("登陆handler------params:" + params);
-        console.log(params);
-        UserDao.getUserByAccountAndPass(params['username'], params['password'], function (err, user) {
 
-            if(err&& err.length>0){
-                res.json({message:"Login Failed！",user:null});
-                //res.writeHead(500, {
-                //    "Content-Type": "text/plain;charset=utf-8"
-                //});
-                //res.end("登录失败！");
-            }else if(user==null){
-                res.json({message:"Username Or Password error,Please login again！",user:null});
-            } else{
-                req.session.user_id = user._id;
-                req.session.account = user.account;
-                req.session.user_name = user.username;
-                req.session.password = user.password;
-                req.session.head = user.head;
-                console.log('登录成功---user_id:'+req.session.user_id);
-                res.json({message:"Login Successful！",user:user});
+    console.log("登陆handler------");
+    var username = req.param('username');
+    var password = req.param('password');
+    console.log(username);
+    console.log(password);
 
-                //res.writeHead(200, {
-                //    "Content-Type": "text/plain;charset=utf-8"
-                //});
-                //res.end("登录成功！");
-            }
+    UserDao.getUserByAccountAndPass(username, password, function (err, user) {
+        if(err&& err.length>0)
+        {
+            res.json({message:"Login Failed！",user:null});
+            //res.writeHead(500, {
+            //    "Content-Type": "text/plain;charset=utf-8"
+            //});
+            //res.end("登录失败！");
+        }
+        else if(user==null)
+        {
+            res.json({message:"Username Or Password error,Please login again！",user:null});
+        }
+        else
+        {
+            console.log("hehe");
 
-        });
+//            AccessToken.userActionWithToken(req.params.token, res, function(){
+//
+//            }, req.params.id);
+            AccessToken.createAccessToken(user.__id, function(err, token){
+                if (err)
+                {
+                    console.log("Error : " + err);
+                    return res.status(500).end("Internal error");
+                }
+                var data = {
+                    "token" : token._id
+                }
+                res.status(200).json(data);
+            });
+        }
     });
 
 };
@@ -266,15 +265,21 @@ UserinfoHandler.getUserRecipes=function(req,res){
 };
 */
 
-
 UserinfoHandler.logout=function(req,res){
-    req.session.user_id = "";
-    req.session.account = "";
-    req.session.user_name = "";
-    req.session.password = "";
-    req.session.head = "";
 
-    console.log("UserHandler---注销");
+    console.log("UserHandler---logout");
+    if (!req.body.token)
+        return res.status(400).end("Not connected")
+    AccessToken.removeAccessToken(req.body.token, function (err, token) {
+        if (err) {
+            console.log("Error token : " + err);
+            return res.status(500).end("Internal error");
+        }
+        if (!token)
+            return res.status(400).end("Bad token");
+        res.status(204).end();
+    })
+
     res.json({message:"Logout successful!"});
 }
 

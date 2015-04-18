@@ -70,7 +70,7 @@ UserDao.getUserByAccount = function (account,callback) {
     });
 }
 UserDao.getUserById = function (id,callback) {
-    UsersModel.find({_id:id}).exec(function(err,user){
+    UsersModel.findOne({_id:id}).exec(function(err,user){
         if (err){
             console.log("err"+err);
             callback(err,null);
