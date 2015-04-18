@@ -17,6 +17,7 @@ var dishRoute = require('./routes/dishRoute');
 var moment = require('./routes/moment');
 var friends = require('./routes/friends');
 var dateRoute =  require('./routes/dateRoute');
+var pushmsg = require('./routes/pushMsg');
 
 var app = express();
 
@@ -44,6 +45,7 @@ dishRoute(app);
 moment(app);
 friends(app);
 dateRoute(app);
+pushmsg(app);
 //dishRoute(APP);
 
 // catch 404 and forward to error handler
