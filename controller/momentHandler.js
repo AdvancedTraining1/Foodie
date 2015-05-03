@@ -7,6 +7,7 @@ var MomentDao = require("../dao/MomentDao"),
     MomentModel = require("./../data").Moment,
     MomentCommentModel = require("./../data").MomentComment,
     querystring = require('querystring'),
+    AccessToken = require("../auth/ControllerAccessToken.js"),
     config=require("../util/config");
 
 exports.listAll = function(req,res){
@@ -34,13 +35,22 @@ exports.listAll = function(req,res){
 exports.listByUser = function(req,res){
     var pageNo = req.param('pageNo');
     var pageSize = req.param('pageSize');
+    var token = req.param('token');
+    console.log("----------"+token);
     var authorId = req.param('authorId');
 
-    MomentDao.getByUserId(pageNo,pageSize,authorId,function (err1, moment) {
-        MomentDao.getNumByUserId(authorId,function(err2,num){
-            if(!(err1 || err2)){
-                res.json({root:moment,total:num});
-            }
+    AccessToken.userActionWithToken(token, res, function (user) {
+        if (!pageNo)
+            return res.status(400).end("pageNo missing.");
+        if (!pageSize)
+            return res.status(400).end("pageSize missing.");
+
+        MomentDao.getByUserId(pageNo,pageSize,user._id,function (err1, moment) {
+            MomentDao.getNumByUserId(user._id,function(err2,num){
+                if(!(err1 || err2)){
+                    res.json({root:moment,total:num});
+                }
+            });
         });
     });
 };
@@ -61,40 +71,40 @@ exports.getCommentById = function(req,res){
 
 //暂时有点问题
 exports.addMoment = function(req,res){
-    var user = {
-        _id: "111",
-        head: "3.jpg",
-        account: "cmm1"
-    };
-    var moment = new MomentModel({
-        _id:"551ff89554177cfd188158e9",
-        author: {
-            _id: user._id,
-            head: user.head,
-            account: user.account },
-        pictures:req.body.pictures,
-        content:req.body.content,
-        date: logTime(),
-        likeNum: 0,
-        showComment:[],
-        likeList:[],
-        commentList:[],
-        commentNum: 0,
-        flag: true
-    });
+    AccessToken.userActionWithToken(req.body.token, res, function (user) {
+        if (!req.body.content)
+            return res.status(400).end("content missing.");
 
-    MomentDao.create(moment,function (err, moments){
-        if(err){
-            res.writeHead(500, {
-                "Content-Type": "text/plain;charset=utf-8"
-            });
-            res.end("发布moment出现内部错误！");
-        }else {
-            res.writeHead(200, {
-                "Content-Type": "text/plain;charset=utf-8"
-            });
-            res.end("create moment success！");
-        }
+        var moment = new MomentModel({
+            //_id:"551ff89554177cfd188158e9",
+            author: {
+                _id: user._id,
+                head: user.head,
+                account: user.account },
+            pictures:req.body.pictures,
+            content:req.body.content,
+            date: logTime(),
+            likeNum: 0,
+            showComment:[],
+            likeList:[],
+            commentList:[],
+            commentNum: 0,
+            flag: true
+        });
+
+        MomentDao.create(moment,function (err, moments){
+            if(err){
+                res.writeHead(500, {
+                    "Content-Type": "text/plain;charset=utf-8"
+                });
+                res.end("发布moment出现内部错误！");
+            }else {
+                res.writeHead(200, {
+                    "Content-Type": "text/plain;charset=utf-8"
+                });
+                res.end("create moment success！");
+            }
+        });
     });
 };
 
@@ -110,42 +120,42 @@ exports.deleteMoment = function(req,res){
 };
 
 exports.commentMoment = function(req,res){
-    var user = {
-        _id: "111",
-        head: "3.jpg",
-        account: "cmm1"
-    };
-    var comment = new MomentCommentModel({
-        _id:"551feb07c0d9b51a11266c31",
-        author: {
-            _id: user._id,
-            head: user.head,
-            account: user.account },
-        content:req.body.content,
-        date: logTime(),
-        momentId:req.body.momentId,
-        reply: {
-            _id:req.body.reply.id,
-            account:req.body.reply.account},
-        flag: true
-    });
-    MomentCommentDao.create(comment,function (err, momentComment) {
-        console.log(comment._id);
-        if(err){
-            res.writeHead(500, {
-                "Content-Type": "text/plain;charset=utf-8"
-            });
-            res.end("评论菜谱出现内部错误！");
-        }else {
-            MomentDao.updateComment(comment.momentId,momentComment._id,function(err1,moment){
-                if(!err1){
-                    res.writeHead(200, {
-                        "Content-Type": "text/plain;charset=utf-8"
-                    });
-                    res.end("comment success！");
-                }
-            });
-        }
+    AccessToken.userActionWithToken(req.body.token, res, function (user) {
+        if (!req.body.content)
+            return res.status(400).end("content missing.");
+
+        var comment = new MomentCommentModel({
+            //_id:"551feb07c0d9b51a11266c31",
+            author: {
+                _id: user._id,
+                head: user.head,
+                account: user.account },
+            content:req.body.content,
+            date: logTime(),
+            momentId:req.body.momentId,
+            reply: {
+                _id:req.body.reply.id,
+                account:req.body.reply.account},
+            flag: true
+        });
+        MomentCommentDao.create(comment,function (err, momentComment) {
+            console.log(comment._id);
+            if(err){
+                res.writeHead(500, {
+                    "Content-Type": "text/plain;charset=utf-8"
+                });
+                res.end("评论朋友圈出现内部错误！");
+            }else {
+                MomentDao.updateComment(comment.momentId,momentComment._id,function(err1,moment){
+                    if(!err1){
+                        res.writeHead(200, {
+                            "Content-Type": "text/plain;charset=utf-8"
+                        });
+                        res.end("comment success！");
+                    }
+                });
+            }
+        });
     });
 };
 
@@ -164,23 +174,22 @@ exports.deleteComment = function (req,res) {
 
 exports.likeMoment = function (req,res) {
     var momentId = req.body.momentId;
-    var user = {
-        _id: "111",
-        head: "3.jpg",
-        account: "cmm1"
-    };
-    var like = {
-        _id: user._id,
-        head: user.head,
-        account: user.account
-    };
-    MomentDao.likeMoment(momentId,like,function(err,moment){
-        if(!err){
-            res.writeHead(200, {
-                "Content-Type": "text/plain;charset=utf-8"
-            });
-            res.end("like moment success！");
-        }
+    AccessToken.userActionWithToken(req.body.token, res, function (user) {
+        if (!req.body.content)
+            return res.status(400).end("content missing.");
+        var like = {
+            _id: user._id,
+            head: user.head,
+            account: user.account
+        };
+        MomentDao.likeMoment(momentId,like,function(err,moment){
+            if(!err){
+                res.writeHead(200, {
+                    "Content-Type": "text/plain;charset=utf-8"
+                });
+                res.end("like moment success！");
+            }
+        });
     });
 };
 
