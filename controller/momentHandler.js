@@ -71,41 +71,65 @@ exports.getCommentById = function(req,res){
 
 //暂时有点问题
 exports.addMoment = function(req,res){
-    AccessToken.userActionWithToken(req.body.token, res, function (user) {
-        if (!req.body.content)
-            return res.status(400).end("content missing.");
-
-        var moment = new MomentModel({
-            //_id:"551ff89554177cfd188158e9",
-            author: {
-                _id: user._id,
-                head: user.head,
-                account: user.account },
-            pictures:req.body.pictures,
-            content:req.body.content,
-            date: logTime(),
-            likeNum: 0,
-            showComment:[],
-            likeList:[],
-            commentList:[],
-            commentNum: 0,
-            flag: true
-        });
-
-        MomentDao.create(moment,function (err, moments){
-            if(err){
-                res.writeHead(500, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("发布moment出现内部错误！");
-            }else {
-                res.writeHead(200, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("create moment success！");
-            }
-        });
+    //console.log("0:"+req.body.content.name);
+    req.setEncoding('utf-8');
+    var postData = ""; //POST & GET ： name=zzl&email=zzl@sina.com
+    // 数据块接收中
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
     });
+    // 数据接收完毕，执行回调函数
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
+        //console.log("1:"+params.content);
+        //console.log("2:"+params.content.name);
+        //console.log("3:"+params["content.name"]);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            if (!req.body.content)
+                return res.status(400).end("content missing.");
+
+            var moment = new MomentModel({
+                //_id:"551ff89554177cfd188158e9",
+                author: {
+                    _id: user._id,
+                    head: user.head,
+                    account: user.account
+                },
+                pictures: params["pictures"],
+                content: params.content,
+                date: logTime(),
+                likeNum: 0,
+                showComment: [],
+                likeList: [],
+                commentList: [],
+                commentNum: 0,
+                flag: true
+            });
+
+            MomentDao.create(moment, function (err, moments) {
+                if (err) {
+                    res.writeHead(500, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("发布moment出现内部错误！");
+                } else {
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("create moment success！");
+                }
+            });
+        });
+
+        res.writeHead(200, {
+            "Content-Type": "text/plain;charset=utf-8"
+        });
+        res.end("数据提交完毕");
+    });
+
+
 };
 
 exports.deleteMoment = function(req,res){
