@@ -1,6 +1,6 @@
 var JPush = require("../lib/JPush/JPush.js");
 
-var client = JPush.buildClient('4f856268a486a60ed30b5f07', '2419210b33fb0c49a60eca6b');
+var client = JPush.buildClient('fe28690dfbd70fe511ea5a3d', '89cde66f94f449d97599005f');
 
 //npm install jpusher
 

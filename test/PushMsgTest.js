@@ -22,8 +22,8 @@ describe('Test the push message functions', function () {
     it('it should push a message', function (done) {
         //console.log("DishDao Add 成功!!！");
         var temp = {
-            msg: "huhao",
-            head: "huhao is a fish"
+            msg: "做时训",
+            head: "翟媛"
         };
         request(url)
             .post('/service/pushmsg')
