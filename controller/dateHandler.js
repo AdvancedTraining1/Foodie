@@ -11,6 +11,7 @@ var DateDao=require("../dao/DateDao");
 var UserDao = require("../dao/UserDao");
 
 var querystring = require("querystring"),
+    AccessToken = require("../auth/ControllerAccessToken.js"),
     formidable = require('formidable'),
     fs = require('fs'),
     url = require('url'),
@@ -55,33 +56,49 @@ DateHandler.lookDate=function(req,res){
 
 DateHandler.createDate=function(req,res){
 
-    console.log("create one date");
-    var userId = 1234;
-    var restaurantId = 4321;
-    var logTime =Date.parse(new Date());
+    req.setEncoding('utf-8');
+    var postData = "";
 
-    /*var dateTitle = req.param('dateTitle');
-    var dateContent = req.param('dateContent');
-    var dateTime = req.param('dateTime');*/
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
 
-    //if(dateTitle&& dateTitle.length>0){
-        var date = new DateModel({
-            userId: userId,
-            //dateTitle: dateTitle,
-            //dateContent: dateContent,
-            //dateTime: dateTime,
-            logTime: logTime,
-            restaurantId:restaurantId
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            if (!req.body.content)
+                return res.status(400).end("content missing.");
+
+            var date = new DateModel({
+                userId: user._id,
+                //dateTitle: dateTitle,
+                //dateContent: dateContent,
+                dateTime: params['time'],
+                logTime: Date.parse(new Date()),
+                restaurantId:params['content'],
+
+                dateUsers:params['friends']//?????????? id1 id2 id3 account head
+            });
+
+            DateDao.save(date, function (err, data) {
+                if(err&& err.length>0){
+                    res.json({message:"Date create Error"});
+                }else {
+                    res.json({message:"Date create Successful！"});
+                }
+            });
+
         });
 
-        DateDao.save(date, function (err, data) {
-            if(err&& err.length>0){
-                res.json({message:"Date create Error"});
-            }else {
-                res.json({message:"Date create Successful！"});
-            }
+        res.writeHead(200, {
+            "Content-Type": "text/plain;charset=utf-8"
         });
-    //}
+        res.end("数据提交完毕");
+    });
+
+
 };
 
 DateHandler.updateDate=function(req,res){

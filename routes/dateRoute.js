@@ -5,7 +5,7 @@
 var DateHandler = require('../controller/dateHandler');
 module.exports = function (app) {
     app.get('/service/date/look',DateHandler.lookDate);
-    app.get('/service/date/create',DateHandler.createDate);
+    app.post('/service/date/create',DateHandler.createDate);
     app.get('/service/date/update',DateHandler.updateDate);//if or not
     app.get('/service/date/delete',DateHandler.deleteDate);
 
