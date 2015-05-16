@@ -221,8 +221,8 @@ exports.likeMoment = function (req,res) {
 };
 
 exports.upload = function(req,res){
-    var form = new formidable.IncomingForm();
-    //form.uploadDir = "./../upload/temp/";//改变临时目录
+    /*var form = new formidable.IncomingForm();
+    form.uploadDir = "./../upload/temp/";//改变临时目录
     console.log("~~~~~~~~~~~~~~  1"+form);
     form.parse(req, function(error, fields, files){
         console.log("~~~~~~~~~~~~~~  2");
@@ -254,6 +254,18 @@ exports.upload = function(req,res){
                 res.end("upload/"+fName);
             });
         }
+    });*/
+
+    var form = new formidable.IncomingForm();
+    console.log("about to parse");
+    form.parse(req, function(error, fields, files) {
+        console.log("parsing done");
+        console.log(files);
+        console.log(files.image.path);
+        //fs.renameSync(files.upload.path, "/tmp/test.png"); 这个会报错，这个应该是linux的路径
+        fs.renameSync(files.image.path, "./../public/upload/test.png"); //winodw认的路径，nodejs的安装路径
+        //fs.renameSync(files.upload.path, "d:/tmp/test.png");  这个也报错
+        res.end("upload/"+"aaaaaa");
     });
 };
 
