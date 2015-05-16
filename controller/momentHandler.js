@@ -221,9 +221,9 @@ exports.likeMoment = function (req,res) {
 };
 
 exports.upload = function(req,res){
-    /*var form = new formidable.IncomingForm();
-    form.uploadDir = "./../upload/temp/";//改变临时目录
-    console.log("~~~~~~~~~~~~~~  1"+form);
+    var form = new formidable.IncomingForm();
+    form.uploadDir = "./../upload/";//改变临时目录
+    console.log("~~~~~~~~~~~~~~  1"+form.uploadDir);
     form.parse(req, function(error, fields, files){
         console.log("~~~~~~~~~~~~~~  2");
         for(var key in files){
@@ -254,9 +254,9 @@ exports.upload = function(req,res){
                 res.end("upload/"+fName);
             });
         }
-    });*/
+    });
 
-    var form = new formidable.IncomingForm();
+    /*var form = new formidable.IncomingForm();
     console.log("about to parse");
     form.parse(req, function(error, fields, files) {
         console.log("parsing done");
@@ -266,7 +266,7 @@ exports.upload = function(req,res){
         fs.renameSync(files.image.path, "./../public/upload/test.png"); //winodw认的路径，nodejs的安装路径
         //fs.renameSync(files.upload.path, "d:/tmp/test.png");  这个也报错
         res.end("upload/"+"aaaaaa");
-    });
+    });*/
 };
 
 Date.prototype.format =function(format)
