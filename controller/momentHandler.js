@@ -258,7 +258,7 @@ exports.upload = function(req,res){
 
     var form = new formidable.IncomingForm();
     console.log("about to parse");
-    form.uploadDir = "./../upload/temp/";
+    //form.uploadDir = "./../upload/temp/";
     form.parse(req, function(error, fields, files) {
         console.log("parsing done");
         console.log(files);
