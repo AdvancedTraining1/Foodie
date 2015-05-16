@@ -223,10 +223,10 @@ exports.likeMoment = function (req,res) {
 exports.upload = function(req,res){
     var form = new formidable.IncomingForm();
     form.uploadDir = "./../upload/temp/";//改变临时目录
-
+    console.log("~~~~~~~~~~~~~~  1");
     form.parse(req, function(error, fields, files){
         for(var key in files){
-            console.log("~~~~~~~~~~~~~~");
+            console.log("~~~~~~~~~~~~~~  2");
             var file = files[key];
 
             console.log(file.type);
