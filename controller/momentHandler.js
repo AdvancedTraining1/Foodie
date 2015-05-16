@@ -8,6 +8,8 @@ var MomentDao = require("../dao/MomentDao"),
     MomentCommentModel = require("./../data").MomentComment,
     querystring = require('querystring'),
     AccessToken = require("../auth/ControllerAccessToken.js"),
+    fs = require('fs'),
+    url = require('url'),
     config=require("../util/config");
 
 exports.listAll = function(req,res){
