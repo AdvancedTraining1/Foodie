@@ -218,9 +218,9 @@ exports.likeMoment = function (req,res) {
 };
 
 exports.upload = function(req,res){
-    console.log("~~~~~~~~~~~~~~");
     var form = new formidable.IncomingForm();
     form.uploadDir = "./../upload/temp/";//改变临时目录
+    console.log("~~~~~~~~~~~~~~");
     form.parse(req, function(error, fields, files){
         for(var key in files){
             var file = files[key];
