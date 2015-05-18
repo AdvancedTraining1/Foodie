@@ -15,7 +15,7 @@ var userinfoRoute = require('./routes/userinfoRoute');
 //var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
 var moment = require('./routes/moment');
-var friends = require('./routes/friends');
+var friend = require('./routes/friend');
 var dateRoute =  require('./routes/dateRoute');
 var pushmsg = require('./routes/pushMsg');
 
@@ -43,7 +43,7 @@ userinfoRoute(app);
 //common(app);
 dishRoute(app);
 moment(app);
-friends(app);
+friend(app);
 dateRoute(app);
 pushmsg(app);
 //dishRoute(APP);
