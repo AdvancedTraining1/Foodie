@@ -7,7 +7,10 @@ var MomentDao = require("../dao/MomentDao"),
     MomentModel = require("./../data").Moment,
     MomentCommentModel = require("./../data").MomentComment,
     querystring = require('querystring'),
+    formidable = require('formidable'),
     AccessToken = require("../auth/ControllerAccessToken.js"),
+    fs = require('fs'),
+    url = require('url'),
     config=require("../util/config");
 
 exports.listAll = function(req,res){
@@ -220,9 +223,13 @@ exports.likeMoment = function (req,res) {
 exports.upload = function(req,res){
     var form = new formidable.IncomingForm();
     form.uploadDir = "./../upload/temp/";//改变临时目录
+    console.log("~~~~~~~~~~~~~~  1"+form.uploadDir);
     form.parse(req, function(error, fields, files){
+        console.log("~~~~~~~~~~~~~~  2");
         for(var key in files){
+            console.log("~~~~~~~~~~~~~~  3");
             var file = files[key];
+
             console.log(file.type);
             var fName = (new Date()).getTime();
 
@@ -248,6 +255,19 @@ exports.upload = function(req,res){
             });
         }
     });
+
+    /*var form = new formidable.IncomingForm();
+    console.log("about to parse");
+    //form.uploadDir = "./../upload/temp/";
+    form.parse(req, function(error, fields, files) {
+        console.log("parsing done");
+        console.log(files);
+        console.log(files.image.path);
+        //fs.renameSync(files.upload.path, "/tmp/test.png"); 这个会报错，这个应该是linux的路径
+        fs.renameSync(files.image.path, "./../public/upload/test.png"); //winodw认的路径，nodejs的安装路径
+        //fs.renameSync(files.upload.path, "d:/tmp/test.png");  这个也报错
+        res.end("upload/"+"aaaaaa");
+    });*/
 };
 
 Date.prototype.format =function(format)
