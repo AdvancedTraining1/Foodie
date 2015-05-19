@@ -43,14 +43,39 @@ DateHandler.lookDate=function(req,res){
         });
     })*/
 
-    DateDao.getAll(function(err,date){
-        if(err){
-            res.json(500,{message:err.toString()});
-            return;
-        }else{
-            res.json(200,{date:date});
-        }
-    })
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            if (!req.body.content)
+                return res.status(400).end("content missing.");
+
+            var userId=user._id;
+
+            DateDao.getAll(function(err,date){
+                if(err){
+                    res.json(500,{message:err.toString()});
+                    return;
+                }else{
+                    res.json(200,{date:date});
+                }
+            })
+
+        });
+
+        res.writeHead(200, {
+            "Content-Type": "text/plain;charset=utf-8"
+        });
+        res.end("数据提交完毕");
+    });
 
 };
 
@@ -100,6 +125,48 @@ DateHandler.createDate=function(req,res){
 
 
 };
+
+
+DateHandler.selectFriend=function(req,res){
+
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+
+          UserDao.getUserById(user._id, function (err, user){
+
+              if(err&& err.length>0){
+                  res.json({message:"No user"});
+              }else {
+                  DateDao.findFriendsById(user, function (err, friends) {
+                      if(err&& err.length>0){
+                          res.json(500,{message:err.toString()});
+                      }else {
+                          console.log("friends==="+friends);
+                          res.json({root:friends});
+                      }
+                  });
+
+              }
+          });
+
+        });
+
+    });
+
+
+};
+
+
 
 DateHandler.updateDate=function(req,res){
     var date_id = req.params.date_id;
