@@ -85,14 +85,8 @@ exports.addMoment = function(req,res){
     req.addListener("end", function () {
         console.log('数据接收完毕');
         var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
-        //console.log("1:"+params.content);
-        //console.log("2:"+params.content.name);
-        //console.log("3:"+params["content.name"]);
-
+        console.log(params["token"]);
         AccessToken.userActionWithToken(params["token"], res, function (user) {
-            if (!req.body.content)
-                return res.status(400).end("content missing.");
-
             var moment = new MomentModel({
                 //_id:"551ff89554177cfd188158e9",
                 author: {
