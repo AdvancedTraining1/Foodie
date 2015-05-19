@@ -256,19 +256,6 @@ exports.upload = function(req,res){
             });
         }
     });
-
-    /*var form = new formidable.IncomingForm();
-    console.log("about to parse");
-    //form.uploadDir = "./../upload/temp/";
-    form.parse(req, function(error, fields, files) {
-        console.log("parsing done");
-        console.log(files);
-        console.log(files.image.path);
-        //fs.renameSync(files.upload.path, "/tmp/test.png"); 这个会报错，这个应该是linux的路径
-        fs.renameSync(files.image.path, "./../public/upload/test.png"); //winodw认的路径，nodejs的安装路径
-        //fs.renameSync(files.upload.path, "d:/tmp/test.png");  这个也报错
-        res.end("upload/"+"aaaaaa");
-    });*/
 };
 
 Date.prototype.format =function(format)
