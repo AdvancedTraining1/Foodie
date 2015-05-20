@@ -141,23 +141,24 @@ DateHandler.selectFriend=function(req,res){
         var params = querystring.parse(postData);
 
         AccessToken.userActionWithToken(params["token"], res, function (user) {
+            res.json({root:user.friends});
 
-          UserDao.getUserById(user._id, function (err, user){
-
-              if(err&& err.length>0){
-                  res.json({message:"No user"});
-              }else {
-                  DateDao.findFriendsById(user, function (err, friends) {
-                      if(err&& err.length>0){
-                          res.json(500,{message:err.toString()});
-                      }else {
-                          console.log("friends==="+friends);
-                          res.json({root:friends});
-                      }
-                  });
-
-              }
-          });
+//          UserDao.getUserById(user._id, function (err, user){
+//
+//              if(err&& err.length>0){
+//                  res.json({message:"No user"});
+//              }else {
+//                  DateDao.findFriendsById(user, function (err, friends) {
+//                      if(err&& err.length>0){
+//                          res.json(500,{message:err.toString()});
+//                      }else {
+//                          console.log("friends2222==="+friends);
+//                          res.json({root:friends});
+//                      }
+//                  });
+//
+//              }
+//          });
 
         });
 
