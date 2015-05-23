@@ -173,25 +173,31 @@ UserinfoHandler.logout=function(req,res){
 UserinfoHandler.addUser=function(req,res){
 
     var user = new UserModel({
-        username: "zyy",
-        account: "zyy",
-        password: "zyy",
+        username: "cmm",
+        account: "cmm",
+        password: "cmm",
         type: 0,
-        phone: "15201345555",
+        phone: "15201342345",
         sex: 0,
-        head:"2.img"/*,
+        head:"2.img",
         friends: [{
-            _id: "54578976af75277b630cc379",
-            account : "zhaiyuan",
-            head: "1.img"
-        },
+            _id: "551d6239753c1a9c3d9e6e75",
+            account : "zy",
+            head: "2.img"
+            },
             {
-                _id: "5457aa1f0233539703192dc9",
-                account : "mengchi",
+                _id: "552147699f6ffb2a5050760f",
+                account : "zyy",
+                head: "2.img"
+            },
+            {
+                _id: "55570009443d204e23451b83",
+                account : "mc",
                 head: "2.img"
             }],
 
-        friends_count: 2*/
+
+        friends_count: 3
     });
 
     UserDao.save(user,function(err, newuser) {
