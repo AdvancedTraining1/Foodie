@@ -101,7 +101,7 @@ DateHandler.createDate=function(req,res){
                 //dateTitle: dateTitle,
                 //dateContent: dateContent,
                 dateTime: params['time'],
-                logTime: Date.parse(new Date()),
+                logTime: Date.parse(new Date().format('yyyy-MM-dd hh:mm:ss')),
                 restaurantId:params['content'],
 
                 dateUsers:params['friends']//?????????? id1 id2 id3 account head
