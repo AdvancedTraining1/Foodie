@@ -10,7 +10,7 @@ var schema = new Schema({
         _id: String,
         head: String,
         account: String },
-    pictures:[String],
+    picture:[String],
     content:String,
     date: String,
     position: String,

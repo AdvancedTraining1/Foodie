@@ -25,12 +25,12 @@ exports.listAll = function(req,res){
                 if(!err2){
                     file.showComment.push(comment);
                 }
-                MomentDao.getAllNum(function(err2,num){
-                    if(!(err1 || err2)){
-                        res.json({root:moment,total:num});
-                    }
-                });
             });
+        });
+        MomentDao.getAllNum(function(err3,num){
+            if(!err3){
+                res.json({root:moment,total:num});
+            }
         });
     });
 };
@@ -94,7 +94,7 @@ exports.addMoment = function(req,res){
                     head: user.head,
                     account: user.account
                 },
-                pictures: params["pictures"],
+                picture: params["picture"],
                 content: params.content,
                 position:params.position,
                 date: logTime(),
