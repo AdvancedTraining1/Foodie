@@ -96,7 +96,7 @@ exports.addMoment = function(req,res){
                 },
                 picture: params["picture"],
                 content: params.content,
-                position:params.position,
+                location:params.location,
                 date: logTime(),
                 likeNum: 0,
                 showComment: [],

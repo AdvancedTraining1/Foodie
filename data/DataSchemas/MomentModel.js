@@ -13,7 +13,7 @@ var schema = new Schema({
     picture:String,
     content:String,
     date: String,
-    position: String,
+    location: String,
     likeNum: Number,
     showComment:[],
     likeList:[
