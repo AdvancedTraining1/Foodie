@@ -7,9 +7,9 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
 var schema = new mongoose.Schema({
     userId: { type: String },
     //phone: { type: String },
-    restaurantId: { type: String },
-    dateTitle: { type: String },
-    dateContent: { type: String },
+    //restaurantId: { type: String },
+    //dateTitle: { type: String },
+    dateContent: { type: String },//restaurant address
     dateTime: { type: Date },   //date time of the date
     logTime: { type: Date },  //publish time of the date
     dateUsers: [{
@@ -18,8 +18,8 @@ var schema = new mongoose.Schema({
         head: String
     }],
 
-    dateUsers_count: { type: Number, default: 0 },
-    dateStatus: { type: Number, default: 1 }     //1 is on or 0 is cancel
+    dateUsers_count: { type: Number, default: 0 }
+    //dateStatus: { type: Number, default: 1 }     //1 is on or 0 is cancel
 
 });
 

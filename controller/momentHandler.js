@@ -7,7 +7,10 @@ var MomentDao = require("../dao/MomentDao"),
     MomentModel = require("./../data").Moment,
     MomentCommentModel = require("./../data").MomentComment,
     querystring = require('querystring'),
+    formidable = require('formidable'),
     AccessToken = require("../auth/ControllerAccessToken.js"),
+    fs = require('fs'),
+    url = require('url'),
     config=require("../util/config");
 
 exports.listAll = function(req,res){
@@ -22,12 +25,12 @@ exports.listAll = function(req,res){
                 if(!err2){
                     file.showComment.push(comment);
                 }
-                MomentDao.getAllNum(function(err2,num){
-                    if(!(err1 || err2)){
-                        res.json({root:moment,total:num});
-                    }
-                });
             });
+        });
+        MomentDao.getAllNum(function(err3,num){
+            if(!err3){
+                res.json({root:moment,total:num});
+            }
         });
     });
 };
@@ -71,41 +74,55 @@ exports.getCommentById = function(req,res){
 
 //暂时有点问题
 exports.addMoment = function(req,res){
-    AccessToken.userActionWithToken(req.body.token, res, function (user) {
-        if (!req.body.content)
-            return res.status(400).end("content missing.");
+    //console.log("0:"+req.body.content.name);
+    req.setEncoding('utf-8');
+    var postData = ""; //POST & GET ： name=zzl&email=zzl@sina.com
+    // 数据块接收中
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+    // 数据接收完毕，执行回调函数
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
+        console.log(params["token"]);
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            var moment = new MomentModel({
+                //_id:"551ff89554177cfd188158e9",
+                author: {
+                    _id: user._id,
+                    head: user.head,
+                    account: user.account
+                },
+                picture: params["picture"],
+                content: params.content,
+                location:params.location,
+                date: logTime(),
+                likeNum: 0,
+                showComment: [],
+                likeList: [],
+                commentList: [],
+                commentNum: 0,
+                flag: true
+            });
 
-        var moment = new MomentModel({
-            //_id:"551ff89554177cfd188158e9",
-            author: {
-                _id: user._id,
-                head: user.head,
-                account: user.account },
-            pictures:req.body.pictures,
-            content:req.body.content,
-            date: logTime(),
-            likeNum: 0,
-            showComment:[],
-            likeList:[],
-            commentList:[],
-            commentNum: 0,
-            flag: true
-        });
-
-        MomentDao.create(moment,function (err, moments){
-            if(err){
-                res.writeHead(500, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("发布moment出现内部错误！");
-            }else {
-                res.writeHead(200, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("create moment success！");
-            }
+            MomentDao.create(moment, function (err, moments) {
+                if (err) {
+                    res.writeHead(500, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("发布moment出现内部错误！");
+                } else {
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("create moment success！");
+                }
+            });
         });
     });
+
+
 };
 
 exports.deleteMoment = function(req,res){
@@ -196,9 +213,13 @@ exports.likeMoment = function (req,res) {
 exports.upload = function(req,res){
     var form = new formidable.IncomingForm();
     form.uploadDir = "./../upload/temp/";//改变临时目录
+    console.log("~~~~~~~~~~~~~~  1"+form.uploadDir);
     form.parse(req, function(error, fields, files){
+        console.log("~~~~~~~~~~~~~~  2");
         for(var key in files){
+            console.log("~~~~~~~~~~~~~~  3");
             var file = files[key];
+
             console.log(file.type);
             var fName = (new Date()).getTime();
 

@@ -19,55 +19,80 @@ function UserinfoHandler(){
 }
 UserinfoHandler.register=function(req,res){
 
-    var user = new UserModel({
-        username: req.body.username,
-        account: req.body.username,
-        password: req.body.password,
-        email: req.body.email
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
     });
 
-    UserDao.save(user, function (err, data) {
-        if(err&& err.length>0){
-            res.json({message:"Register Failed！"});
-        }else {
-            res.end("Register Successful！");
-        }
+    req.addListener("data",function(){
+        var params = querystring.parse(postData);
+        console.log("Register...");
+        var username = params['username'];
+        var email = params['email'];
+        var password = params['password'];
+
+        console.log(username);
+        var user = new UserModel({
+            username: username,
+            account: username,
+            password: password,
+            email: email
+        });
+
+        UserDao.save(user, function (err, data) {
+            if(err&& err.length>0){
+                res.json({message:"Register Failed！"});
+            }else {
+                res.end("Register Successful！");
+            }
+        });
     });
+
 };
 
 UserinfoHandler.login=function(req,res){
 
     console.log("登陆handler------");
-    var username = req.param('username');
-    var password = req.param('password');
-    console.log(username);
-    console.log(password);
+    req.setEncoding('utf-8');
+    var postData = "";
 
-    UserDao.getUserByAccountAndPass(username, password, function (err, user) {
-        if(err&& err.length>0)
-        {
-            res.json({message:"Login Failed！",user:null});
-        }
-        else if(user==null)
-        {
-            res.json({message:"Username Or Password error,Please login again！",user:null});
-        }
-        else
-        {
-            AccessToken.createAccessToken(user._id, function(err, token){
-                if (err)
-                {
-                    console.log("Error : " + err);
-                    return res.status(500).end("Internal error");
-                }
-                console.log("hehe");
-                var data = {
-                    "token" : token._id
-                }
-                res.status(200).json(data);
-                console.log(token._id);
-            });
-        }
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end",function(){
+        var params = querystring.parse(postData);
+        var username = params['username'];
+        var password = params['password'];
+
+        UserDao.getUserByAccountAndPass(username, password, function (err, user) {
+            if(err&& err.length>0)
+            {
+                res.json({message:"Login Failed！",user:null});
+            }
+            else if(user==null)
+            {
+                res.json({message:"Username Or Password error,Please login again！",user:null});
+            }
+            else
+            {
+                AccessToken.createAccessToken(user._id, function(err, token){
+                    if (err)
+                    {
+                        console.log("Error : " + err);
+                        return res.status(500).end("Internal error");
+                    }
+                    console.log("hehe");
+                    var data = {
+                        "token" : token._id
+                    }
+                    res.status(200).json(data);
+                    console.log(token._id);
+                });
+            }
+        });
     });
 
 };
@@ -148,25 +173,31 @@ UserinfoHandler.logout=function(req,res){
 UserinfoHandler.addUser=function(req,res){
 
     var user = new UserModel({
-        username: "zyy",
-        account: "zyy",
-        password: "zyy",
+        username: "cmm",
+        account: "cmm",
+        password: "cmm",
         type: 0,
-        phone: "15201345555",
+        phone: "15201342345",
         sex: 0,
-        head:"2.img"/*,
+        head:"2.img",
         friends: [{
-            _id: "54578976af75277b630cc379",
-            account : "zhaiyuan",
-            head: "1.img"
-        },
+            _id: "551d6239753c1a9c3d9e6e75",
+            account : "zy",
+            head: "2.img"
+            },
             {
-                _id: "5457aa1f0233539703192dc9",
-                account : "mengchi",
+                _id: "552147699f6ffb2a5050760f",
+                account : "zyy",
+                head: "2.img"
+            },
+            {
+                _id: "55570009443d204e23451b83",
+                account : "mc",
                 head: "2.img"
             }],
 
-        friends_count: 2*/
+
+        friends_count: 3
     });
 
     UserDao.save(user,function(err, newuser) {
