@@ -15,7 +15,7 @@ var schema = new mongoose.Schema({
     ownerId: String,
     tableNumber: { type: Number, default: 0 },
     tableRemain: { type: Number, default: 0 }
-
+    
 
 
 });

@@ -5,5 +5,5 @@
 var RestaurantHandler = require('../controller/restaurantHandler');
 module.exports = function (app) {
 
-    app.get('/service/dish/create',DishHandler.addDish);
+    app.get('/service/restaurant/create',RestaurantHandler.addRestaurant);
 };
