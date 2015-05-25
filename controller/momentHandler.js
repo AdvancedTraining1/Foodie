@@ -63,11 +63,13 @@ exports.listByUser = function(req,res){
 
 exports.getCommentById = function(req,res){
     var id = req.param('id');
+    var pageNo = req.param('pageNo');
+    var pageSize = req.param('pageSize');
     MomentDao.getById(id,function (err1, moment) {
         if(moment != null){
             var commentList = moment.commentList;
             if(!err1){
-                MomentCommentDao.getByIdList(commentList,function(err2,comment){
+                MomentCommentDao.getByIdList(commentList,pageNo,pageSize,function(err2,comment){
                     if(!err2){
                         res.json({root:comment,total:commentList.length});
                     }
