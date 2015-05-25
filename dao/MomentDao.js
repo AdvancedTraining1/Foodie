@@ -115,7 +115,7 @@ MomentDao.likeMoment = function(momentId,like,callback){
 
 MomentDao.checkLike = function(momentId,userId,callback){
     Moment.find({"_id":momentId,"likeList._id":userId}).exec(function(err,moment){
-        if(error1)
+        if(err)
             return callback(err,null);
         else{
             return callback(null, moment);
