@@ -19,7 +19,6 @@ exports.listAll = function(req,res){
 
     MomentDao.getAll(pageNo,pageSize,function (err1, moment) {
         moment.forEach(function(file) {
-            file.commentNum = 3;
             var commentList = file.commentList;
             MomentCommentDao.getByIdList(commentList,function(err2,comment){
                 if(!err2){
@@ -137,7 +136,6 @@ exports.deleteMoment = function(req,res){
 };
 
 exports.commentMoment = function(req,res){
-
     req.setEncoding('utf-8');
     var postData = ""; //POST & GET ： name=zzl&email=zzl@sina.com
     // 数据块接收中

@@ -60,7 +60,7 @@ MomentDao.updateLikeNum = function (id,callback) {
 
 MomentDao.updateComment = function (replyId,commentId,callback) {
     //if(flag == true){
-    Moment.findByIdAndUpdate(replyId,{'$inc':{commentNum:1},'push':{commentList:commentId}},function(error,moment){
+    Moment.findByIdAndUpdate(replyId,{'$inc':{commentNum:1},'$push':{commentList:commentId}},function(error,moment){
         if(error)
             return callback(error,null);
         return callback(null, moment);
