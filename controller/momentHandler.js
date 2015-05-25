@@ -232,6 +232,10 @@ exports.likeMoment = function (req,res) {
                     console.log("wrong find function");
                 }else if(moment){
                     console.log("already liked");
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("already liked！");
                 }else{
                     MomentDao.likeMoment(momentId,like,function(err,moment){
                         if(!err){
