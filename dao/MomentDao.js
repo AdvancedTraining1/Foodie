@@ -104,7 +104,7 @@ MomentDao.deleteComment = function(commentId,momentId,callback){
 };
 
 MomentDao.likeMoment = function(momentId,like,callback){
-    MomentComment.findByIdAndUpdate(momentId,{'$inc':{likeNum:1},'$push':{likeList:like}}).exec(function(error1,moment){
+    Moment.findByIdAndUpdate(momentId,{'$inc':{likeNum:1},'$push':{likeList:like}}).exec(function(error1,moment){
         if(error1)
             return callback(error1,null);
         else{
