@@ -18,46 +18,63 @@ function FriendsHandler() {
 
 FriendsHandler.saveFriendMessage = function (req, res) {
 
-    var friendId = req.param('friendId');
-    var friendAccount = req.param('friendAccount');
-    var friendHead = req.param('friendHead');
-    var message = req.param('message');
-    var token = req.param('token');
+    req.setEncoding('utf-8');
+    var postData = "";
+    console.log("ok");
 
-    var to = {};
-    to._id = friendId;
-    to.account = friendAccount;
-    to.head = friendHead;
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+        console.log(postDataChunk);
+    });
 
-    AccessToken.userActionWithToken(token, res, function (user) {
+    req.addListener("end", function () {
 
-        var from = {}
-        from._id = user._id;
-        from.accout = user.account;
-        from.head = user.head;
+        var params = querystring.parse(postData);
 
-        var FriendMessage = new FriendMessageModel({
-            from: from,
-            to: to,
-            status: "0",
-            message: message,
-            date: getTime()
-        });
+        var friendId = params.friendId;
+        var friendAccount = params.friendAccount;
+        var friendHead = params.friendHead;
+     //   var message = params.message;
+        var token = params.token;
 
-        FriendMessageDao.create(FriendMessage, function (error, friendMessage) {
-            if (err) {
-                res.json(500, {message: err.toString()});
-                return;
-            }
-            if (!friendMessage) {
-                res.json(404, {message: "send fail"});
-                return;
-            }
-            res.json(200, {message: "send successful"});
+        var to = {};
+        to._id = friendId;
+        to.account = friendAccount;
+        to.head = friendHead;
+
+        AccessToken.userActionWithToken(token, res, function (user) {
+
+            var from = {}
+            from._id = user._id;
+            from.accout = user.account;
+            from.head = user.head;
+
+            var FriendMessage = new FriendMessageModel({
+                from: from,
+                to: to,
+                status: "0",
+         //       message: message,
+                date: getTime()
+            });
+
+            FriendMessageDao.create(FriendMessage, function (error, friendMessage) {
+                if (error) {
+                    res.json(500, {message: err.toString()});
+                    return;
+                }
+                if (!friendMessage) {
+                    res.json(404, {message: "send fail"});
+                    return;
+                }
+                res.json(200, {message: "send successful"});
+
+            });
 
         });
 
     });
+
+
 
 }
 
@@ -165,26 +182,43 @@ FriendsHandler.dealFriendMessage = function (req, res) {
 }
 
 FriendsHandler.getFriendMessage = function (req, res) {
-    var token = req.param('token');
 
-    AccessToken.userActionWithToken(token, res, function (user) {
-        var id = user.id;
+    req.setEncoding('utf-8');
+    var postData = "";
+    console.log("ok");
 
-        FriendMessageDao.getNeedList(id, function (err, fMlists) {
-            if (err) {
-                res.json(500, {message: err.toString()});
-                return;
-            }
-            if (!fMlists) {
-                res.json(404, {message: "no message"});
-                return;
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+        console.log(postDataChunk);
+    });
 
-            }
+    req.addListener("end", function () {
 
-            res.json(200, {fMlists: fMlists});
+        var params = querystring.parse(postData);
 
-        });
-    })
+        var token = params.token;
+
+        AccessToken.userActionWithToken(token, res, function (user) {
+            var id = user.id;
+
+            FriendMessageDao.getNeedList(id, function (err, fMlists) {
+                if (err) {
+                    res.json(500, {message: err.toString()});
+                    return;
+                }
+                if (!fMlists) {
+                    res.json(404, {message: "no message"});
+                    return;
+
+                }
+
+                res.json(200, {fMlists: fMlists});
+
+            });
+        })
+
+    });
+
 
 
 }
@@ -319,29 +353,46 @@ FriendsHandler.deleteFriend = function (req, res) {
 
 FriendsHandler.searchNewFriends = function (req, res) {
 
-    var pageNo = req.param('pageNo');
-    var pageSize = req.param('pageSize');
-    var queryStr = req.param('queryStr');//"b" //
-    //    var userid = req.session.user_id;//"551d7bb281e3449e1c1c6600"//
+    req.setEncoding('utf-8');
+    var postData = "";
+    console.log("ok");
 
-    FriendDao.searchFriends(pageNo, pageSize, queryStr, function (err, users) {
-        if (err) {
-            res.json(500, {message: err.toString()});
-            return;
-        }
-        if (!users) {
-            res.json(200, {message: "Not found."});
-            return;
-        }
-        res.json(200, {friendList: users});
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+        console.log(postDataChunk);
+    });
+
+    req.addListener("end", function () {
+
+        var params = querystring.parse(postData);
+        var pageNo = params.pageNo;
+        var pageSize = params.pageSize;
+        var queryStr = params.queryStr;
+
+        FriendDao.searchFriends(pageNo, pageSize, queryStr, function (err, users) {
+            if (err) {
+                res.json(500, {message: err.toString()});
+                return;
+            }
+            if (!users) {
+                res.json(200, {message: "Not found."});
+                return;
+            }
+            res.json(200, {friendList: users});
+
+        });
 
     });
+
+
 
 }
 
 
 FriendsHandler.checkFriend = function (req, res) {
     var friendId = req.param('friendId');
+    var token = req.param('token');
+
 
     AccessToken.userActionWithToken(token, res, function (user) {
 
@@ -392,6 +443,15 @@ FriendsHandler.searchMyFriend = function (req, res) {
 
 }
 
+FriendsHandler.getUserId = function (req, res) {
+
+    var token = req.param('token');
+
+    AccessToken.userActionWithToken(token, res, function (user) {
+        res.json(200, {id: user._id});
+    });
+
+}
 
 FriendsHandler.recommend = function (req, res) {
 
