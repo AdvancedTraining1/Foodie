@@ -64,13 +64,15 @@ exports.listByUser = function(req,res){
 exports.getCommentById = function(req,res){
     var id = req.param('id');
     MomentDao.getById(id,function (err1, moment) {
-        var commentList = moment.commentList;
-        if(!err1){
-            MomentCommentDao.getByIdList(commentList,function(err2,comment){
-                if(!err2){
-                    res.json({root:comment,total:commentList.length});
-                }
-            });
+        if(moment != null){
+            var commentList = moment.commentList;
+            if(!err1){
+                MomentCommentDao.getByIdList(commentList,function(err2,comment){
+                    if(!err2){
+                        res.json({root:comment,total:commentList.length});
+                    }
+                });
+            }
         }
     });
 };
