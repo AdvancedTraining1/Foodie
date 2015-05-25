@@ -218,6 +218,7 @@ exports.likeMoment = function (req,res) {
         console.log('数据接收完毕');
         var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
         console.log(params["token"]);
+        console.log(params["momentId"]);
 
         var momentId = params["momentId"];
         AccessToken.userActionWithToken(params["token"], res, function (user) {
