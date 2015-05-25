@@ -60,7 +60,7 @@ MomentDao.updateLikeNum = function (id,callback) {
 
 MomentDao.updateComment = function (replyId,commentId,callback) {
     //if(flag == true){
-    Moment.findByIdAndUpdate(replyId,{'$inc':{commentNum:1},'push':{commentList:commentId}},function(error,moment){
+    Moment.findByIdAndUpdate(replyId,{'$inc':{commentNum:1},'$push':{commentList:commentId}},function(error,moment){
         if(error)
             return callback(error,null);
         return callback(null, moment);
@@ -104,9 +104,19 @@ MomentDao.deleteComment = function(commentId,momentId,callback){
 };
 
 MomentDao.likeMoment = function(momentId,like,callback){
-    MomentComment.findByIdAndUpdate(momentId,{'$inc':{likeNum:-1},'$push':{likeList:like}}).exec(function(error1,moment){
+    Moment.findByIdAndUpdate(momentId,{'$inc':{likeNum:1},'$push':{likeList:like}}).exec(function(error1,moment){
         if(error1)
             return callback(error1,null);
+        else{
+            return callback(null, moment);
+        }
+    });
+};
+
+MomentDao.checkLike = function(momentId,userId,callback){
+    Moment.find({"_id":momentId,"likeList._id":userId}).exec(function(err,moment){
+        if(err)
+            return callback(err,null);
         else{
             return callback(null, moment);
         }

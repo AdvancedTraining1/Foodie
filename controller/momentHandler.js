@@ -19,7 +19,6 @@ exports.listAll = function(req,res){
 
     MomentDao.getAll(pageNo,pageSize,function (err1, moment) {
         moment.forEach(function(file) {
-            file.commentNum = 3;
             var commentList = file.commentList;
             MomentCommentDao.getByIdList(commentList,function(err2,comment){
                 if(!err2){
@@ -137,43 +136,59 @@ exports.deleteMoment = function(req,res){
 };
 
 exports.commentMoment = function(req,res){
-    AccessToken.userActionWithToken(req.body.token, res, function (user) {
-        if (!req.body.content)
-            return res.status(400).end("content missing.");
+    req.setEncoding('utf-8');
+    var postData = ""; //POST & GET ： name=zzl&email=zzl@sina.com
+    // 数据块接收中
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+    // 数据接收完毕，执行回调函数
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
+        console.log(params["token"]);
 
-        var comment = new MomentCommentModel({
-            //_id:"551feb07c0d9b51a11266c31",
-            author: {
-                _id: user._id,
-                head: user.head,
-                account: user.account },
-            content:req.body.content,
-            date: logTime(),
-            momentId:req.body.momentId,
-            reply: {
-                _id:req.body.reply.id,
-                account:req.body.reply.account},
-            flag: true
-        });
-        MomentCommentDao.create(comment,function (err, momentComment) {
-            console.log(comment._id);
-            if(err){
-                res.writeHead(500, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("评论朋友圈出现内部错误！");
-            }else {
-                MomentDao.updateComment(comment.momentId,momentComment._id,function(err1,moment){
-                    if(!err1){
-                        res.writeHead(200, {
-                            "Content-Type": "text/plain;charset=utf-8"
-                        });
-                        res.end("comment success！");
-                    }
-                });
-            }
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            if (!params.content)
+                return res.status(400).end("content missing.");
+
+            var comment = new MomentCommentModel({
+                //_id:"551feb07c0d9b51a11266c31",
+                author: {
+                    _id: user._id,
+                    head: user.head,
+                    account: user.account },
+                content:params.content,
+                date: logTime(),
+                momentId:params.momentId,
+                reply: {
+                    _id:params["reply._id"],
+                    account:params["reply.account"]},
+                flag: true
+            });
+            MomentCommentDao.create(comment,function (err, momentComment) {
+                console.log(comment._id);
+                if(err){
+                    res.writeHead(500, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("评论朋友圈出现内部错误！");
+                }else {
+                    MomentDao.updateComment(comment.momentId,momentComment._id,function(err1,moment){
+                        if(!err1){
+                            res.writeHead(200, {
+                                "Content-Type": "text/plain;charset=utf-8"
+                            });
+                            res.end("comment success！");
+                        }
+                    });
+                }
+            });
         });
     });
+
+
+
 };
 
 exports.deleteComment = function (req,res) {
@@ -190,24 +205,50 @@ exports.deleteComment = function (req,res) {
 };
 
 exports.likeMoment = function (req,res) {
-    var momentId = req.body.momentId;
-    AccessToken.userActionWithToken(req.body.token, res, function (user) {
-        if (!req.body.content)
-            return res.status(400).end("content missing.");
-        var like = {
-            _id: user._id,
-            head: user.head,
-            account: user.account
-        };
-        MomentDao.likeMoment(momentId,like,function(err,moment){
-            if(!err){
-                res.writeHead(200, {
-                    "Content-Type": "text/plain;charset=utf-8"
-                });
-                res.end("like moment success！");
-            }
+    req.setEncoding('utf-8');
+    var postData = ""; //POST & GET ： name=zzl&email=zzl@sina.com
+    // 数据块接收中
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+    // 数据接收完毕，执行回调函数
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);//GET & POST  ////解释表单数据部分{name="zzl",email="zzl@sina.com"}
+        console.log(params["token"]);
+        console.log(params["momentId"]);
+
+        var momentId = params["momentId"];
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            var like = {
+                _id: user._id,
+                head: user.head,
+                account: user.account
+            };
+            MomentDao.checkLike(momentId,user._id,function(err1,moment){
+                if(err1){
+                    console.log("wrong find function");
+                }else if(moment){
+                    console.log("already liked");
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("already liked！");
+                }else{
+                    MomentDao.likeMoment(momentId,like,function(err,moment){
+                        if(!err){
+                            res.writeHead(200, {
+                                "Content-Type": "text/plain;charset=utf-8"
+                            });
+                            res.end("like moment success！");
+                        }
+                    });
+                }
+            });
         });
     });
+
+
 };
 
 exports.upload = function(req,res){
