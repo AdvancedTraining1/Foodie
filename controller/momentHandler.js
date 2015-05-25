@@ -26,6 +26,7 @@ exports.listAll = function(req,res){
                 if(!err2){
                     console.log(comment);
                     file.showComment.push(comment);
+                    console.log(file.showComment);
                 }
             });
         });
