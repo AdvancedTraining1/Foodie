@@ -93,34 +93,51 @@ DateHandler.createDate=function(req,res){
         var params = querystring.parse(postData);
 
         AccessToken.userActionWithToken(params["token"], res, function (user) {
-            if (!req.body.content)
-                return res.status(400).end("content missing.");
 
             var date = new DateModel({
                 userId: user._id,
                 //dateTitle: dateTitle,
-                //dateContent: dateContent,
+                dateContent: params['content'],
                 dateTime: params['time'],
-                logTime: Date.parse(new Date().format('yyyy-MM-dd hh:mm:ss')),
-                restaurantId:params['content'],
+                logTime: Date.parse(new Date().format('yyyy-MM-dd hh:mm:ss'))
+                //restaurantId:params['content'],
 
-                dateUsers:params['friends']//?????????? id1 id2 id3 account head
+               // dateUsers:params['friends']
             });
+
+            var ids=params['friendids'];
+            console.log(ids.split(","));
+            var names=params['friendnames'];
+            console.log(names);
 
             DateDao.save(date, function (err, data) {
                 if(err&& err.length>0){
-                    res.json({message:"Date create Error"});
+                    res.json("publish date error！");
                 }else {
-                    res.json({message:"Date create Successful！"});
+
+                    for(var i=0;i<ids.split(",").length-1;i++){
+
+                        UserDao.getUserById(ids.split(",")[i],function(err,user){
+                            var dateUsers={
+                                _id: user._id,
+                                account : user.account,
+                                head: user.head
+                            };
+
+
+                            DateDao.updateById(date._id,dateUsers,function(error,date){
+                                //res.json("publish date success！");
+                            })
+
+                        })
+
+                    }
+                    res.end("publish date success");
                 }
             });
 
         });
 
-        res.writeHead(200, {
-            "Content-Type": "text/plain;charset=utf-8"
-        });
-        res.end("数据提交完毕");
     });
 
 

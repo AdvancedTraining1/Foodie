@@ -10,8 +10,8 @@ var schema = new mongoose.Schema({
     //restaurantId: { type: String },
     //dateTitle: { type: String },
     dateContent: { type: String },//restaurant address
-    dateTime: { type: Date },   //date time of the date
-    logTime: { type: Date },  //publish time of the date
+    dateTime: { type: String },   //date time of the date
+    logTime: { type: String },  //publish time of the date
     dateUsers: [{
         _id: String,
         account : String,
