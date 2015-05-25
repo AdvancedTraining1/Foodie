@@ -20,8 +20,11 @@ exports.listAll = function(req,res){
     MomentDao.getAll(pageNo,pageSize,function (err1, moment) {
         moment.forEach(function(file) {
             var commentList = file.commentList;
+            console.log(file.commentList);
+
             MomentCommentDao.getByIdList(commentList,function(err2,comment){
                 if(!err2){
+                    console.log(comment);
                     file.showComment.push(comment);
                 }
             });
