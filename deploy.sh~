@@ -1,0 +1,9 @@
+<<<<<<< HEAD
+#!/bin/sh
+=======
+#!/bin/sh 
+
+>>>>>>> 64b17a0c4b9ef83dc196dcf61455c55b80f7ac74
+node ./bin/www &
+echo $?
+echo "Running"

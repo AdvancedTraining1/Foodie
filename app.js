@@ -7,18 +7,17 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var routes = require('./routes/index');
-var blog = require('./routes/blog');
-var topic = require('./routes/topic');
-var attention = require('./routes/attention');
-var adminpage = require('./routes/admin');
-var advertisepage = require('./routes/advertise');
-var recipe = require('./routes/recipe');
-var sale = require('./routes/sale');
-var userinfo = require('./routes/userinfo');
-var common = require('./routes/common');
-var seasonpage = require('./routes/season');
+//var adminpage = require('./routes/admin');
+//var recipe = require('./routes/recipe');
+//var sale = require('./routes/sale');
+var userinfoRoute = require('./routes/userinfoRoute');
+//var common = require('./routes/common');
+//var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
-var restaurantRoute = require('./routes/restaurantRoute');
+var moment = require('./routes/moment');
+var friend = require('./routes/friend');
+var dateRoute =  require('./routes/dateRoute');
+var pushmsg = require('./routes/pushMsg');
 
 var app = express();
 
@@ -36,19 +35,19 @@ app.use(session({secret: 'keyboard cat'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/blog', blog);
-app.use('/topic', topic);
-//app.use('/attention',attention);
-attention(app);
-app.use('/admin',adminpage);
-app.use('/season',seasonpage);
-app.use('/advertise',advertisepage);
-app.use('/sale',sale);
-userinfo(app);
-recipe(app);
-common(app);
+//app.use('/admin',adminpage);
+//app.use('/season',seasonpage);
+//app.use('/sale',sale);
+userinfoRoute(app);
+//recipe(app);
+//common(app);
 dishRoute(app);
-restaurantRoute(app);
+moment(app);
+friend(app);
+dateRoute(app);
+pushmsg(app);
+//dishRoute(APP);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

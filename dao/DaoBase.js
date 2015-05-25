@@ -53,10 +53,10 @@ DaoBase.prototype.getAll = function (callback) {
 
 DaoBase.prototype.delete = function (query, callback){
     console.log(query);
-    this.model.remove(query, function(error){
+    this.model.remove(query, function(error,user){
         if(error) return callback(error);
 
-        return callback(null);
+        return callback(user);
     });
 };
 

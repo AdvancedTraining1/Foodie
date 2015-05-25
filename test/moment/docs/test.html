@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head prefix="Group7">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+
+    <title>Moment_Test</title>
+</head>
+<body>
+    <h2>Moment_Test</h2>
+</body>
+</html>
+make[1]: 正在进入目录 `/home/hh/work/Foodie/test/moment'
+make test-node
+make[2]: 正在进入目录 `/home/hh/work/Foodie/test/moment'
+[33m
+##############################################################
+#
+#   !!! MONGOOSE WARNING !!!
+#
+#   This is an UNSTABLE release of Mongoose.
+#   Unstable releases are available for preview/testing only.
+#   DO NOT run this in production.
+#
+##############################################################
+[0m
+    <section class="suite">
+      <h1>Moment connecting to the database</h1>
+      <dl>
+connect to DB!
+        <dt>it should connect properly and get the moment</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/listAll')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 1);
+        done();
+    });</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Test the get functions</h1>
+      <dl>
+        <dt>it should get all the moments</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/listAll')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 1);
+        done();
+    });</code></pre></dd>
+        <dt>it should get the moment by 110011</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/listOwn?authorId=110011')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 1);
+        done();
+    });</code></pre></dd>
+        <dt>it should get the moment comment by moment_Id </dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/getCommentById?id=551f4d3a582104f00ef48953')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.body.should.have.property(&quot;root&quot;);
+        res.body.should.have.property(&quot;total&quot;, 2);
+        done();
+    });</code></pre></dd>
+        <dt>it should create a comment</dt>
+        <dd><pre><code>var comment = MomentComment({
+    //_id:&quot;551feb07c0d9b51a11266c31&quot;,
+    author: {
+        _id: &quot;110011&quot;,
+        head: &quot;1.jpg&quot;,
+        account:&quot;cmm&quot;
+    },
+    content:&quot;ZanZan!&quot;,
+    momentId:&quot;551f4d3a582104f00ef48953&quot;,
+    reply: {
+        _id:null,
+        account:null}
+});
+request(url)
+    .post('/service/moment/addComment')
+    .type('json')
+    .expect(200)
+    .send(JSON.stringify(comment))
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.text.should.eql(&quot;comment success！&quot;);
+        done();
+    });</code></pre></dd>
+        <dt>it should delete the comment</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/deleteComment?commentId=551feb07c0d9b51a11266c31&amp;momentId=551f4d3a582104f00ef48953')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.text.should.eql(&quot;delete comment success！&quot;);
+        done();
+    });</code></pre></dd>
+        <dt>it should like a moment</dt>
+        <dd><pre><code>var like = MomentComment({
+    momentId:&quot;551f4d3a582104f00ef48953&quot;
+});
+request(url)
+    .post('/service/moment/addLike')
+    .type('json')
+    .expect(200)
+    .send(JSON.stringify(like))
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.text.should.eql(&quot;like moment success！&quot;);
+        done();
+    });</code></pre></dd>
+        <dt>it should create a new moment</dt>
+        <dd><pre><code>var moment = new Moment({
+    pictures: [&quot;11.jpg&quot;,&quot;12.jpg&quot;],
+    content: &quot;I have a good diner !!!&quot;,
+    date: &quot;2015-04-03 20:00:00&quot;,
+    likeNum: 0,
+    likeList: [],
+    showComment:[],
+    commentNum:0,
+    commentList: []
+});
+request(url)
+    .post('/service/moment/addMoment')
+    .type('json')
+    .expect(200)
+    .send(JSON.stringify(moment))
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.text.should.eql(&quot;create moment success！&quot;);
+        done();
+    });</code></pre></dd>
+        <dt>it should delete an existing moment</dt>
+        <dd><pre><code>request(url)
+    .get('/service/moment/deleteMoment?id=551f4d3a582104f00ef48953')
+    .type('json')
+    .expect(200)
+    .end(function (err, res) {
+        if (err) {
+            throw err;
+        }
+        res.text.should.eql(&quot;delete moment success！&quot;);
+        done();
+    });</code></pre></dd>
+      </dl>
+    </section>
+make[2]:正在离开目录 `/home/hh/work/Foodie/test/moment'
+make[1]:正在离开目录 `/home/hh/work/Foodie/test/moment'
+<h2>end of the moment test</h2>

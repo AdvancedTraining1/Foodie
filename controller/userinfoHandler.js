@@ -4,15 +4,11 @@
 var db = require('../util/database')
 
 var RestaurantModel = require('../data').Restaurant;
-var UserModel = require('../data').user;
-
-var UserDao = require("../dao/UserDao");
+var UserModel = require('../data').User;
 
 var querystring = require("querystring"),
-    formidable = require('formidable'),
-    RecipeDao = require("../dao/RecipeDao"),
     UserDao = require("../dao/UserDao"),
-    RecipeModel = require("./../data").Recipe,
+    AccessToken = require("../auth/ControllerAccessToken.js");
     fs = require('fs'),
     url = require('url'),
     config=require("../util/config");
@@ -25,19 +21,19 @@ UserinfoHandler.register=function(req,res){
 
     req.setEncoding('utf-8');
     var postData = "";
+
     req.addListener("data", function (postDataChunk) {
         postData += postDataChunk;
     });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
+
+    req.addListener("data",function(){
         var params = querystring.parse(postData);
-        console.log(params);//{ username: 'aaa', password: 'aaa', email: '1412@sfd.com' }
+        console.log("Register...");
+        var username = params['username'];
+        var email = params['email'];
+        var password = params['password'];
 
-        var username = params.username;
-        var password = params.password;
-        var email = params.email;
-        console.log("注册---username:" + username + "-----密码:" + password);
-
+        console.log(username);
         var user = new UserModel({
             username: username,
             account: username,
@@ -49,97 +45,170 @@ UserinfoHandler.register=function(req,res){
             if(err&& err.length>0){
                 res.json({message:"Register Failed！"});
             }else {
-                res.json({message:"Register Successful！"});
+                res.end("Register Successful！");
             }
-
         });
     });
+
 };
 
 UserinfoHandler.login=function(req,res){
+
+    console.log("登陆handler------");
     req.setEncoding('utf-8');
     var postData = "";
+
     req.addListener("data", function (postDataChunk) {
         postData += postDataChunk;
     });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
+
+    req.addListener("end",function(){
         var params = querystring.parse(postData);
-        console.log("登陆handler------params:" + params);
-        console.log(params);
-        UserDao.getUserByAccountAndPass(params['username'], params['password'], function (err, user) {
+        var username = params['username'];
+        var password = params['password'];
 
-            if(err&& err.length>0){
+        UserDao.getUserByAccountAndPass(username, password, function (err, user) {
+            if(err&& err.length>0)
+            {
                 res.json({message:"Login Failed！",user:null});
-                //res.writeHead(500, {
-                //    "Content-Type": "text/plain;charset=utf-8"
-                //});
-                //res.end("登录失败！");
-            }else if(user==null){
-                res.json({message:"Username Or Password error,Please login again！",user:null});
-            } else{
-                req.session.user_id = user._id;
-                req.session.account = user.account;
-                req.session.user_name = user.username;
-                req.session.password = user.password;
-                req.session.head = user.head;
-                console.log('登录成功---user_id:'+req.session.user_id);
-                res.json({message:"Login Successful！",user:user});
-
-                //res.writeHead(200, {
-                //    "Content-Type": "text/plain;charset=utf-8"
-                //});
-                //res.end("登录成功！");
             }
-
+            else if(user==null)
+            {
+                res.json({message:"Username Or Password error,Please login again！",user:null});
+            }
+            else
+            {
+                AccessToken.createAccessToken(user._id, function(err, token){
+                    if (err)
+                    {
+                        console.log("Error : " + err);
+                        return res.status(500).end("Internal error");
+                    }
+                    console.log("hehe");
+                    var data = {
+                        "token" : token._id
+                    }
+                    res.status(200).json(data);
+                    console.log(token._id);
+                });
+            }
         });
     });
 
 };
 
 UserinfoHandler.modifypass=function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-    });
-
     console.log("修改密码handler");
-    var params = querystring.parse(postData);
-    var oldpass = params.passwordold;
-    var newpass = params.passwordnew1;
 
-    var oldpassOfUser=req.session.password;
-    if(oldpass!=oldpassOfUser){
-        res.json({message:"Old Password Error!"});
-        return 0;
-    }
-    var conditions = {_id:req.session.user_id};
-    var update={"password":newpass};
+    var oldpass = req.param('oldpass');
+    var newpass = req.param('newpass');
+    var token = req.param('token');
+    console.log(token);
 
-    var user =UserDao.update(conditions,update,null,function (err, user)
-    {
-        if(err)
-        {
-            console.log(err);
-            res.json({message:"Modify password failed！"});
+    AccessToken.userActionWithToken(token, res, function(user){
+        var oldpassOfUser = user.password;
+        var conditions = {_id: user._id};
+        var update={"password": newpass};
 
-        }else
-        {
-            req.session.password =newpass ;  //修改session中的值
-            res.json({message:"Modify password successful!"});
-
+        if(oldpass != oldpassOfUser) {
+            res.json({message: "Old Password Error!"});
+            return 0;
         }
-    });
+
+        UserDao.update(conditions,update,null,function (err, user)
+        {
+            if(err)
+            {
+                console.log(err);
+                res.json({message:"Modify password failed！"});
+
+            }else
+            {
+                user.password = newpass ;
+                res.end("Modify password successful!");
+            }
+        });
+
+    }, req.params.id);
 
 };
+
 UserinfoHandler.isLogin = function(req,res){
-    var user_id = req.session.user_id;
-    if(user_id.length>0){
-        res.json({message:"1",username:req.session.user_name});
-    }else{
-        res.json({message:"2"});
-    }
+    var token = req.param('token');
+    AccessToken.userActionWithToken(token, res, function(user){
+        if(user._id != null)
+        {
+            res.json({message:"1",username:user.username});
+        }
+        else
+        {
+            res.json({message:"2"});
+        }
+
+    }, req.params.id);
+};
+
+UserinfoHandler.logout=function(req,res){
+    console.log("UserHandler---logout");
+    var token = req.param('token');
+
+    console.log(token);
+    if (!token)
+        return res.status(400).end("Not connected")
+    AccessToken.removeAccessToken(token, function (err, token) {
+        if (err) {
+            console.log("Error token : " + err);
+            return res.status(500).end("Internal error");
+        }
+        if (!token)
+            return res.status(400).end("Bad token");
+        res.status(204).end();
+    })
+
+    res.json({message:"Logout successful!"});
+}
+
+//**********************************zhaiyuan start********************************
+
+UserinfoHandler.addUser=function(req,res){
+
+    var user = new UserModel({
+        username: "cmm",
+        account: "cmm",
+        password: "cmm",
+        type: 0,
+        phone: "15201342345",
+        sex: 0,
+        head:"2.img",
+        friends: [{
+            _id: "551d6239753c1a9c3d9e6e75",
+            account : "zy",
+            head: "2.img"
+            },
+            {
+                _id: "552147699f6ffb2a5050760f",
+                account : "zyy",
+                head: "2.img"
+            },
+            {
+                _id: "55570009443d204e23451b83",
+                account : "mc",
+                head: "2.img"
+            }],
+
+
+        friends_count: 3
+    });
+
+    UserDao.save(user,function(err, newuser) {
+        if (err) {
+            res.json(500, {message: err.toString()});
+            return;
+        }
+        console.log(newuser)
+        res.json(200, newuser);
+        //res.render('index');
+    });
 };
 
 UserinfoHandler.modifyinfo=function(req,res){
@@ -152,24 +221,27 @@ UserinfoHandler.modifyinfo=function(req,res){
 
     var params = querystring.parse(postData);
     console.log("UserHandler---更改个人信息");
-    var username = params['username'];
-    var email = params['email'];
+    //var username = params['username'];
+    //var email = params['email'];
+    var username = "zhai"
     console.log("修改个人信息handler");
 
-    var conditions = {_id:req.session.user_id};
-    var update={username:username,email:email};
+    //var conditions = {_id:req.session.user_id};
+    //var update={username:username,email:email};
+    var conditions = {_id:"551d6239753c1a9c3d9e6e75"};
+    var update={username:username};
 
     var user =UserDao.update(conditions,update,null,function (err, user)
     {
         if(err)
         {
             console.log(err);
-            res.json({message:"Modify userinfo successful！"});
+            res.json({message:"Modify userinfo failed！"});
 
         }else
         {
 
-            res.json({message:"Modify userinfo failed！"});
+            res.json({message:"Modify userinfo successful！"});
 
         }
     });
@@ -178,26 +250,33 @@ UserinfoHandler.modifyinfo=function(req,res){
 
 UserinfoHandler.viewUserinfo=function(req,res){
 
-    var user_account =req.session.account;
+    //var user_account =req.session.account;
+    var user_account ="zy";
     console.log("UserHandler---查看个人信息---user_account："+user_account);
 
-    var user = UserDao.getUserByAccount(user_account,function (err, user)
-    {
+    UserDao.getUserByAccount(user_account,function (err, user){
         if(err)
         {
             console.log(err);
-            res.json({message:"Get userinfo successful!",user:null});
+            res.json({message:"Get userinfo failed!",user:null});
 
         }else
         {
 
-            res.json({message:"Get userinfo failed！",user:user});
+            res.json({message:"Get userinfo successful！",user:user});
 
         }
     });
 
 };
 
+
+
+//**********************************zhaiyuan  end********************************
+
+
+
+/*
 UserinfoHandler.getUserBlogs=function(req,res){
 
     var pageNo = req.param('pageNo');
@@ -240,17 +319,7 @@ UserinfoHandler.getUserRecipes=function(req,res){
     });
 
 };
+*/
 
-
-UserinfoHandler.logout=function(req,res){
-    req.session.user_id = "";
-    req.session.account = "";
-    req.session.user_name = "";
-    req.session.password = "";
-    req.session.head = "";
-
-    console.log("UserHandler---注销");
-    res.json({message:"Logout successful!"});
-}
 
 module.exports = UserinfoHandler;
