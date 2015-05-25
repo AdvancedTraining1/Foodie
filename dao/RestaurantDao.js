@@ -54,8 +54,8 @@ RestaurantDao.update = function (conditions,update,options,callback) {
     });
 }
 
-RestaurantDao.getRestaurantByName = function (restname,callback) {
-    RestaurantModel.find({restaurantName:restname}).exec(function(err,restaurant){
+RestaurantDao.getRestaurantByID= function (restid,callback) {
+    RestaurantModel.findOne({_id:restid}).exec(function(err,restaurant){
         if (err){
             console.log("err"+err);
             callback(err,null);
@@ -65,7 +65,31 @@ RestaurantDao.getRestaurantByName = function (restname,callback) {
         }
     });
 }
+RestaurantDao.getRestaurantByName= function (pageNo,pageSize,restname,callback) {
+    RestaurantModel.find({restaurantName:restname}).skip((pageNo-1)*pageSize).limit(pageSize).sort({'date':-1}).exec(function(error,restaurantlist){
+        if(error)
+            return callback(error,null);
+        return callback(null, restaurantlist);
+    });
+};
+RestaurantDao.testRestaurantName= function (restname,callback) {
+    RestaurantModel.findOne({restaurantName:restname}).exec(function(err,restaurant){
+        if (err){
+            console.log("err"+err);
+            callback(err,null);
+        }
+        else{
+            callback(null,restaurant);
+        }
+    });
+};
 
-
+RestaurantDao.getNumByName= function (restname,callback) {
+    RestaurantModel.count({restaurantName:restname}).exec(function(error,num){
+        if(error)
+            return callback(error,null);
+        return callback(null, num);
+    });
+};
 
 module.exports = RestaurantDao;
