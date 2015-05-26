@@ -18,7 +18,7 @@ FriendMessageDao.create = function(FriendMessage,callback){
     });
 }
 FriendMessageDao.getNeedList = function(userId,callback){
-    FriendMessage.find({"to.id":userId}).sort({'date':-1}).exec(function(error,fMlists){
+    FriendMessage.find({"to._id":userId}).sort({'date':-1}).exec(function(error,fMlists){
         if(error) return callback(error,null);
 
         return callback(null, fMlists);

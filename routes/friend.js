@@ -10,7 +10,8 @@ module.exports = function (app) {
     app.post('/service/friend/dealFriendMessage',friend.dealFriendMessage);
 
     app.get('/service/friend/listFriend', friend.showAllFriends);
-    app.get('/service/friend/searchNewFriend',friend.searchNewFriends);
+    app.get('/service/friend/myId', friend.getUserId);
+    app.post('/service/friend/searchNewFriend',friend.searchNewFriends);
     app.post('/service/friend/add', friend.addFriend);
     app.post('/service/friend/delete', friend.deleteFriend);
     app.get('/service/friend/check', friend.checkFriend);
