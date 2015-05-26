@@ -42,6 +42,28 @@ DateHandler.lookDate=function(req,res){
     });
 };
 
+DateHandler.lookMyDate=function(req,res){
+
+    var token = req.param('token');
+
+    AccessToken.userActionWithToken(token, res, function (user) {
+
+        var userId=user._id;
+
+        DateDao.findByAuthorId(userId,function(err,date){
+            if(err){
+                res.json(500,{message:err.toString()});
+                return;
+            }else{
+
+                res.json(200,{date:date});
+            }
+        })
+
+    });
+};
+
+
 DateHandler.createDate=function(req,res){
 
     req.setEncoding('utf-8');
