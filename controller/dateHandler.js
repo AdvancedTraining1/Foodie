@@ -23,60 +23,23 @@ function DateHandler(){
 
 DateHandler.lookDate=function(req,res){
 
-    /*var pageNo = req.param('pageNo');
-    var pageSize = req.param('pageSize');
-    console.log("look date");
-    DateDao.getAll(pageNo,pageSize,function(err,date){
-        DateDao.getAllNum(function(err2,num){
-            if(err || err2){
-                res.json(500, {message: err.toString()});
+    var token = req.param('token');
+
+    AccessToken.userActionWithToken(token, res, function (user) {
+
+        var userId=user._id;
+
+        DateDao.findByDateUserId(userId,function(err,date){
+            if(err){
+                res.json(500,{message:err.toString()});
                 return;
+            }else{
 
+                res.json(200,{date:date});
             }
-            if (!date) {
-                res.json(404, {message: "Not found."});
-                return;
-            }
+        })
 
-            console.log("num"+num)
-            res.json({root:date,total:num});
-        });
-    })*/
-
-    req.setEncoding('utf-8');
-    var postData = "";
-
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
     });
-
-    req.addListener("end", function () {
-        console.log('数据接收完毕');
-        var params = querystring.parse(postData);
-
-        AccessToken.userActionWithToken(params["token"], res, function (user) {
-            if (!req.body.content)
-                return res.status(400).end("content missing.");
-
-            var userId=user._id;
-
-            DateDao.getAll(function(err,date){
-                if(err){
-                    res.json(500,{message:err.toString()});
-                    return;
-                }else{
-                    res.json(200,{date:date});
-                }
-            })
-
-        });
-
-        res.writeHead(200, {
-            "Content-Type": "text/plain;charset=utf-8"
-        });
-        res.end("数据提交完毕");
-    });
-
 };
 
 DateHandler.createDate=function(req,res){
@@ -95,11 +58,16 @@ DateHandler.createDate=function(req,res){
         AccessToken.userActionWithToken(params["token"], res, function (user) {
 
             var date = new DateModel({
-                userId: user._id,
+                //userId: user._id,
+                author:{
+                    _id:user._id,
+                    account:user.account,
+                    head:user.head
+                },
                 //dateTitle: dateTitle,
                 dateContent: params['content'],
                 dateTime: params['time'],
-                logTime: Date.parse(new Date().format('yyyy-MM-dd hh:mm:ss'))
+                logTime: new Date().format('yyyy-MM-dd hh:mm:ss')
                 //restaurantId:params['content'],
 
                // dateUsers:params['friends']

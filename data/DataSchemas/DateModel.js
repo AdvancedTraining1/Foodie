@@ -5,7 +5,12 @@
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 var schema = new mongoose.Schema({
-    userId: { type: String },
+    //userId: { type: String },
+    author:{
+        _id:String,
+        account:String,
+        head:String
+    },
     //phone: { type: String },
     //restaurantId: { type: String },
     //dateTitle: { type: String },

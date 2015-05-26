@@ -41,6 +41,13 @@ DateDao.getOne = function (id,callback) {
     });
 };
 
+DateDao.findByDateUserId = function (id,callback) {
+    DateModel.find({"dateUsers._id":id}).sort({'logTime':-1}).exec(function(error,date){
+        if(error) return callback(error,null);
+        return callback(null, date);
+    });
+};
+
 
 //no use
 DateDao.findFriendsById = function (user,callback) {
