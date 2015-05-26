@@ -115,6 +115,23 @@ DateDao.updateById = function (id,dateUsers,callback) {
     });
 }
 
+DateDao.updateStatusById = function (dateId,userId,callback) {
+
+    DateModel.update({"_id":dateId,"dateUsers._id":userId},{$set:{"dateUsers.$.status":1}},function(error,date){
+        if(error) return callback(error,null);
+        return callback(null, date);
+    });
+}//查找名为Mike的记录，并且该人的名字改成tank   db.test2.update( { "comments.author": "Mike"},{ $set: { "comments.$.author" : "tank" } });
+
+
+DateDao.updateStatusNoById = function (dateId,userId,callback) {
+
+    DateModel.update({"_id":dateId,"dateUsers._id":userId},{$set:{"dateUsers.$.status":2}},function(error,date){
+        if(error) return callback(error,null);
+        return callback(null, date);
+    });
+}
+
 DateDao.delete = function (list,callback) {
     DateModel.remove({_id:{$in:list}}).exec(function(error,date){
         if(error) return callback(error,null);

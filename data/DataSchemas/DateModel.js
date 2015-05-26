@@ -20,7 +20,8 @@ var schema = new mongoose.Schema({
     dateUsers: [{
         _id: String,
         account : String,
-        head: String
+        head: String,
+        status:{ type:String, default:0}
     }],
 
     dateUsers_count: { type: Number, default: 0 }

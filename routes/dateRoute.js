@@ -11,5 +11,6 @@ module.exports = function (app) {
     app.get('/service/date/update',DateHandler.updateDate);//if or not
     app.get('/service/date/delete',DateHandler.deleteDate);
 
-    app.get('/service/date/join',DateHandler.joinDate);
+    app.post('/service/date/join',DateHandler.joinDate);
+    app.post('/service/date/nojoin',DateHandler.nojoinDate);
 };

@@ -89,7 +89,8 @@ DateHandler.createDate=function(req,res){
                             var dateUsers={
                                 _id: user._id,
                                 account : user.account,
-                                head: user.head
+                                head: user.head,
+                                status: 0
                             };
 
 
@@ -172,39 +173,64 @@ DateHandler.updateDate=function(req,res){
 };
 
 DateHandler.joinDate=function(req,res){
-    //var date_id = req.params.date_id;
-    var date_id = "551d6f4811a4d97e4d3bfe6a";
+    req.setEncoding('utf-8');
+    var postData = "";
 
-    var dateUsers = {};
-    dateUsers._id=123;
-    dateUsers.account=123;
-    dateUsers.head="2.img";
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
 
-    DateDao.getOne(date_id,function(err,date){
-        if (err) {
-            res.json(500, {message: err.toString()});
-            return;
-        }else{
-        /*var conditions = {_id: date_id};
-        var dateUsers_count = date.dateUsers_count + 1;
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
 
-        var update={$push: {dateUsers:dateUsers},$set: {dateUsers_count:dateUsers_count}};
-*/
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
 
-        DateDao.updateById(date_id,dateUsers,function(err,date){
+            DateDao.updateStatusById(params["dateId"],user._id,function(err,date){
+                if(err)
+                {
+                    console.log(err);
+                    res.json({message:"join failed！"});
 
-            if(err)
-            {
-                console.log(err);
-                res.json({message:"join failed！"});
+                }else
+                {
+                    res.json({message:"join successful！"});
+                }
+            })
+        });
 
-            }else
-            {
-                res.json({message:"join successful！"});
-            }
-        })
-        }
-    })
+    });
+
+};
+
+DateHandler.nojoinDate=function(req,res){
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+
+            DateDao.updateStatusNoById(params["dateId"],user._id,function(err,date){
+                if(err)
+                {
+                    console.log(err);
+                    res.json({message:"refuse failed！"});
+
+                }else
+                {
+                    res.json({message:"refuse successful！"});
+                }
+            })
+        });
+
+    });
 
 };
 
