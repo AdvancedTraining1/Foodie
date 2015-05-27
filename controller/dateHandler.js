@@ -35,7 +35,7 @@ DateHandler.lookDate=function(req,res){
                 return;
             }else{
 
-                res.json(200,{date:date});
+                res.json(200,{date:date,user:user});
             }
         })
 
