@@ -18,7 +18,7 @@ exports.listAll = function(req,res){
     var pageSize = req.param('pageSize');
 
     MomentDao.getAll(pageNo,pageSize,function (err1, moment) {
-        moment.forEach(function(file) {
+        /*moment.forEach(function(file) {
             var commentList = file.commentList;
             console.log(file.commentList);
 
@@ -29,9 +29,9 @@ exports.listAll = function(req,res){
                     console.log(file.showComment);
                 }
             });
-        });
+        });*/
         MomentDao.getAllNum(function(err3,num){
-            if(!err3){
+            if(!err3 && !err1){
                 res.json({root:moment,total:num});
             }
         });
