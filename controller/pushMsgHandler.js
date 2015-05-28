@@ -23,8 +23,8 @@ pushMsgHandler.pushMsg=function(req,res){
 
         var params = querystring.parse(postData);
 
-        var title = params.head;
-        var msg = params.msg;
+        var m_head = params.head;
+        var m_msg = params.msg;
         client.push().setPlatform(JPush.ALL)
         .setAudience(JPush.ALL)
         .setNotification('Hi, JPush', JPush.android(m_head,m_msg, 5))
