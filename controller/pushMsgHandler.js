@@ -10,16 +10,22 @@ function pushMsgHandler(){
 
 pushMsgHandler.pushMsg=function(req,res){
 
-    console.log("pushMsgHandler----pushMsg()");
+    req.setEncoding('utf-8');
+    var postData = "";
+    console.log("ok");
+    //console.log("pushMsgHandler----pushMsg()");
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+        console.log(postDataChunk);
+    });
+    
+    req.addListener("end", function () {
 
+        var params = querystring.parse(postData);
 
-    var m_msg = req.body.msg;
-    var m_head = req.body.head;
-    //console.log("DishDao Add 成功!!！");
-    if(m_msg && m_msg.length>0){
-       console.log(m_msg);
-
-    client.push().setPlatform(JPush.ALL)
+        var title = params.head;
+        var msg = params.msg;
+        client.push().setPlatform(JPush.ALL)
         .setAudience(JPush.ALL)
         .setNotification('Hi, JPush', JPush.android(m_head,m_msg, 5))
         .send(function(err, res) {
@@ -35,7 +41,8 @@ pushMsgHandler.pushMsg=function(req,res){
             }
         });
         res.end("Push Successful！");
-    }
+
+    });
 };
 
 
