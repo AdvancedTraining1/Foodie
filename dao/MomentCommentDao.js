@@ -9,7 +9,7 @@ var MomentCommentDao = new DaoBase(MomentComment);
 module.exports = MomentCommentDao;
 
 MomentCommentDao.getByIdList = function (idList,pageNo,pageSize,callback) {
-    MomentComment.find({_id:{$in:idList},flag:true}).skip((pageNo-1)*pageSize).limit(pageSize).sort({'date':1}).exec(function(error,momentComment){
+    MomentCommentDao.find({_id:{$in:idList},flag:true}).skip((pageNo-1)*pageSize).limit(pageSize).sort({'date':1}).exec(function(error,momentComment){
         if(error)
             return callback(error,null);
         return callback(null, momentComment);
