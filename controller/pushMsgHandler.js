@@ -34,10 +34,11 @@ pushMsgHandler.pushMsg=function(req,res){
                 console.log('Msg_id: ' + res.msg_id);
             }
         });
-        var temp = {
-            res: "Push Successful！"
-        }
-        res.send(JSON.stringify(temp));
+        //var temp = {
+        //    res: "Push Successful！"
+        //}
+        //res.send(JSON.stringify(temp));
+        res.end("Push Successful！");
     }
 };
 
