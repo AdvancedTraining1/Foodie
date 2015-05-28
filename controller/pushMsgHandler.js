@@ -34,7 +34,10 @@ pushMsgHandler.pushMsg=function(req,res){
                 console.log('Msg_id: ' + res.msg_id);
             }
         });
-        res.end("Push Successful！");
+        var temp = {
+            res: "Push Successful！"
+        }
+        res.send(JSON.stringify(temp));
     }
 };
 
