@@ -138,7 +138,7 @@ RestaurantHandler.testName=function(req,res){  //http://localhost:3000/service/r
    
     
 
-    RestaurantDao.testRestaurantName(restName,function (err1, restaurant) {
+    RestaurantDao.testRestaurantName(restName,function (err, restaurant) {
         if(err)
         {
             console.log(err);
