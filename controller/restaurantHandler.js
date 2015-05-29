@@ -133,21 +133,43 @@ RestaurantHandler.getRestaurantListByName=function(req,res){  //http://localhost
 };
 
 RestaurantHandler.testName=function(req,res){  //http://localhost:3000/service/restaurant/getRestByID?a=a&b=b&c=c
-    console.log("RestaurantHandler----testName----");
-    var restName = req.param('restaurantName');
+    console.log("RestaurantHandler----test restaurant Name");
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end",function(){
+        var params = querystring.parse(postData);
+        var restaurantName=params['restaurantName'];
+        RestaurantDao.testRestaurantName(restName,function (err, restaurant) {
+         if(err)
+         {
+             console.log(err);
+             res.json({message:"There is not a restaurant in db",restaurant:null});
+         }else
+         {
+             res.json({message:"There is a restaurant in db",restaurant:restaurant});
+         }
+        });
+    });
+    // console.log("RestaurantHandler----testName----");
+    // var restName = req.param('restaurantName');
    
     
 
-    RestaurantDao.testRestaurantName(restName,function (err, restaurant) {
-        if(err)
-        {
-            console.log(err);
-            res.json({message:"Get userinfo failed!",restaurant:null});
-        }else
-        {
-            res.json({message:"Get userinfo successful！",restaurant:restaurant});
-        }
-    });
+    // RestaurantDao.testRestaurantName(restName,function (err, restaurant) {
+    //     if(err)
+    //     {
+    //         console.log(err);
+    //         res.json({message:"Get userinfo failed!",restaurant:null});
+    //     }else
+    //     {
+    //         res.json({message:"Get userinfo successful！",restaurant:restaurant});
+    //     }
+    // });
 };
 
 
