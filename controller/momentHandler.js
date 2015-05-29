@@ -61,7 +61,7 @@ exports.listByUser = function(req,res){
     });*/
 
     MomentDao.getByUserId(0,0,authorId,function (err1, moment) {
-        MomentDao.getNumByUserId(user._id,function(err2,num){
+        MomentDao.getNumByUserId(authorId,function(err2,num){
             if(!(err1 || err2)){
                 res.json({root:moment,total:num});
             }
