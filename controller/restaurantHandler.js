@@ -1,261 +1,184 @@
 /**
  * Created by liuhanxu on 15-3-20.
  */
+
 var db = require('../util/database')
 
-var BlogModel = require('../data').Blog;
-var BlogDao = require('../dao/BlogDao');
-var CollectBlogDao = require('../dao/CollectBlogDao');
-var CollectBlogModel = require('./../data').CollectBlog;
-var CommentToBlogDao = require('../dao/CommentToBlogDao');
-var CommentToBlogModel = require('./../data').CommentToBlog;
-var BlogLikeModel = require('./../data').BlogLike;
-var BlogLikeDao = require('../dao/BlogLikeDao');
-var UserDao = require("../dao/UserDao");
+var DishModel = require('../data').Dish;
+var RestaurantModel = require('../data').Restaurant;
 var UserModel = require('../data').user;
+
+var RestaurantDao=require("../dao/RestaurantDao");
+
+var UserDao = require("../dao/UserDao");
+
 var querystring = require("querystring"),
     formidable = require('formidable'),
-    RecipeDao = require("../dao/RecipeDao"),
-    UserDao = require("../dao/UserDao"),
-    RecipeModel = require("./../data").Recipe,
+    AccessToken = require("../auth/ControllerAccessToken.js"),
     fs = require('fs'),
     url = require('url'),
     config=require("../util/config");
 
 
-function UserinfoHandler(){
-
+function RestaurantHandler(){
 }
-UserinfoHandler.register=function(req,res){
 
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-    });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
-        var params = querystring.parse(postData);
-        console.log(params);//{ username: 'aaa', password: 'aaa', email: '1412@sfd.com' }
+RestaurantHandler.addRestaurant=function(req,res){  //http://localhost:3000/service/dish/create?a=a&b=b&c=c
+    console.log("RestaurantHandler----addRestaurant()");
+    var ownerId ="12345";
+    var logTime =Date.parse(new Date());  //毫秒
+    var restaurantName = req.param('restaurantName');
+    var description = req.param('description');
+    var address=req.param('address');
+    var cuisine=req.param('cuisine');
+    var phone=req.param('phone');
+    var photo = req.param('photo');
+    var tableNumber = req.param('tableNumber');
+    var tableRemain = tableNumber;
 
-        var username = params.username;
-        var password = params.password;
-        var email = params.email;
-        console.log("注册---username:" + username + "-----密码:" + password);
-
-        var user = new UserModel({
-            username: username,
-            account: username,
-            password: password,
-            email: email
+    if(restaurantName&& restaurantName.length>0){
+        var restaurant = new RestaurantModel({
+            restaurantName: restaurantName,
+            description: description,
+            photo: photo,
+            address:address,
+            cuisine:cuisine,
+            phone:phone,
+            logTime: logTime,
+            tableNumber:tableNumber,
+            tableRemain:tableRemain
         });
 
-        UserDao.save(user, function (err, data) {
+        RestaurantDao.save(restaurant, function (err, data) {
             if(err&& err.length>0){
-                res.json({message:"Register Failed！"});
+                res.json({message:"restaurant add Error"});
             }else {
-                res.json({message:"Register Successful！"});
+                res.json({message:"restaurant add Successful！"});
             }
-
         });
-    });
+    }
 };
 
-UserinfoHandler.login=function(req,res){
+RestaurantHandler.insertRestaurant=function(req,res) {
+    console.log("RestaurantHandler----get restaurant by ID");
     req.setEncoding('utf-8');
     var postData = "";
+
     req.addListener("data", function (postDataChunk) {
         postData += postDataChunk;
     });
-    // 数据接收完毕，执行回调函数
-    req.addListener("end", function () {
+
+    req.addListener("end",function(){
         var params = querystring.parse(postData);
-        console.log("登陆handler------params:" + params);
-        console.log(params);
-        UserDao.getUserByAccountAndPass(params['username'], params['password'], function (err, user) {
+        console.log("解析restaurant信息字符串");
+        var restaurant = new RestaurantModel({
+            restaurantName: params['restaurantName'],
+            description: params['description'],
+            cuisine: params['cuisine'],
+            address: params['address'],
+            phone: params['phone'],
+            photo: params['photo'],
+            logTime: logTime(),
+            ownerId: "LHX",
+            tableNumber: 30,
+            tableRemain: 30
+        });
 
+        RestaurantDao.save(restaurant, function (err, data) {
             if(err&& err.length>0){
-                res.json({message:"Login Failed！",user:null});
-                //res.writeHead(500, {
-                //    "Content-Type": "text/plain;charset=utf-8"
-                //});
-                //res.end("登录失败！");
-            }else if(user==null){
-                res.json({message:"Username Or Password error,Please login again！",user:null});
-            } else{
-                req.session.user_id = user._id;
-                req.session.account = user.account;
-                req.session.user_name = user.username;
-                req.session.password = user.password;
-                req.session.head = user.head;
-                console.log('登录成功---user_id:'+req.session.user_id);
-                res.json({message:"Login Successful！",user:user});
-
-                //res.writeHead(200, {
-                //    "Content-Type": "text/plain;charset=utf-8"
-                //});
-                //res.end("登录成功！");
+                res.json({message:"insert Failed！"});
+            }else {
+                res.end("insert Successful！");
             }
-
         });
     });
 
 };
 
-UserinfoHandler.modifypass=function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-    });
 
-    console.log("修改密码handler");
-    var params = querystring.parse(postData);
-    var oldpass = params.passwordold;
-    var newpass = params.passwordnew1;
+RestaurantHandler.getRestaurantByID=function(req,res){  //http://localhost:3000/service/restaurant/getRestByID?a=a&b=b&c=c
+    console.log("RestaurantHandler----getRestaurantByID()");
+    var restID = req.param('restID');
 
-    var oldpassOfUser=req.session.password;
-    if(oldpass!=oldpassOfUser){
-        res.json({message:"Old Password Error!"});
-        return 0;
-    }
-    var conditions = {_id:req.session.user_id};
-    var update={"password":newpass};
-
-    var user =UserDao.update(conditions,update,null,function (err, user)
-    {
+    RestaurantDao.getRestaurantByID(restID,function (err, restaurant){
         if(err)
         {
             console.log(err);
-            res.json({message:"Modify password failed！"});
-
+            res.json({message:"Get userinfo failed!",restaurant:null});
         }else
         {
-            req.session.password =newpass ;  //修改session中的值
-            res.json({message:"Modify password successful!"});
-
+            res.json({message:"Get userinfo successful！",restaurant:restaurant});
         }
     });
-
-};
-UserinfoHandler.isLogin = function(req,res){
-    var user_id = req.session.user_id;
-    if(user_id.length>0){
-        res.json({message:"1",username:req.session.user_name});
-    }else{
-        res.json({message:"2"});
-    }
 };
 
-UserinfoHandler.modifyinfo=function(req,res){
-    req.setEncoding('utf-8');
-    var postData = "";
 
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-    });
-
-    var params = querystring.parse(postData);
-    console.log("UserHandler---更改个人信息");
-    var username = params['username'];
-    var email = params['email'];
-    console.log("修改个人信息handler");
-
-    var conditions = {_id:req.session.user_id};
-    var update={username:username,email:email};
-
-    var user =UserDao.update(conditions,update,null,function (err, user)
-    {
-        if(err)
-        {
-            console.log(err);
-            res.json({message:"Modify userinfo successful！"});
-
-        }else
-        {
-
-            res.json({message:"Modify userinfo failed！"});
-
-        }
-    });
-
-};
-
-UserinfoHandler.viewUserinfo=function(req,res){
-
-    var user_account =req.session.account;
-    console.log("UserHandler---查看个人信息---user_account："+user_account);
-
-    var user = UserDao.getUserByAccount(user_account,function (err, user)
-    {
-        if(err)
-        {
-            console.log(err);
-            res.json({message:"Get userinfo successful!",user:null});
-
-        }else
-        {
-
-            res.json({message:"Get userinfo failed！",user:user});
-
-        }
-    });
-
-};
-
-UserinfoHandler.getUserBlogs=function(req,res){
-
+RestaurantHandler.getRestaurantListByName=function(req,res){  //http://localhost:3000/service/restaurant/getRestByID?a=a&b=b&c=c
+    console.log("RestaurantHandler----getRestaurantByID()");
+    var restName = req.param('restname');
     var pageNo = req.param('pageNo');
     var pageSize = req.param('pageSize');
+    if (!pageNo)
+        return res.status(400).end("pageNo missing.");
+    if (!pageSize)
+        return res.status(400).end("pageSize missing.");
 
-    var user_id = req.session.user_id;
-
-    console.log("handler---UserBlogs");
-    BlogDao.getUserBlogs(pageNo,pageSize,user_id,function(err,blogs){
-        BlogDao.getUserBlogNum(user_id,function(err2,num){
-            if(err || err2){
-                res.json(500, {message: err.toString()});
-                return;
-
-            }
-            if (!blogs) {
-                res.json(404, {message: "Not found."});
-                return;
-            }
-
-            console.log("User--Num:"+num)
-            res.json({root:blogs,total:num});
-        });
-    });
-
-};
-
-UserinfoHandler.getUserRecipes=function(req,res){
-    var pageNo = req.param('pageNo');
-    var pageSize = req.param('pageSize');
-    var authorId = req.session.user_id;
-
-    console.log('UserHandler-----Recipes----userid:'+authorId);
-    RecipeDao.getOwn(pageNo,pageSize,authorId,function (err1, recipe) {
-        RecipeDao.getOwnNum(authorId,function(err2,num){
+    RestaurantDao.getRestaurantByName(restName,pageNo,pageSize,function (err1, restaurantlist) {
+        RestaurantDao.getNumByName(restName,function(err2,num){
             if(!(err1 || err2)){
-                res.json({root:recipe,total:num});
+                res.json({root:restaurantlist,total:num});
             }
         });
     });
+};
 
+RestaurantHandler.testName=function(req,res){  //http://localhost:3000/service/restaurant/getRestByID?a=a&b=b&c=c
+    console.log("RestaurantHandler----test restaurant Name");
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end",function(){
+        var params = querystring.parse(postData);
+        var restaurantName=params['restaurantName'];
+        RestaurantDao.testRestaurantName(restaurantName,function (err, restaurant) {
+         if(err)
+         {
+             console.log(err);
+             res.json({message:"There is not a restaurant in db",restaurant:null});
+         }else
+         {
+             res.json({message:"There is a restaurant in db",restaurant:restaurant});
+         }
+        });
+    });
+    // console.log("RestaurantHandler----testName----");
+    // var restName = req.param('restaurantName');
+   
+    
+
+    // RestaurantDao.testRestaurantName(restName,function (err, restaurant) {
+    //     if(err)
+    //     {
+    //         console.log(err);
+    //         res.json({message:"Get userinfo failed!",restaurant:null});
+    //     }else
+    //     {
+    //         res.json({message:"Get userinfo successful！",restaurant:restaurant});
+    //     }
+    // });
 };
 
 
-UserinfoHandler.logout=function(req,res){
-    req.session.user_id = "";
-    req.session.account = "";
-    req.session.user_name = "";
-    req.session.password = "";
-    req.session.head = "";
-
-    console.log("UserHandler---注销");
-    res.json({message:"Logout successful!"});
+function logTime(){
+    var data =new Date().format('yyyy-MM-dd hh:mm:ss');
+    console.log(data);
+    return data;
 }
 
-module.exports = UserinfoHandler;
+
+
+module.exports = RestaurantHandler;

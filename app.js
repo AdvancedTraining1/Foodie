@@ -15,9 +15,11 @@ var userinfoRoute = require('./routes/userinfoRoute');
 //var seasonpage = require('./routes/season');
 var dishRoute = require('./routes/dishRoute');
 var moment = require('./routes/moment');
-var friends = require('./routes/friends');
+var friend = require('./routes/friend');
 var dateRoute =  require('./routes/dateRoute');
 var pushmsg = require('./routes/pushMsg');
+var seat = require('./routes/seatRoute');
+var restaurant = require('./routes/restaurantRoute');
 
 var app = express();
 
@@ -43,9 +45,11 @@ userinfoRoute(app);
 //common(app);
 dishRoute(app);
 moment(app);
-friends(app);
+friend(app);
 dateRoute(app);
 pushmsg(app);
+seat(app);
+restaurant(app);
 //dishRoute(APP);
 
 // catch 404 and forward to error handler

@@ -11,6 +11,7 @@ var DateDao=require("../dao/DateDao");
 var UserDao = require("../dao/UserDao");
 
 var querystring = require("querystring"),
+    AccessToken = require("../auth/ControllerAccessToken.js"),
     formidable = require('formidable'),
     fs = require('fs'),
     url = require('url'),
@@ -22,67 +23,159 @@ function DateHandler(){
 
 DateHandler.lookDate=function(req,res){
 
-    /*var pageNo = req.param('pageNo');
-    var pageSize = req.param('pageSize');
-    console.log("look date");
-    DateDao.getAll(pageNo,pageSize,function(err,date){
-        DateDao.getAllNum(function(err2,num){
-            if(err || err2){
-                res.json(500, {message: err.toString()});
+    var token = req.param('token');
+
+    AccessToken.userActionWithToken(token, res, function (user) {
+
+        var userId=user._id;
+
+        DateDao.findByDateUserId(userId,function(err,date){
+            if(err){
+                res.json(500,{message:err.toString()});
                 return;
+            }else{
 
+                res.json(200,{date:date,user:user});
             }
-            if (!date) {
-                res.json(404, {message: "Not found."});
-                return;
-            }
+        })
 
-            console.log("num"+num)
-            res.json({root:date,total:num});
-        });
-    })*/
-
-    DateDao.getAll(function(err,date){
-        if(err){
-            res.json(500,{message:err.toString()});
-            return;
-        }else{
-            res.json(200,{date:date});
-        }
-    })
-
+    });
 };
+
+DateHandler.lookMyDate=function(req,res){
+
+    var token = req.param('token');
+
+    AccessToken.userActionWithToken(token, res, function (user) {
+
+        var userId=user._id;
+
+        DateDao.findByAuthorId(userId,function(err,date){
+            if(err){
+                res.json(500,{message:err.toString()});
+                return;
+            }else{
+
+                res.json(200,{date:date});
+            }
+        })
+
+    });
+};
+
 
 DateHandler.createDate=function(req,res){
 
-    console.log("create one date");
-    var userId = 1234;
-    var restaurantId = 4321;
-    var logTime =Date.parse(new Date());
+    req.setEncoding('utf-8');
+    var postData = "";
 
-    /*var dateTitle = req.param('dateTitle');
-    var dateContent = req.param('dateContent');
-    var dateTime = req.param('dateTime');*/
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
 
-    //if(dateTitle&& dateTitle.length>0){
-        var date = new DateModel({
-            userId: userId,
-            //dateTitle: dateTitle,
-            //dateContent: dateContent,
-            //dateTime: dateTime,
-            logTime: logTime,
-            restaurantId:restaurantId
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+
+            var date = new DateModel({
+                //userId: user._id,
+                author:{
+                    _id:user._id,
+                    account:user.account,
+                    head:user.head
+                },
+                //dateTitle: dateTitle,
+                dateContent: params['content'],
+                dateTime: params['time'],
+                logTime: new Date().format('yyyy-MM-dd hh:mm:ss')
+                //restaurantId:params['content'],
+
+               // dateUsers:params['friends']
+            });
+
+            var ids=params['friendids'];
+            console.log(ids.split(","));
+            var names=params['friendnames'];
+            console.log(names);
+
+            DateDao.save(date, function (err, data) {
+                if(err&& err.length>0){
+                    res.json("publish date error！");
+                }else {
+
+                    for(var i=0;i<ids.split(",").length-1;i++){
+
+                        UserDao.getUserById(ids.split(",")[i],function(err,user){
+                            var dateUsers={
+                                _id: user._id,
+                                account : user.account,
+                                head: user.head,
+                                status: 0
+                            };
+
+
+                            DateDao.updateById(date._id,dateUsers,function(error,date){
+                                //res.json("publish date success！");
+                            })
+
+                        })
+
+                    }
+                    res.end("publish date success");
+                }
+            });
+
         });
 
-        DateDao.save(date, function (err, data) {
-            if(err&& err.length>0){
-                res.json({message:"Date create Error"});
-            }else {
-                res.json({message:"Date create Successful！"});
-            }
-        });
-    //}
+    });
+
+
 };
+
+
+DateHandler.selectFriend=function(req,res){
+
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+            res.json({root:user.friends});
+
+//          UserDao.getUserById(user._id, function (err, user){
+//
+//              if(err&& err.length>0){
+//                  res.json({message:"No user"});
+//              }else {
+//                  DateDao.findFriendsById(user, function (err, friends) {
+//                      if(err&& err.length>0){
+//                          res.json(500,{message:err.toString()});
+//                      }else {
+//                          console.log("friends2222==="+friends);
+//                          res.json({root:friends});
+//                      }
+//                  });
+//
+//              }
+//          });
+
+        });
+
+    });
+
+
+};
+
+
 
 DateHandler.updateDate=function(req,res){
     var date_id = req.params.date_id;
@@ -102,39 +195,64 @@ DateHandler.updateDate=function(req,res){
 };
 
 DateHandler.joinDate=function(req,res){
-    //var date_id = req.params.date_id;
-    var date_id = "551d6f4811a4d97e4d3bfe6a";
+    req.setEncoding('utf-8');
+    var postData = "";
 
-    var dateUsers = {};
-    dateUsers._id=123;
-    dateUsers.account=123;
-    dateUsers.head="2.img";
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
 
-    DateDao.getOne(date_id,function(err,date){
-        if (err) {
-            res.json(500, {message: err.toString()});
-            return;
-        }else{
-        /*var conditions = {_id: date_id};
-        var dateUsers_count = date.dateUsers_count + 1;
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
 
-        var update={$push: {dateUsers:dateUsers},$set: {dateUsers_count:dateUsers_count}};
-*/
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
 
-        DateDao.updateById(date_id,dateUsers,function(err,date){
+            DateDao.updateStatusById(params["dateId"],user._id,function(err,date){
+                if(err)
+                {
+                    console.log(err);
+                    res.json({message:"join failed！"});
 
-            if(err)
-            {
-                console.log(err);
-                res.json({message:"join failed！"});
+                }else
+                {
+                    res.json({message:"join successful！"});
+                }
+            })
+        });
 
-            }else
-            {
-                res.json({message:"join successful！"});
-            }
-        })
-        }
-    })
+    });
+
+};
+
+DateHandler.nojoinDate=function(req,res){
+    req.setEncoding('utf-8');
+    var postData = "";
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+    });
+
+    req.addListener("end", function () {
+        console.log('数据接收完毕');
+        var params = querystring.parse(postData);
+
+        AccessToken.userActionWithToken(params["token"], res, function (user) {
+
+            DateDao.updateStatusNoById(params["dateId"],user._id,function(err,date){
+                if(err)
+                {
+                    console.log(err);
+                    res.json({message:"refuse failed！"});
+
+                }else
+                {
+                    res.json({message:"refuse successful！"});
+                }
+            })
+        });
+
+    });
 
 };
 

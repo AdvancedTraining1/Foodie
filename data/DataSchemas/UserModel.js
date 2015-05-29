@@ -15,7 +15,7 @@ var schema = new mongoose.Schema({
     head:{ type: String , default:'/head/defaulthead.jpeg' },
     tag:{ type: String},
     friends: [{
-        _id: ObjectId,
+        _id: String,
         account : String,
         head: String
     }],

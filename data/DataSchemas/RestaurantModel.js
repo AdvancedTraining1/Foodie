@@ -14,8 +14,8 @@ var schema = new mongoose.Schema({
     logTime: String,
     ownerId: String,
     tableNumber: { type: Number, default: 0 },
-    tableRemain: { type: Number, default: 0 }
-
+    tableRemain: { type: Number, default: 0},
+    dishList:[mongoose.Schema.Types.ObjectId]
 
 
 });

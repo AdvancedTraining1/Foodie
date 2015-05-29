@@ -14,6 +14,4 @@ module.exports = function (app) {
     app.get('/service/moment/deleteComment', moment.deleteComment);//
     app.post('/service/moment/addLike', moment.likeMoment);//
     app.post('/service/moment/upload', moment.upload);
-
-
 };
