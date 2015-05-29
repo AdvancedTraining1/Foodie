@@ -144,7 +144,7 @@ RestaurantHandler.testName=function(req,res){  //http://localhost:3000/service/r
     req.addListener("end",function(){
         var params = querystring.parse(postData);
         var restaurantName=params['restaurantName'];
-        RestaurantDao.testRestaurantName(restName,function (err, restaurant) {
+        RestaurantDao.testRestaurantName(restaurantName,function (err, restaurant) {
          if(err)
          {
              console.log(err);
