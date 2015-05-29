@@ -72,21 +72,38 @@ SeatHandler.getSeatNum=function(req,res){
 
 SeatHandler.setSeatNum=function(req,res){
 
-    console.log("SeatHandler----setSeatNum");
-    var id = req.body.restaurantId;
-    var num = req.body.seatsNum;
-    //console.log("Id---"+id);
-    //console.log("num---"+num);
-    var conditions ={restaurantId : id};
-    var update = {$set : {seatsNum : num}};
-    var options = {update : true};
 
-    SeatDao.update(conditions,update,options,function (err, recipe) {
-        if(!(err)){
-            res.end("setSeatNum！");
-        }
+    req.setEncoding('utf-8');
+    var postData = "";
+    console.log("ok");
+
+    req.addListener("data", function (postDataChunk) {
+        postData += postDataChunk;
+        console.log(postDataChunk);
+    });
+
+    req.addListener("end", function () {
+
+        var params = querystring.parse(postData);
+
+        console.log("SeatHandler----setSeatNum");
+        var id = params.restaurantId;
+        var num = params.seatsNum;
+        //console.log("Id---"+id);
+        //console.log("num---"+num);
+        var conditions ={restaurantId : id};
+        var update = {$set : {seatsNum : num}};
+        var options = {update : true};
+
+        SeatDao.update(conditions,update,options,function (err, recipe) {
+            if(!(err)){
+                res.json(200,{message:"setSeatNum successful！"});
+            }
+
+        });
 
     });
+
 
 };
 
