@@ -41,11 +41,11 @@ exports.listAll = function(req,res){
 exports.listByUser = function(req,res){
     var pageNo = req.param('pageNo');
     var pageSize = req.param('pageSize');
-    var token = req.param('token');
-    console.log("----------"+token);
+    /*var token = req.param('token');
+    console.log("----------"+token);*/
     var authorId = req.param('authorId');
 
-    AccessToken.userActionWithToken(token, res, function (user) {
+    /*AccessToken.userActionWithToken(token, res, function (user) {
         if (!pageNo)
             return res.status(400).end("pageNo missing.");
         if (!pageSize)
@@ -57,6 +57,14 @@ exports.listByUser = function(req,res){
                     res.json({root:moment,total:num});
                 }
             });
+        });
+    });*/
+
+    MomentDao.getByUserId(0,0,authorId,function (err1, moment) {
+        MomentDao.getNumByUserId(user._id,function(err2,num){
+            if(!(err1 || err2)){
+                res.json({root:moment,total:num});
+            }
         });
     });
 };
