@@ -134,7 +134,7 @@ RestaurantHandler.getRestaurantListByName=function(req,res){  //http://localhost
 
 RestaurantHandler.testName=function(req,res){  //http://localhost:3000/service/restaurant/getRestByID?a=a&b=b&c=c
     var restName = req.param('restaurantName');
-    console.log("RestaurantHandler----testName----naem:restName");
+    console.log("RestaurantHandler----testName----name:"+restName);
     
 
     RestaurantDao.testRestaurantName(restName,function (err1, restaurant) {
