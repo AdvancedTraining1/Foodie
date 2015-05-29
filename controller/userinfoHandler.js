@@ -85,10 +85,7 @@ UserinfoHandler.login=function(req,res){
                         return res.status(500).end("Internal error");
                     }
                     console.log("hehe");
-                    var data = {
-                        "token" : token._id
-                    }
-                    res.status(200).json(data);
+                    res.status(200).json({token:token._id,id:user._id,account:user.account,head:user.head});
                     console.log(token._id);
                 });
             }
