@@ -3,7 +3,7 @@
  */
 
 var PushMsgHandler = require('../controller/pushMsgHandler');
-PushMsgHandler2 =  require('../controller/pushMsgHandler2');
+var PushMsgHandler2 =  require('../controller/pushMsgHandler2');
 var DishHandler = require('../controller/dishHandler');
 
 module.exports = function (app) {
