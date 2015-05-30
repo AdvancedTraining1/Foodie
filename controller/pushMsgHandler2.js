@@ -5,10 +5,10 @@ var querystring = require('querystring');
 //npm install jpusher
 
 
-function pushMsgHandler(){
+function pushMsgHandler2(){
 }
 
-pushMsgHandler.pushMsg=function(req,res){
+pushMsgHandler2.pushMsg=function(req,res){
 
     req.setEncoding('utf-8');
     var postData = "";
@@ -46,7 +46,7 @@ pushMsgHandler.pushMsg=function(req,res){
 };
 
 
-module.exports = pushMsgHandler;
+module.exports = pushMsgHandler2;
 
 //easy push
 //client.push().setPlatform(JPush.ALL)
