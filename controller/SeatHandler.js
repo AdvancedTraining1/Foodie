@@ -61,8 +61,10 @@ SeatHandler.getSeatNum=function(req,res){
     ///service/dish/getalldishs?a=a&b=b
     console.log("SeatHandler----getSeatNUm");
     var restaurantId = req.param('restaurantId');
+    console.log(restaurantId);
     SeatDao.getByRestaurantId(1,20,restaurantId,function (err1, data) {
         if(!(err1)){
+            console.log(data);
             console.log(data[0].seatsNum);
             res.json({num : data[0].seatsNum});
             //data

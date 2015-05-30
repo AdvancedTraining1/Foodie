@@ -241,10 +241,18 @@ exports.likeMoment = function (req,res) {
                 head: user.head,
                 account: user.account
             };
-            MomentDao.checkLike(momentId,user._id,function(err1,moment){
+            MomentDao.likeMoment(momentId,like,function(err,moment){
+                if(!err){
+                    res.writeHead(200, {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    });
+                    res.end("like moment success！");
+                }
+            });
+            /*MomentDao.checkLike(momentId,user._id,function(err1,moment){
                 if(err1){
                     console.log("wrong find function");
-                }else if(moment){
+                }else if(moment != null){
                     console.log("already liked");
                     res.writeHead(200, {
                         "Content-Type": "text/plain;charset=utf-8"
@@ -260,7 +268,7 @@ exports.likeMoment = function (req,res) {
                         }
                     });
                 }
-            });
+            });*/
         });
     });
 
