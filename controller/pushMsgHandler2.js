@@ -5,26 +5,16 @@ var querystring = require('querystring');
 //npm install jpusher
 
 
-function pushMsgHandler(){
+function pushMsgHandler2(){
 }
 
-pushMsgHandler.pushMsg=function(req,res){
+pushMsgHandler2.pushMsg=function(req,res){
 
-    req.setEncoding('utf-8');
-    var postData = "";
-    console.log("ok");
-    //console.log("pushMsgHandler----pushMsg()");
-    req.addListener("data", function (postDataChunk) {
-        postData += postDataChunk;
-        console.log(postDataChunk);
-    });
+    ///service/pushmsg2?title=123&body=321;
+    var m_head = req.param('title');
+    var m_msg = req.param('body');
 
-    req.addListener("end", function () {
 
-        var params = querystring.parse(postData);
-
-        var m_head = params.head;
-        var m_msg = params.msg;
         client.push().setPlatform(JPush.ALL)
             .setAudience(JPush.ALL)
             .setNotification('Hi, JPush', JPush.android(m_head,m_msg, 5))
@@ -37,16 +27,15 @@ pushMsgHandler.pushMsg=function(req,res){
                     }
                 } else {
                     console.log('Sendno: ' + res.sendno);
-                    console.log('Msg_id: ' + res.msg_id);
+                    //console.log('Msg_id: ' + res.msg_id);
                 }
             });
         res.end("Push Successful！");
 
-    });
 };
 
 
-module.exports = pushMsgHandler;
+module.exports = pushMsgHandler2;
 
 //easy push
 //client.push().setPlatform(JPush.ALL)
