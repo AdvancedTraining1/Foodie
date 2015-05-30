@@ -238,7 +238,7 @@ SeatHandler.testdata=function(req,res){
         name: 'hh'
     };
     var seatNum = 40;
-    var peopleNum = 40;
+    var peopleNum = 1;
     var restaurantName = 'HH';
     var temp = new SeatModel({
         restaurantName: restaurantName,
